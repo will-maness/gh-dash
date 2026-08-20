@@ -1,0 +1,2 @@
+Session 1: I observed Bob scaffold a Node.js project. There was nothing here for Bob to read. Bob created a comprehensive 7 step todo list and then executed each step accordingly. Once done, Bob spelled out the files it created and key decisions that it made. By the end of this process the context window was 29% full. MCP tools were the largest piece of this even though MCP was not obviously being used. This is one thing that surprised me. I also used 0.7 BobCoins. 
+
