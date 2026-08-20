@@ -1,0 +1,7 @@
+# Credentials — never read these
+.env
+.env.*
+
+# Generated output
+node_modules/
+*.log

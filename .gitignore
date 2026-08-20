@@ -1,0 +1,15 @@
+# Credentials
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Logs
+docs/LEARNING_LOG.md
