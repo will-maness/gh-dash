@@ -1,0 +1,16 @@
+# Credentials
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Bob configuration
+.bob/
+.bobignore
