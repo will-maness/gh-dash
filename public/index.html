@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gh-dash — Repository Health Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      background: #f7f8fa;
+      color: #1f2328;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1f2328;
+      color: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    header .subtitle {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .repo-label {
+      font-size: 0.85rem;
+      color: #57606a;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #57606a;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2328;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-value.placeholder {
+      color: #d0d7de;
+    }
+
+    .card-description {
+      font-size: 0.8rem;
+      color: #57606a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.75rem;
+      color: #8b949e;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 3rem;
+    }
+
+    /* ── Comparison table ───────────────────────────────────── */
+    .compare-section {
+      margin-top: 3rem;
+    }
+
+    .compare-section h2 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #57606a;
+      margin-bottom: 1rem;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.875rem;
+    }
+
+    .compare-table thead {
+      background: #f7f8fa;
+    }
+
+    .compare-table th {
+      text-align: left;
+      padding: 0.65rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #57606a;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .compare-table th.right,
+    .compare-table td.right { text-align: right; }
+
+    .compare-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid #f0f2f5;
+      color: #1f2328;
+    }
+
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+
+    .compare-table tbody tr:hover td { background: #f7f8fa; }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-right: 0.5rem;
+      background: #e5e7eb;
+      color: #57606a;
+    }
+
+    .rank-badge.rank-1 { background: #d1fae5; color: #065f46; }
+    .rank-badge.rank-2 { background: #dbeafe; color: #1e40af; }
+    .rank-badge.rank-3 { background: #ede9fe; color: #5b21b6; }
+
+    .bar-cell { min-width: 120px; }
+
+    .bar-track {
+      background: #e5e7eb;
+      border-radius: 3px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: #3b82d4;
+      transition: width 0.4s ease;
+    }
+
+    #compare-placeholder {
+      color: #8b949e;
+      font-size: 0.85rem;
+      padding: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    </svg>
+    <div>
+      <h1>gh-dash</h1>
+      <p class="subtitle">Repository Health Dashboard</p>
+    </div>
+  </header>
+
+  <main>
+
+    <p class="repo-label" id="repo-label">No repository selected</p>
+
+    <div class="grid">
+
+      <div class="card">
+        <p class="card-title">PR Cycle Time</p>
+        <p class="card-value placeholder" id="pr-cycle-time">—</p>
+        <p class="card-description">Average hours from open to merge</p>
+      </div>
+
+      <div class="card">
+        <p class="card-title">Commit Frequency</p>
+        <p class="card-value placeholder" id="commit-frequency">—</p>
+        <p class="card-description">Commits per day (last 30 days)</p>
+      </div>
+
+      <div class="card">
+        <p class="card-title">Stale Branches</p>
+        <p class="card-value placeholder" id="stale-branches">—</p>
+        <p class="card-description">Branches with no activity &gt; 30 days</p>
+      </div>
+
+      <div class="card">
+        <p class="card-title">Contributors</p>
+        <p class="card-value placeholder" id="contributors">—</p>
+        <p class="card-description">Unique authors in last 90 days</p>
+        <svg id="contributor-sparkline" width="200" height="40"></svg>
+      </div>
+
+    </div>
+    <!-- Comparison table -->
+    <section class="compare-section">
+      <h2>PR Cycle Time &mdash; Repo Comparison</h2>
+      <p id="compare-placeholder">Loading comparison data&hellip;</p>
+      <table class="compare-table" id="compare-table" hidden>
+        <thead>
+          <tr>
+            <th>Repository</th>
+            <th class="right">Avg Cycle Time</th>
+            <th class="right">Merged PRs</th>
+            <th class="bar-cell">Relative Speed</th>
+          </tr>
+        </thead>
+        <tbody id="compare-tbody"></tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer>gh-dash &mdash; data sourced from the GitHub REST API v3</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

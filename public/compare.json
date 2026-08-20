@@ -1,0 +1,27 @@
+[
+  {
+    "repo": "vercel/next.js",
+    "avgCycleTimeHours": 70.9,
+    "totalMergedPRs": 723
+  },
+  {
+    "repo": "facebook/react",
+    "avgCycleTimeHours": 150.1,
+    "totalMergedPRs": 415
+  },
+  {
+    "repo": "axios/axios",
+    "avgCycleTimeHours": 187.9,
+    "totalMergedPRs": 549
+  },
+  {
+    "repo": "lodash/lodash",
+    "avgCycleTimeHours": 259.7,
+    "totalMergedPRs": 301
+  },
+  {
+    "repo": "expressjs/express",
+    "avgCycleTimeHours": 573.6,
+    "totalMergedPRs": 205
+  }
+]
