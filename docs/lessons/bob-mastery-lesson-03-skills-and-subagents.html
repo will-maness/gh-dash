@@ -1,0 +1,780 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 03 — Skills &amp; Subagents | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar a { color: #57606a; text-decoration: none; }
+  .topbar a:hover { color: #3b82d4; text-decoration: underline; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .lesson-hero { margin-bottom: 40px; }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #7c5cd8;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .lesson-hero .tagline {
+    font-size: 16px;
+    color: #57606a;
+    margin-bottom: 20px;
+  }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    color: #57606a;
+  }
+
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+  .progress-track { height: 4px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #7c5cd8; border-radius: 4px; transition: width .4s ease; }
+
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .callout .callout-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+  }
+  .callout p { font-size: 14px; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── Code block ── */
+  .code-block {
+    background: #1f2328;
+    color: #e6edf3;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  .code-block .comment { color: #8b949e; }
+  .code-block .key { color: #79c0ff; }
+  .code-block .value { color: #a5d6ff; }
+  .code-block .string { color: #a5d6ff; }
+  .code-block .heading { color: #ffa657; }
+
+  /* ── File structure diagram ── */
+  .file-tree {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    margin: 16px 0;
+    color: #1f2328;
+  }
+  .file-tree .dir { color: #3b82d4; font-weight: 700; }
+  .file-tree .file-key { color: #7c5cd8; font-weight: 700; }
+  .file-tree .comment { color: #57606a; font-style: italic; font-size: 11.5px; }
+
+  /* ── Comparison table ── */
+  .compare-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .compare-table table { width: 100%; border-collapse: collapse; }
+  .compare-table th {
+    background: #f7f8fa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #57606a;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .compare-table td {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .row-label { font-weight: 700; color: #1f2328; white-space: nowrap; }
+
+  /* ── Checklist ── */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .checklist-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .check-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-icon-red { background: #fee2e2; color: #991b1b; }
+  .checklist-item-content { font-size: 13.5px; }
+  .checklist-item-content strong { display: block; margin-bottom: 2px; }
+  .checklist-item-content span { color: #57606a; font-size: 13px; }
+
+  /* ── Scenario box ── */
+  .scenario {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .scenario-header {
+    background: #1f2328;
+    color: #fff;
+    padding: 12px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scenario-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-red { background: #f87171; }
+  .dot-yellow { background: #fbbf24; }
+  .dot-green { background: #34d399; }
+  .scenario-body { padding: 16px 18px; background: #fafafa; }
+  .scenario-prompt {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    color: #1f2328;
+  }
+  .scenario-prompt .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #57606a; margin-bottom: 4px; }
+  .scenario-response { font-size: 13px; color: #57606a; line-height: 1.6; }
+  .scenario-tool-call {
+    background: #f0f4ff;
+    border-left: 3px solid #3b82d4;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    color: #3b52a4;
+    margin: 8px 0;
+  }
+  .scenario-tool-call-purple {
+    background: #f5f3ff;
+    border-left: 3px solid #7c5cd8;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    color: #6d28d9;
+    margin: 8px 0;
+  }
+
+  /* ── Quiz ── */
+  .quiz-section { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+  .quiz-header {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .quiz-header h2 { border: none; padding: 0; margin: 0; font-size: 18px; }
+  .quiz-score-badge {
+    font-size: 13px;
+    font-weight: 700;
+    color: #57606a;
+    background: #e5e7eb;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .quiz-body { padding: 20px; display: flex; flex-direction: column; gap: 28px; }
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .q-num { color: #7c5cd8; margin-right: 6px; }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    background: #fff;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .q-option:hover { border-color: #c4b5fd; background: #faf5ff; }
+  .q-option.selected { border-color: #7c5cd8; background: #f5f3ff; }
+  .q-option.correct { border-color: #10b981; background: #d1fae5; }
+  .q-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+  .q-option.revealed-correct { border-color: #10b981; background: #d1fae5; }
+  .q-radio {
+    width: 16px; height: 16px;
+    border: 2px solid #c8d0dc;
+    border-radius: 50%;
+    flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-radio-inner { width: 8px; height: 8px; border-radius: 50%; background: transparent; transition: background .1s; }
+  .q-option.selected .q-radio { border-color: #7c5cd8; }
+  .q-option.selected .q-radio-inner { background: #7c5cd8; }
+  .q-option.correct .q-radio { border-color: #10b981; }
+  .q-option.correct .q-radio-inner { background: #10b981; }
+  .q-option.incorrect .q-radio { border-color: #ef4444; }
+  .q-option.incorrect .q-radio-inner { background: #ef4444; }
+  .q-option.revealed-correct .q-radio { border-color: #10b981; }
+  .q-option.revealed-correct .q-radio-inner { background: #10b981; }
+  .q-feedback {
+    font-size: 13px; margin-top: 8px; padding: 8px 12px;
+    border-radius: 6px; display: none;
+  }
+  .q-feedback.correct-fb { background: #d1fae5; color: #065f46; display: block; }
+  .q-feedback.incorrect-fb { background: #fee2e2; color: #991b1b; display: block; }
+  .quiz-submit-row { padding: 0 20px 20px; display: flex; align-items: center; gap: 16px; }
+  .btn-submit {
+    background: #7c5cd8; color: #fff; border: none;
+    padding: 10px 24px; border-radius: 6px;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: background .15s;
+  }
+  .btn-submit:hover { background: #6d28d9; }
+  .btn-submit:disabled { background: #c8d0dc; cursor: default; }
+  .result-text { font-size: 14px; font-weight: 600; }
+
+  .lesson-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 44px; padding-top: 20px; border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px; font-weight: 600; padding: 9px 20px;
+    border-radius: 6px; border: 1px solid #e5e7eb;
+    cursor: pointer; background: #fff; color: #1f2328;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-nav-primary { background: #1f2328; color: #fff; border-color: #1f2328; }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+
+  footer {
+    text-align: center; font-size: 11px; color: #9ea8b3;
+    padding-top: 20px; border-top: 1px solid #e5e7eb; margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Lesson 03 — Skills &amp; Subagents</span>
+    <span class="pill">~25 min</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Lesson 03 of 06</div>
+    <h1>Skills &amp; Subagents: Teaching Bob to Specialize</h1>
+    <p class="tagline">Skills inject specialized knowledge into Bob's context on demand. Subagents let Bob parallelize work in isolated contexts. Together, they're the mechanism by which Bob scales from a general assistant to a domain expert that can tackle complex, multi-threaded work.</p>
+    <div class="meta-chips">
+      <span class="chip">SKILL.md format</span>
+      <span class="chip">Skill scoping</span>
+      <span class="chip">Subagents vs. subtasks</span>
+      <span class="chip">fork_context</span>
+      <span class="chip">5-question quiz</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Lesson progress</div>
+    <div class="progress-track"><div class="progress-fill" style="width:0%" id="progressFill"></div></div>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">Section 1 of 4</div>
+    <h2>Skills: what they are and how they work architecturally</h2>
+
+    <p>A skill is a Markdown file (<code>SKILL.md</code>) that Bob loads into the context window when a request matches the skill's description. Think of skills as specialized instruction sets — domain-specific knowledge, workflows, checklists, or prompt patterns that you want Bob to apply consistently without having to retype them every session.</p>
+
+    <p>Skills don't run automatically at every prompt. Bob reads the description in the skill's YAML frontmatter, decides whether the current request matches it, and then (with your approval, unless auto-approve is enabled) calls <code>use_skill</code> to load the full skill body into context. Once loaded, the skill stays in context for the rest of the conversation — it's a one-time load per session.</p>
+
+    <h3>The SKILL.md format</h3>
+    <p>Every skill file follows the same structure: YAML frontmatter, then the skill body in plain Markdown.</p>
+
+    <div class="code-block">
+<span class="comment">--- ← YAML frontmatter start</span>
+<span class="key">name</span>: <span class="string">security-audit</span>
+<span class="key">description</span>: <span class="string">Audit code for OWASP vulnerabilities,</span>
+<span class="string">             hardcoded secrets, and injection risks.</span>
+<span class="key">             Use when reviewing code for security issues.</span>
+<span class="comment">--- ← YAML frontmatter end</span>
+
+<span class="heading"># Security Audit Workflow</span>
+
+When auditing code, always check in this order:
+
+1. Search for hardcoded credentials with grep patterns
+2. Audit all SQL queries for parameterized query usage
+3. Check for open redirect vulnerabilities in URL handlers
+4. Verify all user inputs are validated before processing
+5. Document every finding with severity: Critical / High / Medium / Low
+    </div>
+
+    <p>The <code>name</code> field is the identifier used internally. The <code>description</code> is what Bob reads to decide when to activate the skill — write it like a trigger condition, not a title. The body is the actual instructions Bob will follow.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Write descriptions as trigger conditions</div>
+      <p>The description is Bob's activation decision criteria. "Security audit skill" is a bad description. "Audit code for OWASP vulnerabilities, hardcoded secrets, and injection risks. Use when reviewing code for security issues" is a good one — it tells Bob exactly when to use it. Vague descriptions lead to skills activating at the wrong times or not activating at all.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label">Section 2 of 4</div>
+    <h2>Skill scoping: global vs. project-level</h2>
+
+    <p>Skills can live at two locations, and the hierarchy is strict:</p>
+
+    <div class="file-tree">
+<span class="dir">~/.bob/skills/</span>                   <span class="comment"># Global — your personal library</span>
+  └── security-audit/
+      └── <span class="file-key">SKILL.md</span>             <span class="comment"># Available in any project</span>
+
+<span class="dir">&lt;project&gt;/.bob/skills/</span>           <span class="comment"># Project-level — version controlled</span>
+  └── security-audit/
+      └── <span class="file-key">SKILL.md</span>             <span class="comment"># Takes precedence over global</span>
+    </div>
+
+    <p><strong>Priority rule:</strong> if a skill with the same name exists at both levels, the project-level skill always wins. This lets teams distribute standardized skills via the repo (committed to <code>.bob/skills/</code>) while still allowing individual customization at the global level for personal projects.</p>
+    <p>Skills can also include supporting files alongside <code>SKILL.md</code> in the skill directory — reference material, examples, checklists — that Bob gains access to when the skill is activated. Keep <code>SKILL.md</code> focused on the core workflow and move bulky reference content to supporting files.</p>
+
+    <div class="checklist">
+      <div class="checklist-item">
+        <div class="check-icon">G</div>
+        <div class="checklist-item-content">
+          <strong>Global skills (<code>~/.bob/skills/</code>)</strong>
+          <span>Best for: personal workflows, cross-project utilities, individual coding standards you always want applied</span>
+        </div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-icon">P</div>
+        <div class="checklist-item-content">
+          <strong>Project skills (<code>.bob/skills/</code>)</strong>
+          <span>Best for: team-wide standards, project-specific domain knowledge, committed to Git so the whole team benefits automatically</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Project-level skills committed to the repo are a powerful team consistency mechanism. If your security team writes a <code>security-audit</code> skill and commits it, every developer who uses Bob in that project automatically gets that audit workflow applied — without any manual setup. This is how you scale best practices without enforcement overhead. The skill is the policy.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label">Section 3 of 4</div>
+    <h2>Subagents vs. subtasks: the critical distinction</h2>
+
+    <p>Both subagents and subtasks let Bob delegate work, but they serve fundamentally different purposes and have different interaction models. Conflating them is a common mistake.</p>
+
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Subagent</th>
+            <th>Subtask</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Visibility</td>
+            <td>Runs silently in the background</td>
+            <td>Appears in the UI with its own breadcrumb and conversation thread</td>
+          </tr>
+          <tr>
+            <td class="row-label">Interaction</td>
+            <td>Not interactive — returns only a summary when done</td>
+            <td>Fully interactive — you can follow along and continue the conversation</td>
+          </tr>
+          <tr>
+            <td class="row-label">Context</td>
+            <td>Own isolated context window (keeps main context clean)</td>
+            <td>Its own conversation thread with independent history</td>
+          </tr>
+          <tr>
+            <td class="row-label">Use case</td>
+            <td>Background information-gathering, isolated side work</td>
+            <td>Complex work that benefits from dedicated tracking and visibility</td>
+          </tr>
+          <tr>
+            <td class="row-label">Tool</td>
+            <td><code>spawn_subagent</code></td>
+            <td><code>start_subtask</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The three conditions for spawning a subagent</h3>
+    <p>Bob should only spawn a subagent when all three of these conditions are true simultaneously — not just one or two:</p>
+
+    <div class="checklist">
+      <div class="checklist-item">
+        <div class="check-icon">1</div>
+        <div class="checklist-item-content">
+          <strong>The task is clearly self-contained</strong>
+          <span>It can be fully described in the spawn instruction without needing back-and-forth. If it needs iteration, use a subtask instead.</span>
+        </div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-icon">2</div>
+        <div class="checklist-item-content">
+          <strong>The result can be summarized back</strong>
+          <span>The subagent's output is a summary or a set of findings — not something the parent agent needs to directly integrate or modify.</span>
+        </div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-icon">3</div>
+        <div class="checklist-item-content">
+          <strong>It would add significant irrelevant content to the main context</strong>
+          <span>Without a subagent, the exploration work would pollute the parent context with tool calls and intermediate results that aren't needed later.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">When NOT to use a subagent</div>
+      <p>Don't spawn subagents for simple file reads, quick searches, or single-tool operations. The overhead of isolation isn't worth it for tasks that can be done in one or two direct tool calls. Subagent overuse is a cost antipattern — each spawned agent has its own context window overhead.</p>
+    </div>
+
+    <h3>The <code>fork_context</code> parameter</h3>
+    <p>By default, a subagent does not see the parent conversation history. This is intentional — it keeps the subagent's context lean and focused. But sometimes the subagent needs to understand prior decisions or constraints established earlier in the conversation.</p>
+
+    <p>Setting <code>fork_context: true</code> passes the full parent conversation history into the subagent. Use this when the subagent needs to understand prior discussion, decisions, or discovered information — for example, if you spent 10 messages deciding on an architecture and want the subagent to write code consistent with those decisions.</p>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <div class="scenario-dot dot-red"></div>
+        <div class="scenario-dot dot-yellow"></div>
+        <div class="scenario-dot dot-green"></div>
+        <span style="margin-left:4px">Skill activation + subagent coordination — security audit workflow</span>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-prompt">
+          <div class="label">Your prompt</div>
+          "Do a security audit of the payment module and the user auth module in parallel."
+        </div>
+        <div class="scenario-response">
+          <p><strong>Step 1 — Skill activation</strong></p>
+          <div class="scenario-tool-call-purple">use_skill("security-audit") → loads OWASP audit checklist into context</div>
+          <p style="margin-top:10px"><strong>Step 2 — Spawn parallel subagents (both conditions met: self-contained, summaries back)</strong></p>
+          <div class="scenario-tool-call">spawn_subagent("Audit src/payment/ for OWASP vulnerabilities using the security-audit checklist. Return findings with severity ratings.", fork_context: true)</div>
+          <div class="scenario-tool-call">spawn_subagent("Audit src/auth/ for OWASP vulnerabilities using the security-audit checklist. Return findings with severity ratings.", fork_context: true)</div>
+          <p style="margin-top:10px"><strong>Step 3 — Results merged into main conversation</strong></p>
+          <p>Bob receives both summaries and compiles a unified audit report. All the tool calls the subagents made internally never appear in the main conversation context — only the final summaries do.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label">Section 4 of 4</div>
+    <h2>Subagent types: explore vs. general</h2>
+
+    <p>There are two subagent types, and the mode you're in determines which ones Bob is permitted to spawn:</p>
+
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Capabilities</th>
+            <th>Available in</th>
+            <th>Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>explore</code></td>
+            <td>Read tools, explorer model (lighter, faster)</td>
+            <td>All modes (Agent, Plan, Ask)</td>
+            <td>Codebase exploration, research, gathering information</td>
+          </tr>
+          <tr>
+            <td><code>general</code></td>
+            <td>Inherits current mode's full tool set</td>
+            <td>Agent mode only</td>
+            <td>Parallel implementation tasks, side work that needs write access</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The <code>explore</code> type is deliberately lightweight — it uses a faster model optimized for reading and understanding code without writing anything. Ask and Plan modes are restricted to explore subagents, which reinforces their read-only/no-execute constraints all the way through the delegation chain.</p>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Skills are the primary mechanism for building specialized Bob configurations for different teams. A PM team might commit a <code>product-analysis</code> skill that loads structured frameworks for analyzing feature requests. A DevOps team might have an <code>incident-response</code> skill. The skill system is how organizations make Bob a specialist, not just a generalist. This is a competitive moat if you build a library of high-quality skills before competitors do.</p>
+    </div>
+  </div>
+
+
+  <!-- QUIZ -->
+  <div class="section">
+    <div class="section-label">Knowledge Check</div>
+
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-header">
+        <h2>Lesson 03 Quiz</h2>
+        <span class="quiz-score-badge" id="scoreDisplay">0 / 5</span>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+
+        <div class="q-block" data-q="1" data-correct="c">
+          <div class="q-text"><span class="q-num">Q1.</span> A project has a skill named "code-review" in both <code>~/.bob/skills/</code> and <code>.bob/skills/</code>. Which one does Bob use?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>The global one — global skills always take precedence because they represent personal preferences.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Both are merged — Bob combines instructions from both files to create a unified skill.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>The project-level one — project skills take precedence over global skills with the same name.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>The most recently modified one — Bob uses file timestamps to resolve conflicts.</div>
+          </div>
+          <div class="q-feedback" id="fb-1"></div>
+        </div>
+
+        <div class="q-block" data-q="2" data-correct="d">
+          <div class="q-text"><span class="q-num">Q2.</span> You need Bob to research three separate sections of a large codebase simultaneously to answer a question, without polluting your main conversation context. What should you use?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Three sequential read_file calls in the main conversation — this is the most reliable approach.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Three subtasks — subtasks keep work visible and give you the best control.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>A single subagent reading all three sections — one subagent is sufficient for all three.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Three parallel subagents — self-contained, results summarized back, isolated from main context.</div>
+          </div>
+          <div class="q-feedback" id="fb-2"></div>
+        </div>
+
+        <div class="q-block" data-q="3" data-correct="b">
+          <div class="q-text"><span class="q-num">Q3.</span> What happens when Bob loads a skill at the start of a conversation?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>The skill is loaded fresh before every prompt to ensure instructions are always current.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>The skill is loaded once per conversation and stays in the context window for its duration.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>The skill replaces the default system prompt for that conversation.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>The skill is streamed in segments, with each segment loaded only when that section is relevant.</div>
+          </div>
+          <div class="q-feedback" id="fb-3"></div>
+        </div>
+
+        <div class="q-block" data-q="4" data-correct="a">
+          <div class="q-text"><span class="q-num">Q4.</span> When should you set <code>fork_context: true</code> when spawning a subagent?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>When the subagent needs to understand prior conversation decisions, constraints, or preferences established earlier.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Always — it's best practice to give every subagent full context so it has maximum information.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Only when spawning a "general" type subagent — "explore" subagents cannot receive forked context.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Never — the default context isolation is always the correct choice for cost efficiency.</div>
+          </div>
+          <div class="q-feedback" id="fb-4"></div>
+        </div>
+
+        <div class="q-block" data-q="5" data-correct="c">
+          <div class="q-text"><span class="q-num">Q5.</span> You're in Ask mode and Bob needs to delegate codebase exploration work to a subagent. Which subagent type is Bob permitted to spawn?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>General — Ask mode needs a capable subagent to handle exploration tasks.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Either type — Ask mode has no restrictions on subagent types.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Explore only — Ask mode restricts subagent spawning to the explore type.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>No subagents — Ask mode cannot spawn any subagents.</div>
+          </div>
+          <div class="q-feedback" id="fb-5"></div>
+        </div>
+
+      </div>
+
+      <div class="quiz-submit-row">
+        <button class="btn-submit" id="submitBtn">Check Answers</button>
+        <span class="result-text" id="resultText"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-02-modes-and-tools.html" class="btn-nav">← Lesson 02</a>
+    <span class="lesson-nav-center">Lesson 3 of 6</span>
+    <a href="bob-mastery-lesson-04-configuration.html" class="btn-nav btn-nav-primary">Next: Configuration →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+
+<script>
+(function() {
+  var answers = {};
+  var submitted = false;
+
+  var feedbacks = {
+    1: { correct: "Correct. Project-level skills in .bob/skills/ always take precedence over global skills in ~/.bob/skills/ with the same name. This lets teams override personal defaults with team-wide standards.", incorrect: "Incorrect. Project-level skills take precedence. The scoping hierarchy is: project > global. This ensures team-committed standards override individual preferences." },
+    2: { correct: "Correct. Three parallel subagents satisfy all three conditions: each task is self-contained, results are summarized back, and the exploration work is isolated from the main context.", incorrect: "Incorrect. Three parallel subagents is the right pattern here. Subtasks are interactive and visible — they don't isolate context. Sequential reads pollute the main context." },
+    3: { correct: "Correct. Skills are loaded once per conversation and remain in the context window for its duration. This is why Bob notes 'skills load once per conversation to avoid duplicate prompts.'", incorrect: "Incorrect. Skills load once per conversation and persist in the context for the entire session. They are not reloaded per-prompt — that would multiply cost with every message." },
+    4: { correct: "Correct. fork_context: true is specifically for cases where the subagent needs to understand prior decisions, discovered constraints, or user preferences expressed earlier in the parent conversation.", incorrect: "Incorrect. The default is no context sharing — it keeps the subagent lean. fork_context: true is only used when the subagent genuinely needs prior conversation history to do its work correctly." },
+    5: { correct: "Correct. Ask mode restricts subagent spawning to the 'explore' type only. The general type is only available in Agent mode, since it inherits the mode's full tool set including write access.", incorrect: "Incorrect. Ask mode is restricted to the 'explore' subagent type. The 'general' type is only available in Agent mode because it would inherit write capabilities that Ask mode doesn't permit." }
+  };
+
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      if (submitted) return;
+      var block = this.closest('.q-block');
+      block.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      answers[block.dataset.q] = this.dataset.val;
+      updateProgress();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (submitted) return;
+    var total = 5, score = 0;
+    document.querySelectorAll('.q-block').forEach(function(block) {
+      var q = block.dataset.q;
+      var correct = block.dataset.correct;
+      var chosen = answers[q];
+      var fb = document.getElementById('fb-' + q);
+      block.querySelectorAll('.q-option').forEach(function(opt) {
+        if (opt.dataset.val === correct) opt.classList.add('revealed-correct');
+      });
+      if (chosen) {
+        var chosenEl = block.querySelector('[data-val="' + chosen + '"]');
+        if (chosen === correct) {
+          chosenEl.classList.add('correct'); chosenEl.classList.remove('selected'); score++;
+          fb.className = 'q-feedback correct-fb'; fb.textContent = feedbacks[q].correct;
+        } else {
+          chosenEl.classList.add('incorrect'); chosenEl.classList.remove('selected');
+          fb.className = 'q-feedback incorrect-fb'; fb.textContent = feedbacks[q].incorrect;
+        }
+      }
+    });
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    var rt = document.getElementById('resultText');
+    if (score === total) { rt.style.color = '#065f46'; rt.textContent = 'Perfect score!'; }
+    else if (score >= 3) { rt.style.color = '#6d28d9'; rt.textContent = score + ' of ' + total + ' correct — solid.'; }
+    else { rt.style.color = '#b91c1c'; rt.textContent = score + ' of ' + total + ' — review the sections above.'; }
+    document.getElementById('submitBtn').disabled = true;
+    submitted = true;
+    document.getElementById('progressFill').style.width = '100%';
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    document.getElementById('progressFill').style.width = Math.round((answered / 5) * 80) + '%';
+  }
+})();
+</script>
+</body>
+</html>

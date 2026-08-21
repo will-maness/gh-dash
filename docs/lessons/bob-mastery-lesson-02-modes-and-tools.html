@@ -1,0 +1,872 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 02 — Modes &amp; Tools | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar a { color: #57606a; text-decoration: none; }
+  .topbar a:hover { color: #3b82d4; text-decoration: underline; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .lesson-hero { margin-bottom: 40px; }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #3b82d4;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .lesson-hero .tagline {
+    font-size: 16px;
+    color: #57606a;
+    margin-bottom: 20px;
+  }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    color: #57606a;
+  }
+
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+  .progress-track {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #3b82d4;
+    border-radius: 4px;
+    transition: width .4s ease;
+  }
+
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .callout .callout-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+  }
+  .callout p { font-size: 14px; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── Mode comparison table ── */
+  .mode-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .mode-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .mode-table th {
+    background: #f7f8fa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #57606a;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .mode-table td {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: top;
+  }
+  .mode-table tr:last-child td { border-bottom: none; }
+  .mode-table .mode-name {
+    font-weight: 700;
+    color: #1f2328;
+    white-space: nowrap;
+  }
+  .check { color: #10b981; font-weight: 700; }
+  .cross { color: #d1d5db; font-weight: 700; }
+
+  /* ── Tool category cards ── */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  @media (max-width: 540px) { .tool-grid { grid-template-columns: 1fr; } }
+  .tool-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .tool-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .tool-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .icon-read { background: #dbeafe; }
+  .icon-write { background: #fce7f3; }
+  .icon-exec { background: #fef3c7; }
+  .icon-mcp { background: #d1fae5; }
+  .icon-skill { background: #ede9fe; }
+  .icon-subagent { background: #fae8ff; }
+  .icon-todo { background: #fee2e2; }
+  .icon-mode { background: #e0f2fe; }
+  .tool-card-title { font-size: 13px; font-weight: 700; }
+  .tool-card-desc { font-size: 12.5px; color: #57606a; line-height: 1.5; }
+  .tool-tag-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .tool-tag {
+    font-size: 11px;
+    background: #f7f8fa;
+    color: #57606a;
+    padding: 2px 7px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  /* ── Scenario box ── */
+  .scenario {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .scenario-header {
+    background: #1f2328;
+    color: #fff;
+    padding: 12px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scenario-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-red { background: #f87171; }
+  .dot-yellow { background: #fbbf24; }
+  .dot-green { background: #34d399; }
+  .scenario-body { padding: 16px 18px; background: #fafafa; }
+  .scenario-prompt {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    color: #1f2328;
+  }
+  .scenario-prompt .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #57606a; margin-bottom: 4px; }
+  .scenario-response { font-size: 13px; color: #57606a; line-height: 1.6; }
+  .scenario-tool-call {
+    background: #f0f4ff;
+    border-left: 3px solid #3b82d4;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    color: #3b52a4;
+    margin: 8px 0;
+  }
+  .scenario-blocked {
+    background: #fff1f2;
+    border-left: 3px solid #ef4444;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    color: #b91c1c;
+    margin: 8px 0;
+  }
+
+  /* ── Flow diagram ── */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .flow-box {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 80px;
+    text-align: center;
+  }
+  .flow-box-blue { background: #dbeafe; color: #1d4ed8; }
+  .flow-box-purple { background: #ede9fe; color: #6d28d9; }
+  .flow-box-green { background: #d1fae5; color: #065f46; }
+  .flow-caption { font-size: 11px; color: #57606a; max-width: 80px; line-height: 1.3; }
+  .flow-arrow { font-size: 22px; color: #c8d0dc; padding: 0 8px; padding-bottom: 20px; }
+
+  /* ── Quiz ── */
+  .quiz-section {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .quiz-header {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .quiz-header h2 { border: none; padding: 0; margin: 0; font-size: 18px; }
+  .quiz-score-badge {
+    font-size: 13px;
+    font-weight: 700;
+    color: #57606a;
+    background: #e5e7eb;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .quiz-body { padding: 20px; display: flex; flex-direction: column; gap: 28px; }
+  .q-block {}
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .q-num { color: #3b82d4; margin-right: 6px; }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    background: #fff;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .q-option:hover { border-color: #93bbf5; background: #f0f6ff; }
+  .q-option.selected { border-color: #3b82d4; background: #eff6ff; }
+  .q-option.correct { border-color: #10b981; background: #d1fae5; }
+  .q-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+  .q-option.revealed-correct { border-color: #10b981; background: #d1fae5; }
+  .q-radio {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #c8d0dc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .q-radio-inner { width: 8px; height: 8px; border-radius: 50%; background: transparent; transition: background .1s; }
+  .q-option.selected .q-radio { border-color: #3b82d4; }
+  .q-option.selected .q-radio-inner { background: #3b82d4; }
+  .q-option.correct .q-radio { border-color: #10b981; }
+  .q-option.correct .q-radio-inner { background: #10b981; }
+  .q-option.incorrect .q-radio { border-color: #ef4444; }
+  .q-option.incorrect .q-radio-inner { background: #ef4444; }
+  .q-option.revealed-correct .q-radio { border-color: #10b981; }
+  .q-option.revealed-correct .q-radio-inner { background: #10b981; }
+  .q-feedback {
+    font-size: 13px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: none;
+  }
+  .q-feedback.correct-fb { background: #d1fae5; color: #065f46; display: block; }
+  .q-feedback.incorrect-fb { background: #fee2e2; color: #991b1b; display: block; }
+  .quiz-submit-row { padding: 0 20px 20px; display: flex; align-items: center; gap: 16px; }
+  .btn-submit {
+    background: #3b82d4;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-submit:hover { background: #2563eb; }
+  .btn-submit:disabled { background: #c8d0dc; cursor: default; }
+  .result-text { font-size: 14px; font-weight: 600; }
+
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 20px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    background: #fff;
+    color: #1f2328;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav-primary { background: #1f2328; color: #fff; border-color: #1f2328; }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #9ea8b3;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Lesson 02 — Modes &amp; Tools</span>
+    <span class="pill">~25 min</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Lesson 02 of 06</div>
+    <h1>Modes &amp; Tools: Bob's Operating System</h1>
+    <p class="tagline">The three built-in modes aren't cosmetic — they determine exactly which actions Bob is physically capable of taking. Understanding this permission model is the foundation of using Bob safely and effectively.</p>
+    <div class="meta-chips">
+      <span class="chip">Agent / Ask / Plan modes</span>
+      <span class="chip">Tool permission matrix</span>
+      <span class="chip">8 tool categories</span>
+      <span class="chip">Mode switching strategy</span>
+      <span class="chip">5-question quiz</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Lesson progress</div>
+    <div class="progress-track"><div class="progress-fill" style="width:0%" id="progressFill"></div></div>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">Section 1 of 4</div>
+    <h2>Why modes exist — and why they're enforced, not suggested</h2>
+
+    <p>When you switch modes in Bob, you're not changing Bob's "personality" or tone. You're changing its tool permissions at a hard architectural level. Ask mode literally cannot call <code>apply_diff</code> or <code>execute_command</code> — those tools are not available to it. This isn't a preference; it's a constraint enforced by the mode's permission groups.</p>
+
+    <p>This matters enormously in practice. It means that when you put Bob into Ask mode to explore a codebase or audit for security issues, you get a genuine safety guarantee: no accidental file writes, no commands fired, even if Bob misunderstands your intent. You're browsing, not editing.</p>
+
+    <p>The three built-in modes are purpose-built for the three mental postures of software development: <strong>understanding</strong> (Ask), <strong>planning</strong> (Plan), and <strong>executing</strong> (Agent). Each one restricts or enables tool groups accordingly.</p>
+
+    <div class="mode-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Primary purpose</th>
+            <th>Read</th>
+            <th>Write</th>
+            <th>Execute</th>
+            <th>Allowed subagents</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mode-name">Agent</span></td>
+            <td>Implement, fix, build</td>
+            <td class="check">✓</td>
+            <td class="check">✓</td>
+            <td class="check">✓</td>
+            <td>Explore + General</td>
+          </tr>
+          <tr>
+            <td><span class="mode-name">Plan</span></td>
+            <td>Design, architect, spec</td>
+            <td class="check">✓</td>
+            <td class="check">✓</td>
+            <td class="cross">✗</td>
+            <td>Explore only</td>
+          </tr>
+          <tr>
+            <td><span class="mode-name">Ask</span></td>
+            <td>Understand, explain, audit</td>
+            <td class="check">✓</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td>Explore only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Common misread: Plan mode</div>
+      <p>Plan mode <em>does</em> have write access. It can write files — specifically for creating spec documents, architecture notes, and planning artifacts. What it <em>cannot</em> do is execute shell commands. So Plan is "read + write docs, no execute," not "read-only." Both Plan and Ask restrict subagent spawning to the <code>explore</code> type — if a spawn isn't permitted by the active mode, Bob completes the work directly without spawning.</p>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>This permission model is a direct product design choice that addresses enterprise risk. Many companies are cautious about AI agents that can execute shell commands without human review. The explicit mode separation lets teams enforce a policy: "only senior devs can work in Agent mode; the rest stay in Ask/Plan." That's a real enterprise governance story.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label">Section 2 of 4</div>
+    <h2>All 8 tool categories, explained</h2>
+
+    <p>Every tool Bob can call falls into one of eight categories. Modes grant or deny access to entire categories at once. Here's what each does and when Bob reaches for it:</p>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-read">📖</div>
+          <div class="tool-card-title">Read</div>
+        </div>
+        <div class="tool-card-desc">Access file contents and understand code structure without making changes.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">read_file</span>
+          <span class="tool-tag">glob</span>
+          <span class="tool-tag">grep</span>
+          <span class="tool-tag">list_files</span>
+          <span class="tool-tag">GetSymbolsOverview</span>
+          <span class="tool-tag">FindSymbol</span>
+          <span class="tool-tag">FindReferencingSymbols</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-write">✏️</div>
+          <div class="tool-card-title">Edit (Write)</div>
+        </div>
+        <div class="tool-card-desc">Create or modify files — targeted diffs, full rewrites, or line insertions.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">apply_diff</span>
+          <span class="tool-tag">write_file</span>
+          <span class="tool-tag">insert_content</span>
+          <span class="tool-tag">search_and_replace</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-exec">⚙️</div>
+          <div class="tool-card-title">Execute</div>
+        </div>
+        <div class="tool-card-desc">Run CLI commands in your workspace — tests, builds, installs, scripts.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">execute_command</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-mcp">🔌</div>
+          <div class="tool-card-title">MCP</div>
+        </div>
+        <div class="tool-card-desc">Call tools provided by connected MCP servers — databases, APIs, external services.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">mcp__*__*</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-skill">🧠</div>
+          <div class="tool-card-title">Skill</div>
+        </div>
+        <div class="tool-card-desc">Load a SKILL.md file to inject specialized workflow instructions into context.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">use_skill</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-subagent">🤖</div>
+          <div class="tool-card-title">Subagent / Subtask</div>
+        </div>
+        <div class="tool-card-desc">Spawn isolated parallel agents or create tracked child conversations for complex work.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">spawn_subagent</span>
+          <span class="tool-tag">start_subtask</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-todo">📋</div>
+          <div class="tool-card-title">Todo</div>
+        </div>
+        <div class="tool-card-desc">Maintain a live step-by-step task list that updates as work progresses.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">update_todo_list</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon icon-mode">🔄</div>
+          <div class="tool-card-title">Mode</div>
+        </div>
+        <div class="tool-card-desc">Switch to a different mode when the current task type changes mid-conversation.</div>
+        <div class="tool-tag-list">
+          <span class="tool-tag">switch_mode</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">Important</div>
+      <p>The <code>switch_mode</code> tool is available in all three built-in modes, but Bob should only use it when you explicitly ask or when the current mode genuinely lacks capability needed to finish the task. Modes should not switch spontaneously — that would undermine the permission safety model.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label">Section 3 of 4</div>
+    <h2>The Plan → Agent workflow: when to use it</h2>
+
+    <p>The most important mode-switching decision is whether to use Plan → Agent or go straight to Agent. Both are valid. The choice depends on how much uncertainty or complexity you're working with.</p>
+
+    <div class="flow-diagram">
+      <div class="flow-step">
+        <div class="flow-box flow-box-purple">Plan mode</div>
+        <div class="flow-caption">Design, spec, decompose</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box flow-box-blue">Review plan</div>
+        <div class="flow-caption">You approve the approach</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-box flow-box-green">Agent mode</div>
+        <div class="flow-caption">Execute with full tools</div>
+      </div>
+    </div>
+
+    <p><strong>Use Plan first when:</strong> the task touches multiple files across the codebase, you're uncertain about the right architecture, the change is risky and you want an explicit written plan to review, or you're onboarding into an unfamiliar project.</p>
+
+    <p><strong>Go straight to Agent when:</strong> the task is well-scoped (e.g., "fix this specific function"), you already know the approach, or the task is simple enough that a plan would take longer than just doing it.</p>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <div class="scenario-dot dot-red"></div>
+        <div class="scenario-dot dot-yellow"></div>
+        <div class="scenario-dot dot-green"></div>
+        <span style="margin-left:4px">Ask mode vs. Agent mode — same request, different results</span>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-prompt">
+          <div class="label">Your prompt (in Ask mode)</div>
+          "Refactor the authentication module to support OAuth."
+        </div>
+        <div class="scenario-response">
+          <p><strong>Ask mode response:</strong></p>
+          <div class="scenario-tool-call">read_file("auth/auth.ts") → reads the current implementation</div>
+          <div class="scenario-tool-call">grep("OAuth", "src/") → searches for any existing OAuth references</div>
+          <p style="margin-top:10px">Bob explains the refactoring approach, identifies which files would need to change, and describes the OAuth integration strategy. <strong>It does not write any files.</strong></p>
+          <p style="margin-top:10px"><strong>If you then switch to Agent mode and say "do it":</strong></p>
+          <div class="scenario-tool-call">apply_diff("auth/auth.ts") → modifies the auth module</div>
+          <div class="scenario-tool-call">write_file("auth/oauth-provider.ts") → creates new file</div>
+          <div class="scenario-tool-call">execute_command("npm test auth/") → verifies nothing broke</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>The Plan → Agent pattern maps directly to how well-run engineering teams work: design review before execution. If your team has a code review culture, you can enforce it architecturally by requiring that significant tasks go through Plan mode first. The plan output is a written artifact — commit it, review it in a PR, then execute. This is a real governance workflow, not just a suggestion.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label">Section 4 of 4</div>
+    <h2>Read tools in depth: how Bob explores a codebase</h2>
+
+    <p>Read tools are the foundation of everything Bob does. Before writing a single line of code, Bob typically executes several read operations to understand the codebase. Knowing which read tools exist — and what each one is good for — helps you write better prompts and understand why Bob makes the exploratory calls it does.</p>
+
+    <p>The pattern Bob follows is: <code>glob</code> to find files → <code>read_file</code> to inspect them → <code>grep</code> to find specific patterns → <code>GetSymbolsOverview</code> or <code>FindSymbol</code> for code-structure-aware navigation. It almost never reads files randomly. It reasons about which files are relevant first.</p>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">Why this matters for cost</div>
+      <p>Every file Bob reads lands in the context window for the rest of the conversation. A read of a 500-line file early in a session means that 500 lines are re-sent with every subsequent prompt. If Bob reads 10 large files while exploring, those reads compound across every message that follows. Being precise about what you ask Bob to look at is a direct cost optimization — not just a style preference.</p>
+    </div>
+
+    <p>The <code>GetSymbolsOverview</code> and <code>FindSymbol</code> tools are especially worth understanding. Rather than reading entire files, they extract just the class/function/method structure — the skeleton — at a fraction of the token cost. Bob uses these to "see the shape" of a file before deciding which specific parts to read in full.</p>
+  </div>
+
+
+  <!-- QUIZ -->
+  <div class="section">
+    <div class="section-label">Knowledge Check</div>
+
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-header">
+        <h2>Lesson 02 Quiz</h2>
+        <span class="quiz-score-badge" id="scoreDisplay">0 / 5</span>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+
+        <div class="q-block" data-q="1" data-correct="c">
+          <div class="q-text"><span class="q-num">Q1.</span> A developer in Plan mode asks Bob to "write the technical spec and then run the test suite to verify nothing is broken." What will happen?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob writes the spec and runs the tests — Plan mode has all permissions except spawning subagents.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob switches to Agent mode automatically to run the tests, then switches back to Plan.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob writes the spec but cannot run the tests — Plan mode has no execute tool access.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob refuses both steps because spec-writing is not a Plan mode capability.</div>
+          </div>
+          <div class="q-feedback" id="fb-1"></div>
+        </div>
+
+        <div class="q-block" data-q="2" data-correct="b">
+          <div class="q-text"><span class="q-num">Q2.</span> Which tool category is available in all three built-in modes (Agent, Plan, and Ask)?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Execute — all modes need to be able to run tests.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Read — all modes need to be able to access file content.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Edit — all modes need to be able to write documentation files.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Todo — all modes track work progress equally.</div>
+          </div>
+          <div class="q-feedback" id="fb-2"></div>
+        </div>
+
+        <div class="q-block" data-q="3" data-correct="a">
+          <div class="q-text"><span class="q-num">Q3.</span> Why is <code>GetSymbolsOverview</code> preferable to <code>read_file</code> when exploring an unfamiliar class?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>It reads only the class structure (methods, properties) rather than the full file body, consuming far fewer tokens.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>It is faster because it reads from a cached index rather than the file system.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>It is the only tool that can access TypeScript or JavaScript files specifically.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>It is available in all modes including Ask, whereas read_file is Agent-only.</div>
+          </div>
+          <div class="q-feedback" id="fb-3"></div>
+        </div>
+
+        <div class="q-block" data-q="4" data-correct="d">
+          <div class="q-text"><span class="q-num">Q4.</span> A PM wants to use Bob to audit the codebase for hardcoded API keys without any risk of Bob accidentally modifying files. Which mode should they use?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Agent mode with auto-approve disabled — this gives maximum capability with human oversight.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Plan mode — it can read and produce a report without executing commands.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Either Ask or Plan — both are equivalent for read-only work.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Ask mode — it is the only mode with guaranteed no write or execute access.</div>
+          </div>
+          <div class="q-feedback" id="fb-4"></div>
+        </div>
+
+        <div class="q-block" data-q="5" data-correct="b">
+          <div class="q-text"><span class="q-num">Q5.</span> When should Bob use the <code>switch_mode</code> tool mid-task?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Whenever the complexity of a task increases — Bob should proactively switch to a more capable mode.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Only when the user explicitly requests it or when the current mode lacks a tool genuinely required to complete the task.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>After every file write, to return to Ask mode for safety review.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Mode switching is automatic — Bob always selects the optimal mode for each tool call.</div>
+          </div>
+          <div class="q-feedback" id="fb-5"></div>
+        </div>
+
+      </div>
+
+      <div class="quiz-submit-row">
+        <button class="btn-submit" id="submitBtn">Check Answers</button>
+        <span class="result-text" id="resultText"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-01-how-bob-thinks.html" class="btn-nav">← Lesson 01</a>
+    <span class="lesson-nav-center">Lesson 2 of 6</span>
+    <a href="bob-mastery-lesson-03-skills-and-subagents.html" class="btn-nav btn-nav-primary">Next: Skills &amp; Subagents →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+
+<script>
+(function() {
+  var answers = {};
+  var submitted = false;
+
+  var feedbacks = {
+    1: { correct: "Correct. Plan mode has Read and Edit (write) tool access but no Execute access. Bob can create the spec document but cannot run shell commands like the test suite.", incorrect: "Incorrect. Plan mode cannot run execute_command. It has write access for creating planning documents, but the Execute tool group is disabled in Plan mode." },
+    2: { correct: "Correct. Read tools are available in all three built-in modes. Ask, Plan, and Agent can all call read_file, glob, grep, and the symbol tools.", incorrect: "Incorrect. Read tools are the only category available in all three modes. Execute is Agent-only, Edit is blocked in Ask mode." },
+    3: { correct: "Correct. GetSymbolsOverview extracts only the structural skeleton of a file — class names, method signatures, properties — at a small fraction of the token cost of reading the full file body.", incorrect: "Incorrect. The key advantage is token efficiency. GetSymbolsOverview reads the class structure without loading the full file body, keeping the context window smaller." },
+    4: { correct: "Correct. Ask mode is the only mode with a hard guarantee of no write or execute access. Plan mode can write files, so it doesn't provide the same level of safety for a pure audit scenario.", incorrect: "Incorrect. Ask mode is the safest choice for read-only audits. Plan mode can write files — it's not equivalent to Ask mode for no-modification guarantees." },
+    5: { correct: "Correct. Bob should not switch modes spontaneously. Mode switches happen only when the user requests it or when the active mode genuinely cannot complete the task with its available tools.", incorrect: "Incorrect. Automatic or proactive mode switching would undermine the permission safety model. Bob only switches when explicitly asked or when required." }
+  };
+
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      if (submitted) return;
+      var block = this.closest('.q-block');
+      block.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      answers[block.dataset.q] = this.dataset.val;
+      updateProgress();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (submitted) return;
+    var total = 5, score = 0;
+    document.querySelectorAll('.q-block').forEach(function(block) {
+      var q = block.dataset.q;
+      var correct = block.dataset.correct;
+      var chosen = answers[q];
+      var fb = document.getElementById('fb-' + q);
+      block.querySelectorAll('.q-option').forEach(function(opt) {
+        if (opt.dataset.val === correct) opt.classList.add('revealed-correct');
+      });
+      if (chosen) {
+        var chosenEl = block.querySelector('[data-val="' + chosen + '"]');
+        if (chosen === correct) {
+          chosenEl.classList.add('correct');
+          chosenEl.classList.remove('selected');
+          score++;
+          fb.className = 'q-feedback correct-fb';
+          fb.textContent = feedbacks[q].correct;
+        } else {
+          chosenEl.classList.add('incorrect');
+          chosenEl.classList.remove('selected');
+          fb.className = 'q-feedback incorrect-fb';
+          fb.textContent = feedbacks[q].incorrect;
+        }
+      }
+    });
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    var rt = document.getElementById('resultText');
+    if (score === total) { rt.style.color = '#065f46'; rt.textContent = 'Perfect score!'; }
+    else if (score >= 3) { rt.style.color = '#1d4ed8'; rt.textContent = score + ' of ' + total + ' correct — solid.'; }
+    else { rt.style.color = '#b91c1c'; rt.textContent = score + ' of ' + total + ' — review the sections above.'; }
+    document.getElementById('submitBtn').disabled = true;
+    submitted = true;
+    document.getElementById('progressFill').style.width = '100%';
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    document.getElementById('progressFill').style.width = Math.round((answered / 5) * 80) + '%';
+  }
+})();
+</script>
+</body>
+</html>

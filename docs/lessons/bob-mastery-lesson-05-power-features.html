@@ -1,0 +1,758 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 05 — Power Features | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar a { color: #57606a; text-decoration: none; }
+  .topbar a:hover { color: #3b82d4; text-decoration: underline; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .lesson-hero { margin-bottom: 40px; }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #10b981;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 { font-size: 26px; font-weight: 800; line-height: 1.25; margin-bottom: 12px; }
+  .lesson-hero .tagline { font-size: 16px; color: #57606a; margin-bottom: 20px; }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid #e5e7eb; color: #57606a; }
+
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+  .progress-track { height: 4px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #10b981; border-radius: 4px; transition: width .4s ease; }
+
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .callout .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .callout p { font-size: 14px; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+  .callout-green { background: #f0fdf4; border-left: 4px solid #10b981; }
+  .callout-green .callout-label { color: #065f46; }
+
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── Feature cards ── */
+  .feature-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .feature-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .feature-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .feature-icon {
+    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .fi-green { background: #d1fae5; }
+  .fi-blue { background: #dbeafe; }
+  .fi-amber { background: #fef3c7; }
+  .fi-purple { background: #ede9fe; }
+  .feature-card-title { font-size: 14px; font-weight: 700; }
+  .feature-card-sub { font-size: 12px; color: #57606a; }
+  .feature-card-body { padding: 14px 16px; font-size: 13.5px; color: #1f2328; line-height: 1.6; }
+  .feature-card-body p { margin-bottom: 8px; }
+  .feature-card-body p:last-child { margin-bottom: 0; }
+
+  /* ── @ mention table ── */
+  .mention-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .mention-table table { width: 100%; border-collapse: collapse; }
+  .mention-table th {
+    background: #f7f8fa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #57606a;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .mention-table td {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: top;
+  }
+  .mention-table tr:last-child td { border-bottom: none; }
+
+  /* ── Auto-approve matrix ── */
+  .approve-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .approve-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .approve-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-safe { background: #d1fae5; color: #065f46; }
+  .badge-caution { background: #fef3c7; color: #92400e; }
+  .badge-risk { background: #fee2e2; color: #991b1b; }
+  .approve-content { flex: 1; }
+  .approve-label { font-size: 13.5px; font-weight: 700; margin-bottom: 2px; }
+  .approve-detail { font-size: 12.5px; color: #57606a; }
+
+  /* ── Scenario box ── */
+  .scenario { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin: 20px 0; }
+  .scenario-header {
+    background: #1f2328; color: #fff;
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: .04em; display: flex; align-items: center; gap: 8px;
+  }
+  .scenario-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-red { background: #f87171; }
+  .dot-yellow { background: #fbbf24; }
+  .dot-green { background: #34d399; }
+  .scenario-body { padding: 16px 18px; background: #fafafa; }
+  .scenario-prompt {
+    background: #fff; border: 1px solid #e5e7eb;
+    border-radius: 6px; padding: 12px 14px;
+    font-size: 13.5px; margin-bottom: 14px;
+  }
+  .scenario-prompt .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #57606a; margin-bottom: 4px; }
+  .scenario-response { font-size: 13px; color: #57606a; line-height: 1.6; }
+  .scenario-tool-call {
+    background: #f0f4ff; border-left: 3px solid #3b82d4;
+    padding: 8px 12px; border-radius: 0 6px 6px 0;
+    font-size: 12px; font-family: "SF Mono","Fira Code","Consolas",monospace;
+    color: #3b52a4; margin: 8px 0;
+  }
+
+  /* ── Quiz ── */
+  .quiz-section { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+  .quiz-header {
+    background: #f7f8fa; border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .quiz-header h2 { border: none; padding: 0; margin: 0; font-size: 18px; }
+  .quiz-score-badge { font-size: 13px; font-weight: 700; color: #57606a; background: #e5e7eb; padding: 4px 12px; border-radius: 20px; }
+  .quiz-body { padding: 20px; display: flex; flex-direction: column; gap: 28px; }
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .q-num { color: #10b981; margin-right: 6px; }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border: 1px solid #e5e7eb;
+    border-radius: 6px; cursor: pointer; font-size: 14px;
+    background: #fff; transition: border-color .15s, background .15s; user-select: none;
+  }
+  .q-option:hover { border-color: #6ee7b7; background: #f0fdf4; }
+  .q-option.selected { border-color: #10b981; background: #ecfdf5; }
+  .q-option.correct { border-color: #10b981; background: #d1fae5; }
+  .q-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+  .q-option.revealed-correct { border-color: #10b981; background: #d1fae5; }
+  .q-radio {
+    width: 16px; height: 16px; border: 2px solid #c8d0dc;
+    border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-radio-inner { width: 8px; height: 8px; border-radius: 50%; background: transparent; transition: background .1s; }
+  .q-option.selected .q-radio { border-color: #10b981; }
+  .q-option.selected .q-radio-inner { background: #10b981; }
+  .q-option.correct .q-radio { border-color: #10b981; }
+  .q-option.correct .q-radio-inner { background: #10b981; }
+  .q-option.incorrect .q-radio { border-color: #ef4444; }
+  .q-option.incorrect .q-radio-inner { background: #ef4444; }
+  .q-option.revealed-correct .q-radio { border-color: #10b981; }
+  .q-option.revealed-correct .q-radio-inner { background: #10b981; }
+  .q-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .q-feedback.correct-fb { background: #d1fae5; color: #065f46; display: block; }
+  .q-feedback.incorrect-fb { background: #fee2e2; color: #991b1b; display: block; }
+  .quiz-submit-row { padding: 0 20px 20px; display: flex; align-items: center; gap: 16px; }
+  .btn-submit {
+    background: #10b981; color: #fff; border: none;
+    padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background .15s;
+  }
+  .btn-submit:hover { background: #059669; }
+  .btn-submit:disabled { background: #c8d0dc; cursor: default; }
+  .result-text { font-size: 14px; font-weight: 600; }
+
+  .lesson-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 44px; padding-top: 20px; border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px; font-weight: 600; padding: 9px 20px;
+    border-radius: 6px; border: 1px solid #e5e7eb;
+    cursor: pointer; background: #fff; color: #1f2328;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-nav-primary { background: #1f2328; color: #fff; border-color: #1f2328; }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+  footer {
+    text-align: center; font-size: 11px; color: #9ea8b3;
+    padding-top: 20px; border-top: 1px solid #e5e7eb; margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Lesson 05 — Power Features</span>
+    <span class="pill">~25 min</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Lesson 05 of 06</div>
+    <h1>Power Features: The Developer Workflow Toolkit</h1>
+    <p class="tagline">Bob ships with a set of developer workflow features that go far beyond chat. Rollback, literate coding, code reviews, Bob tips, context mentions, agent steering, and auto-approve together form a complete developer experience. Understanding them deeply is the difference between using 20% of Bob's capability and 80%.</p>
+    <div class="meta-chips">
+      <span class="chip">Rollback</span>
+      <span class="chip">Bob tips</span>
+      <span class="chip">Literate coding</span>
+      <span class="chip">Agent steering</span>
+      <span class="chip">@context mentions</span>
+      <span class="chip">Code reviews</span>
+      <span class="chip">Auto-approve</span>
+      <span class="chip">5-question quiz</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Lesson progress</div>
+    <div class="progress-track"><div class="progress-fill" style="width:0%" id="progressFill"></div></div>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">Section 1 of 4</div>
+    <h2>Rollback, Bob tips, and literate coding</h2>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-amber">↩</div>
+          <div>
+            <div class="feature-card-title">Rollback</div>
+            <div class="feature-card-sub">Automatic version snapshots during AI tasks</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>Bob captures snapshots of your project's state using a shadow Git repository, separate from your main version control system. Snapshots are recorded <strong>when tasks begin and before file modifications</strong> — they are not automatically created before running commands. This happens silently in the background.</p>
+          <p>Each snapshot gives you two operations: <strong>View diff</strong> (compare current workspace to that snapshot) and <strong>Restore</strong>. Restore has two sub-options: restore only the files (keeps your conversation intact) or restore everything including conversation history.</p>
+          <p>The key distinction from a normal <code>git checkout</code>: restoring files without restoring the conversation lets you compare two AI-generated implementations side-by-side while maintaining the chat context. This is valuable when you want Bob to try an alternative approach without losing the context of why it made the first attempt.</p>
+          <p><strong>Nested Git repos disable rollback:</strong> If Bob detects nested Git repositories in your workspace, rollback is disabled with a notification. Remove or relocate nested repos to re-enable it.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-purple">💡</div>
+          <div>
+            <div class="feature-card-title">Bob tips</div>
+            <div class="feature-card-sub">Continuous static analysis with AI-powered refactoring</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>Bob tips runs continuously in the background, calculating code quality metrics at the function level across all open files. It detects two specific categories of problems:</p>
+          <p><strong>High cyclomatic complexity:</strong> Functions with deeply nested conditionals, excessive branching, or too many independent execution paths — the kind of code that becomes untestable and unmaintainable as it grows.</p>
+          <p><strong>Low maintainability:</strong> Functions that are hard to read, test, or extend — often a result of mixed concerns, long parameter lists, or missing abstraction.</p>
+          <p>When a threshold is exceeded, Bob underlines the function in purple in the editor and adds it to the Bob Findings panel. Clicking <strong>Fix with Bob</strong> opens a chat conversation with full context about the issue, letting you discuss the refactoring approach before committing to it.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-blue">✍</div>
+          <div>
+            <div class="feature-card-title">Literate coding</div>
+            <div class="feature-card-sub">Natural language instructions written directly in source files</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>Literate coding is a fundamentally different interaction model from chat. Instead of describing a change in the chat panel and having Bob infer the location, you write the natural language instruction <em>directly in the source file</em> at the exact line where the code should go — as a comment, pseudocode, or plain description.</p>
+          <p>Instructions appear highlighted in blue to distinguish them from real code. When you run Generate, Bob reads the instruction in context (with full visibility of the surrounding code) and produces an inline diff, previewing the implementation right where you wrote the instruction.</p>
+          <p>This is particularly valuable for targeted changes: adding retry logic to a specific function, inserting a validation block at a specific point, or expanding a stub. The precision eliminates the "Bob changed the wrong place" problem entirely.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-green">⟳</div>
+          <div>
+            <div class="feature-card-title">Agent steering &amp; message queue</div>
+            <div class="feature-card-sub">Redirect a running agent without canceling it</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>Agent steering lets you send a new message to Bob while it is still executing — you don't have to wait for it to finish, and you don't have to cancel the current task. New messages join a <strong>queue</strong> that persists even across webview reloads. Bob works through queued messages as soon as it finishes each step.</p>
+          <p>This changes the interaction model for long-running tasks. Instead of watching Bob execute 15 tool calls and then responding, you can queue up your follow-on instruction as soon as you see where it's headed — or redirect it mid-flight if it's going the wrong direction.</p>
+          <p><strong>Drag to reorder:</strong> Messages in the queue can be dragged to change their execution order. If you realize a later message should run before an earlier one, you reorder without canceling either.</p>
+          <p><strong>When to use it:</strong> Long scaffolding tasks where you want to set context for the next step while the current step is still running. Research or multi-file exploration where you want to queue follow-up questions as Bob's intermediate findings appear.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-amber">👁</div>
+          <div>
+            <div class="feature-card-title">Preview file edits before accepting</div>
+            <div class="feature-card-sub">Inspect proposed changes in-editor before committing to them</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>When this setting is enabled (Settings → Editor → Preview edits), Bob's proposed file changes open as a diff view directly in the editor before you accept them. You see a side-by-side or inline diff of exactly what will change — unchanged lines, deletions, additions — in the same editor you use for all other diffs.</p>
+          <p>This is distinct from the chat panel's tool-call approval prompt. The approval prompt tells you <em>that</em> Bob wants to write a file. The editor preview shows you <em>exactly what</em> will be written before you commit to it.</p>
+          <p><strong>Practical use:</strong> Enable this for any session where Bob is making structural changes to existing files (refactors, configuration updates, schema migrations). Keep it off for greenfield sessions where Bob is creating new files from scratch — the diff view adds overhead that isn't useful when there's no baseline to compare against.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">Task history retention</div>
+      <p>Bob automatically deletes completed tasks after <strong>14 days</strong> to keep your task list manageable. After this period, the task and its conversation history are permanently removed and cannot be recovered. You can change this in Settings → Chat → Task retention. Setting the value to <code>0</code> disables automatic deletion. Task history is stored locally — not backed up or synced across devices.</p>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Bob tips, rollback, agent steering, and edit preview together address the four most common developer fears about AI-assisted code: "will it silently degrade quality?", "what if it breaks something I can't undo?", "what if it goes in the wrong direction?", and "what exactly will it change?". Each feature is zero-setup and always-on (or one toggle away). The product value proposition here is <em>trust at scale</em>: developers who can observe, redirect, and preview AI actions are willing to delegate larger and more consequential tasks.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label">Section 2 of 4</div>
+    <h2>Context mentions: the @ system explained</h2>
+
+    <p>Context mentions let you inject specific project content directly into a prompt without copying and pasting. You type <code>@</code> in the chat input and select what to reference. Bob receives the exact content of whatever you mention — not a description of it.</p>
+
+    <div class="mention-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Syntax</th>
+            <th>What it injects</th>
+            <th>Key detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>@/path/to/file.ts</code></td>
+            <td>Full contents of a specific file</td>
+            <td>Bypasses .bobignore — useful for explicitly sharing generated or ignored files</td>
+          </tr>
+          <tr>
+            <td><code>@/path/to/folder</code></td>
+            <td>Contents of all files directly in that folder</td>
+            <td>Non-recursive — does not include subfolders. Watch context window size with large directories.</td>
+          </tr>
+          <tr>
+            <td><code>@problems</code></td>
+            <td>All diagnostics from the Problems panel</td>
+            <td>Lets Bob see every current TypeScript error, lint warning, etc. in one shot</td>
+          </tr>
+          <tr>
+            <td><code>@terminal</code></td>
+            <td>Current terminal output / last command result</td>
+            <td>Ideal for "why did this fail?" — Bob sees the actual error output directly</td>
+          </tr>
+          <tr>
+            <td><code>@git-changes</code></td>
+            <td>Current staged/unstaged diff</td>
+            <td>Perfect for pre-commit review: "review @git-changes before I commit"</td>
+          </tr>
+          <tr>
+            <td><code>@https://…</code></td>
+            <td>Fetched and Markdown-converted web page content</td>
+            <td>Uses headless browser; strips navigation/scripts. Good for referencing docs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <div class="scenario-dot dot-red"></div>
+        <div class="scenario-dot dot-yellow"></div>
+        <div class="scenario-dot dot-green"></div>
+        <span style="margin-left:4px">Context mentions in action — power combinations</span>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-prompt">
+          <div class="label">Example 1 — Multi-file review</div>
+          "Fix @problems in @/src/components and explain what was wrong"
+        </div>
+        <div class="scenario-response">
+          <p>Bob receives the full diagnostics list AND the complete contents of every file in <code>/src/components</code> in a single prompt. No file exploration needed — everything is already in context.</p>
+        </div>
+        <div class="scenario-prompt" style="margin-top:12px">
+          <div class="label">Example 2 — Debugging with terminal output</div>
+          "The build is failing. Here's the output: @terminal — what's wrong and how do I fix it?"
+        </div>
+        <div class="scenario-response">
+          <p>Bob sees the exact terminal output, not a paraphrase. This is far more reliable than copy-pasting error text, which often loses formatting and truncates stack traces.</p>
+        </div>
+        <div class="scenario-prompt" style="margin-top:12px">
+          <div class="label">Example 3 — Pre-commit review</div>
+          "Review @git-changes and check against the API spec at @https://api.mycompany.com/docs"
+        </div>
+        <div class="scenario-response">
+          <p>Bob compares your actual uncommitted diff against live documentation pulled from the URL. This is impossible to do in a standard chat interface without significant manual preparation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Context window trap</div>
+      <p>Mentioning a large folder or a heavily-referenced file injects all that content into the context window immediately, and it stays there for the rest of the conversation. <code>@/src</code> on a large project could consume tens of thousands of tokens before you've typed a single word of your actual question. Be surgical: mention the specific files or the specific folder, not the entire project root.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label">Section 3 of 4</div>
+    <h2>Code reviews, commit messages &amp; PR generation</h2>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-blue">🔍</div>
+          <div>
+            <div class="feature-card-title">Code reviews (<code>/review</code>)</div>
+            <div class="feature-card-sub">AI-powered diff analysis before you commit</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>Trigger with <code>/review</code> in the chat panel. Bob opens a dedicated Review panel where you select a branch to compare against. It analyzes the diff between branches and populates the Bob Findings panel with flagged issues.</p>
+          <p>Critically: reviews run with <strong>auto-approval enabled</strong> — Bob proceeds through all analysis steps without asking for confirmation at each tool call. This is by design; the review workflow is read-only, so the safety risk of auto-approval is low and the speed benefit is high.</p>
+          <p>You can optionally attach a GitHub issue to validate that your changes actually address its requirements — Bob cross-references the issue description against the diff.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">
+          <div class="feature-icon fi-green">✉</div>
+          <div>
+            <div class="feature-card-title">Commit messages &amp; PR generation</div>
+            <div class="feature-card-sub">Consistent, meaningful git history without the manual work</div>
+          </div>
+        </div>
+        <div class="feature-card-body">
+          <p>Bob generates commit messages by examining staged changes, branch name, and recent commit history to determine the correct format. It follows conventional commit standards (<code>feat:</code>, <code>fix:</code>, <code>refactor:</code>, etc.) and derives the scope and description from what was actually changed — not from what you tell it to say.</p>
+          <p>PR generation works similarly: Bob analyzes the full diff between your branch and the base, creates a structured description, and fills in any template sections your repo defines. Clear section headings in PR templates (<code>## Summary</code>, <code>## Changes</code>) dramatically improve output quality.</p>
+          <p>Both features are designed to be reviewed before use — not auto-submitted. Bob drafts; you approve, edit, and submit.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-green">
+      <div class="callout-label">Why this matters for PM</div>
+      <p>Commit message quality is a hidden product health signal. Repos with AI-generated commit messages that follow consistent conventions become significantly easier to audit, changelog-generate from, and search through. PR descriptions that reference the issue being addressed create a traceable link from requirement to code to deployment. These aren't glamorous features, but they're compounding value — the ROI shows up months later when someone needs to understand why a change was made.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label">Section 4 of 4</div>
+    <h2>Auto-approve settings: the security tradeoff matrix</h2>
+
+    <p>Auto-approve controls whether Bob needs your explicit confirmation before executing each action. By default, every tool call requires approval. You can selectively enable auto-approve for specific action categories — and each toggle carries a different risk profile.</p>
+
+    <div class="approve-grid">
+      <div class="approve-row">
+        <div class="approve-badge badge-safe">Low risk</div>
+        <div class="approve-content">
+          <div class="approve-label">Read operations (<code>read_file</code>, <code>glob</code>, <code>grep</code>)</div>
+          <div class="approve-detail">Safe to auto-approve for almost all users. Reads are non-destructive. The only risk is context window cost from large reads, not data integrity.</div>
+        </div>
+      </div>
+      <div class="approve-row">
+        <div class="approve-badge badge-caution">Caution</div>
+        <div class="approve-content">
+          <div class="approve-label">Write operations (<code>apply_diff</code>, <code>write_file</code>)</div>
+          <div class="approve-detail">Acceptable for experienced users with rollback enabled. Risk: Bob could write to an unintended file. Rollback mitigates this, but you lose the opportunity to catch mistakes before they happen.</div>
+        </div>
+      </div>
+      <div class="approve-row">
+        <div class="approve-badge badge-risk">Higher risk</div>
+        <div class="approve-content">
+          <div class="approve-label">Execute operations (<code>execute_command</code>)</div>
+          <div class="approve-detail">Auto-approving execute allows Bob to run shell commands without review. A misunderstood request could result in <code>rm -rf</code>, package installs that modify lockfiles, or environment state changes. Only enable for very well-scoped workflows where you trust the command patterns Bob will generate.</div>
+        </div>
+      </div>
+      <div class="approve-row">
+        <div class="approve-badge badge-caution">Caution</div>
+        <div class="approve-content">
+          <div class="approve-label">MCP operations</div>
+          <div class="approve-detail">Risk depends entirely on what the MCP server can do. Auto-approving MCP for a read-only search server is low risk. Auto-approving MCP for a server that can send Slack messages or create Jira tickets is a different story entirely.</div>
+        </div>
+      </div>
+      <div class="approve-row">
+        <div class="approve-badge badge-safe">Low risk</div>
+        <div class="approve-content">
+          <div class="approve-label">Skills</div>
+          <div class="approve-detail">Auto-approving skills means Bob activates specialized workflows without asking. Generally safe — skills only inject instructions, they don't execute anything on their own.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">The correct default posture</div>
+      <p>Start with everything requiring approval, then selectively enable auto-approve for the categories you've confirmed are safe for your workflow. The docs explicitly state: "configure these settings based on your risk tolerance and workflow needs." There is no universal "right" setting — it depends on the task, the team, and the MCP servers in use. Re-evaluate auto-approve settings when adding new MCP servers or starting a new project type.</p>
+    </div>
+  </div>
+
+
+  <!-- QUIZ -->
+  <div class="section">
+    <div class="section-label">Knowledge Check</div>
+
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-header">
+        <h2>Lesson 05 Quiz</h2>
+        <span class="quiz-score-badge" id="scoreDisplay">0 / 5</span>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+
+        <div class="q-block" data-q="1" data-correct="c">
+          <div class="q-text"><span class="q-num">Q1.</span> A developer uses rollback to "Restore files" (without restoring conversation history) after Bob generates an implementation they don't like. What is the state after this operation?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>The workspace files and the conversation are both reverted to the snapshot state.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Nothing changes — "Restore files" is a preview-only operation that requires confirmation first.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Workspace files are reverted to the snapshot, but the chat conversation history remains intact.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>The conversation is reverted but the files stay as they are, for safety.</div>
+          </div>
+          <div class="q-feedback" id="fb-1"></div>
+        </div>
+
+        <div class="q-block" data-q="2" data-correct="d">
+          <div class="q-text"><span class="q-num">Q2.</span> Bob tips flags a function with a purple underline. What does this indicate?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>The function has a syntax error that TypeScript cannot compile.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>The function is unused and can be safely deleted.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>The function was written by Bob and may need human review before committing.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>The function exceeds quality thresholds — high cyclomatic complexity or low maintainability.</div>
+          </div>
+          <div class="q-feedback" id="fb-2"></div>
+        </div>
+
+        <div class="q-block" data-q="3" data-correct="a">
+          <div class="q-text"><span class="q-num">Q3.</span> What makes literate coding different from sending a chat message asking Bob to make the same change?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>You write the instruction directly in the source file at the exact line, so Bob has precise location context and generates an inline diff rather than inferring where to make the change.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Literate coding uses a different underlying model optimized for code generation tasks.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>It bypasses the approval loop — literate coding changes are applied without confirmation prompts.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Literate coding is only available in Plan mode — chat-based code generation is an Agent mode feature.</div>
+          </div>
+          <div class="q-feedback" id="fb-3"></div>
+        </div>
+
+        <div class="q-block" data-q="4" data-correct="b">
+          <div class="q-text"><span class="q-num">Q4.</span> You type <code>@/src/components</code> in a prompt to a large project. What is the potential problem?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Folder mentions are recursive, so it will read all nested subdirectories and may time out.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>All files in the folder are injected into the context window immediately and persist for the rest of the conversation, potentially consuming a large portion of the 270k token budget.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>The mention is blocked if the folder has more than 10 files to prevent accidental over-sharing.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>There is no problem — folder mentions are lazy-loaded and only fetch files Bob actually needs.</div>
+          </div>
+          <div class="q-feedback" id="fb-4"></div>
+        </div>
+
+        <div class="q-block" data-q="5" data-correct="b">
+          <div class="q-text"><span class="q-num">Q5.</span> Bob is mid-way through a large scaffolding task — 8 tool calls deep — and you realize you want to add an important constraint to the next file it creates. You do NOT want to cancel the current task. What is the correct action?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Wait for Bob to finish all tool calls, then send a follow-up message with the constraint.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Send the constraint message now — it joins the message queue and Bob will process it as soon as the current step finishes, without canceling the task.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Use the rollback tool to snap back to before the task started, then restart with the constraint included in the original prompt.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Send the constraint message, but it will cancel the current task because Bob can only process one message at a time.</div>
+          </div>
+          <div class="q-feedback" id="fb-5"></div>
+        </div>
+
+      </div>
+
+      <div class="quiz-submit-row">
+        <button class="btn-submit" id="submitBtn">Check Answers</button>
+        <span class="result-text" id="resultText"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-04-configuration.html" class="btn-nav">← Lesson 04</a>
+    <span class="lesson-nav-center">Lesson 5 of 6</span>
+    <a href="bob-mastery-lesson-06-cost-security-scale.html" class="btn-nav btn-nav-primary">Next: Cost, Security &amp; Scale →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+
+<script>
+(function() {
+  var answers = {};
+  var submitted = false;
+
+  var feedbacks = {
+    1: { correct: "Correct. 'Restore files' reverts only the workspace files to the snapshot state. The conversation history stays intact, letting you ask Bob to try a different approach with full context of the first attempt.", incorrect: "Incorrect. 'Restore files' reverts files only, leaving the conversation history intact. This is a deliberate design choice to let you compare approaches while keeping chat context." },
+    2: { correct: "Correct. Bob tips uses a purple underline specifically to flag functions that exceed code quality thresholds — either high cyclomatic complexity (too many branches) or low maintainability.", incorrect: "Incorrect. The purple underline is Bob tips signaling a code quality issue: high cyclomatic complexity or low maintainability. Syntax errors use different editor markers." },
+    3: { correct: "Correct. The defining characteristic of literate coding is writing the instruction at the exact location in the source file. Bob generates an inline diff precisely where the instruction is placed, eliminating ambiguity about location.", incorrect: "Incorrect. The core difference is precision of location. By writing the instruction directly in the source file, you give Bob exact positional context — it generates the change right where you wrote the instruction." },
+    4: { correct: "Correct. Folder mentions inject the contents of all files in the folder into the context window immediately, where they persist for the rest of the conversation. On a large component directory, this can consume a significant fraction of the 270k token budget.", incorrect: "Incorrect. Folder mentions are NOT lazy-loaded and NOT recursive. They inject all file contents immediately into context, where they remain for the entire conversation — potentially consuming a large token budget." },
+    5: { correct: "Correct. Agent steering's message queue lets you send a new message at any time — it queues and executes as soon as the current step completes, without interrupting the running task.", incorrect: "Incorrect. Agent steering lets you send messages to a running Bob without canceling it. The new message joins the queue and Bob processes it as soon as the current step finishes. Waiting is unnecessary; rollback reverts files but doesn't add mid-task constraints." }
+  };
+
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      if (submitted) return;
+      var block = this.closest('.q-block');
+      block.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      answers[block.dataset.q] = this.dataset.val;
+      updateProgress();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (submitted) return;
+    var total = 5, score = 0;
+    document.querySelectorAll('.q-block').forEach(function(block) {
+      var q = block.dataset.q;
+      var correct = block.dataset.correct;
+      var chosen = answers[q];
+      var fb = document.getElementById('fb-' + q);
+      block.querySelectorAll('.q-option').forEach(function(opt) {
+        if (opt.dataset.val === correct) opt.classList.add('revealed-correct');
+      });
+      if (chosen) {
+        var chosenEl = block.querySelector('[data-val="' + chosen + '"]');
+        if (chosen === correct) {
+          chosenEl.classList.add('correct'); chosenEl.classList.remove('selected'); score++;
+          fb.className = 'q-feedback correct-fb'; fb.textContent = feedbacks[q].correct;
+        } else {
+          chosenEl.classList.add('incorrect'); chosenEl.classList.remove('selected');
+          fb.className = 'q-feedback incorrect-fb'; fb.textContent = feedbacks[q].incorrect;
+        }
+      }
+    });
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    var rt = document.getElementById('resultText');
+    if (score === total) { rt.style.color = '#065f46'; rt.textContent = 'Perfect score!'; }
+    else if (score >= 3) { rt.style.color = '#059669'; rt.textContent = score + ' of ' + total + ' correct — solid.'; }
+    else { rt.style.color = '#b91c1c'; rt.textContent = score + ' of ' + total + ' — review the sections above.'; }
+    document.getElementById('submitBtn').disabled = true;
+    submitted = true;
+    document.getElementById('progressFill').style.width = '100%';
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    document.getElementById('progressFill').style.width = Math.round((answered / 5) * 80) + '%';
+  }
+})();
+</script>
+</body>
+</html>

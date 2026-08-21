@@ -1,0 +1,754 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 01 — How Bob Thinks | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  /* ── Nav strip ── */
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  /* ── Hero ── */
+  .lesson-hero {
+    margin-bottom: 40px;
+  }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #3b82d4;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .lesson-hero .tagline {
+    font-size: 16px;
+    color: #57606a;
+    margin-bottom: 20px;
+  }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    color: #57606a;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 40px;
+  }
+  .progress-label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+  .progress-track {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #3b82d4;
+    border-radius: 4px;
+    transition: width .4s ease;
+  }
+
+  /* ── Section headers ── */
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .callout .callout-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+  }
+  .callout p { font-size: 14px; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+
+  /* ── Code / mono ── */
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── Diagram: Context Window ── */
+  .cw-diagram {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .cw-diagram-title {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #57606a;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .cw-bar-container { padding: 16px; }
+  .cw-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .cw-row:last-child { margin-bottom: 0; }
+  .cw-row-label { font-size: 12px; color: #57606a; min-width: 120px; text-align: right; }
+  .cw-bar-track { flex: 1; height: 18px; background: #f0f4ff; border-radius: 4px; overflow: hidden; }
+  .cw-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; }
+  .cw-bar-text { font-size: 10px; font-weight: 700; color: white; }
+  .bar-fixed { background: #6b7280; }
+  .bar-rules { background: #3b82d4; }
+  .bar-skills { background: #7c5cd8; }
+  .bar-msgs { background: #10b981; }
+  .cw-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 0 16px 14px; }
+  .cw-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #57606a; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Approval loop diagram ── */
+  .loop-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .loop-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .loop-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .loop-icon-blue { background: #dbeafe; }
+  .loop-icon-green { background: #d1fae5; }
+  .loop-icon-amber { background: #fef3c7; }
+  .loop-caption { font-size: 11px; color: #57606a; max-width: 72px; line-height: 1.3; }
+  .loop-arrow { font-size: 22px; color: #c8d0dc; padding: 0 8px; padding-bottom: 20px; }
+
+  /* ── Scenario box ── */
+  .scenario {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .scenario-header {
+    background: #1f2328;
+    color: #fff;
+    padding: 12px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scenario-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-red { background: #f87171; }
+  .dot-yellow { background: #fbbf24; }
+  .dot-green { background: #34d399; }
+  .scenario-body { padding: 16px 18px; background: #fafafa; }
+  .scenario-prompt {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    color: #1f2328;
+  }
+  .scenario-prompt .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #57606a; margin-bottom: 4px; }
+  .scenario-response {
+    font-size: 13px;
+    color: #57606a;
+    line-height: 1.6;
+  }
+  .scenario-tool-call {
+    background: #f0f4ff;
+    border-left: 3px solid #3b82d4;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    color: #3b52a4;
+    margin: 8px 0;
+  }
+
+  /* ── Quiz ── */
+  .quiz-section {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .quiz-header {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .quiz-header h2 { border: none; padding: 0; margin: 0; font-size: 18px; }
+  .quiz-score-badge {
+    font-size: 13px;
+    font-weight: 700;
+    color: #57606a;
+    background: #e5e7eb;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .quiz-body { padding: 20px; display: flex; flex-direction: column; gap: 28px; }
+
+  .q-block {}
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .q-num { color: #3b82d4; margin-right: 6px; }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    background: #fff;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .q-option:hover { border-color: #93bbf5; background: #f0f6ff; }
+  .q-option.selected { border-color: #3b82d4; background: #eff6ff; }
+  .q-option.correct { border-color: #10b981; background: #d1fae5; }
+  .q-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+  .q-option.revealed-correct { border-color: #10b981; background: #d1fae5; }
+  .q-radio {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #c8d0dc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .q-radio-inner {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: transparent;
+    transition: background .1s;
+  }
+  .q-option.selected .q-radio { border-color: #3b82d4; }
+  .q-option.selected .q-radio-inner { background: #3b82d4; }
+  .q-option.correct .q-radio { border-color: #10b981; }
+  .q-option.correct .q-radio-inner { background: #10b981; }
+  .q-option.incorrect .q-radio { border-color: #ef4444; }
+  .q-option.incorrect .q-radio-inner { background: #ef4444; }
+  .q-option.revealed-correct .q-radio { border-color: #10b981; }
+  .q-option.revealed-correct .q-radio-inner { background: #10b981; }
+  .q-feedback {
+    font-size: 13px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: none;
+  }
+  .q-feedback.correct-fb { background: #d1fae5; color: #065f46; display: block; }
+  .q-feedback.incorrect-fb { background: #fee2e2; color: #991b1b; display: block; }
+
+  .quiz-submit-row { padding: 0 20px 20px; display: flex; align-items: center; gap: 16px; }
+  .btn-submit {
+    background: #3b82d4;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-submit:hover { background: #2563eb; }
+  .btn-submit:disabled { background: #c8d0dc; cursor: default; }
+  .result-text { font-size: 14px; font-weight: 600; }
+
+  /* ── Navigation buttons ── */
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 20px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    background: #fff;
+    color: #1f2328;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav-primary {
+    background: #1f2328;
+    color: #fff;
+    border-color: #1f2328;
+  }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #9ea8b3;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html" style="color:#57606a;text-decoration:none;">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Lesson 01 — How Bob Thinks</span>
+    <span class="pill">~20 min</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Lesson 01 of 06</div>
+    <h1>How Bob Thinks: The Core Mental Model</h1>
+    <p class="tagline">Before you can use Bob well, you need an accurate mental model of what it actually is. Not "AI chatbot." Not "code autocomplete." Something more specific.</p>
+    <div class="meta-chips">
+      <span class="chip">Foundation</span>
+      <span class="chip">Context window</span>
+      <span class="chip">Tool execution loop</span>
+      <span class="chip">Bobcoins intro</span>
+      <span class="chip">5-question quiz</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Lesson progress</div>
+    <div class="progress-track"><div class="progress-fill" style="width:0%" id="progressFill"></div></div>
+  </div>
+
+
+  
+  <div class="section">
+    <div class="section-label">Section 1 of 4</div>
+    <h2>Bob is an agent, not a chatbot</h2>
+
+    <p>A chatbot takes text in and returns text out. Bob takes a request, decides what to <em>do</em>, and then does it — calling tools, reading files, running commands, and producing side effects in your actual project. That's the difference.</p>
+
+    <p>IBM describes Bob as an "AI SDLC partner." The SDLC framing is deliberate: Bob is designed to participate in every phase of software development — planning, writing, reviewing, debugging, and documenting — not just generate code snippets on demand.</p>
+
+    <p>Practically, this means Bob is stateful during a conversation. It builds up context about your project as you work, uses that context to make decisions, and executes those decisions through a set of tools. You're the approver in that loop.</p>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>When you're talking to stakeholders or writing positioning copy, the key differentiator isn't "AI coding assistant" (every tool claims that). It's <strong>agentic execution</strong> — Bob acts on your codebase with tools, not just advises. That's the line between a copilot and a partner.</p>
+    </div>
+  </div>
+
+
+  
+  <div class="section">
+    <div class="section-label">Section 2 of 4</div>
+    <h2>The context window: Bob's working memory</h2>
+
+    <p>Bob runs on a large language model with a 270,000-token context window. Think of it as working memory: everything Bob "knows" during a conversation must fit inside it. When the window fills up, either older content falls off or you start a new conversation.</p>
+
+    <p>The context window isn't just your chat messages. It has several cost-contributing layers that always fill first:</p>
+
+    <div class="cw-diagram">
+      <div class="cw-diagram-title">What fills the 270,000-token context window</div>
+      <div class="cw-bar-container">
+        <div class="cw-row">
+          <div class="cw-row-label">System prompt + tools</div>
+          <div class="cw-bar-track"><div class="cw-bar-fill bar-fixed" style="width:14%"><span class="cw-bar-text">Fixed</span></div></div>
+        </div>
+        <div class="cw-row">
+          <div class="cw-row-label">Rules + AGENTS.md</div>
+          <div class="cw-bar-track"><div class="cw-bar-fill bar-rules" style="width:10%"><span class="cw-bar-text">Rules</span></div></div>
+        </div>
+        <div class="cw-row">
+          <div class="cw-row-label">Loaded skills</div>
+          <div class="cw-bar-track"><div class="cw-bar-fill bar-skills" style="width:8%"><span class="cw-bar-text">Skills</span></div></div>
+        </div>
+        <div class="cw-row">
+          <div class="cw-row-label">Your messages + tool results</div>
+          <div class="cw-bar-track"><div class="cw-bar-fill bar-msgs" style="width:68%"><span class="cw-bar-text">Grows with conversation →</span></div></div>
+        </div>
+      </div>
+      <div class="cw-legend">
+        <div class="cw-legend-item"><div class="legend-dot bar-fixed"></div> Fixed overhead (always present)</div>
+        <div class="cw-legend-item"><div class="legend-dot bar-rules"></div> Rules files</div>
+        <div class="cw-legend-item"><div class="legend-dot bar-skills"></div> Activated skills</div>
+        <div class="cw-legend-item"><div class="legend-dot bar-msgs"></div> Conversation + tool output</div>
+      </div>
+    </div>
+
+    <p>Every prompt re-sends the <em>entire</em> active context. So a one-line follow-up message in a long thread costs almost as much as re-asking the full original question. This is why context management is a core practice, not a nice-to-have.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Key mechanic: context poisoning</div>
+      <p>If a conversation has drifted — Bob made incorrect assumptions or bad edits earlier — those errors are now baked into the context. Every subsequent response is influenced by them. The fix isn't to argue with Bob; it's to start a new conversation (clearing the bad context) and be more precise the second time.</p>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Context window = cost driver. Longer conversations, more file reads, and bigger rules files all increase Bobcoin spend per prompt. This is a direct product design tradeoff: capability vs. cost. As PM, you'll be asked about this when teams start hitting budget limits.</p>
+    </div>
+  </div>
+
+
+  
+  <div class="section">
+    <div class="section-label">Section 3 of 4</div>
+    <h2>The tool execution loop</h2>
+
+    <p>Bob decides what to do with your request, then executes it through a sequence of tool calls. For each step, it tells you what tool it wants to run and why, you approve (or it auto-approves if you've enabled that), and then the tool runs.</p>
+
+    <div class="loop-diagram">
+      <div class="loop-step">
+        <div class="loop-icon loop-icon-blue">💬</div>
+        <div class="loop-caption">You send a request</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-icon loop-icon-blue">🧠</div>
+        <div class="loop-caption">Bob decides which tool to call</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-icon loop-icon-amber">✋</div>
+        <div class="loop-caption">You approve (or auto-approve fires)</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-icon loop-icon-green">⚙️</div>
+        <div class="loop-caption">Tool executes, result enters context</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-icon loop-icon-blue">🔁</div>
+        <div class="loop-caption">Bob decides next step</div>
+      </div>
+    </div>
+
+    <p>Here's what that looks like in practice when you ask Bob to "add a unit test for the login function":</p>
+
+    <div class="scenario">
+      <div class="scenario-header">
+        <div class="scenario-dot dot-red"></div>
+        <div class="scenario-dot dot-yellow"></div>
+        <div class="scenario-dot dot-green"></div>
+        <span style="margin-left:4px">Bob tool execution trace — "Add a unit test for login"</span>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-prompt">
+          <div class="label">Your prompt</div>
+          Add a unit test for the login function.
+        </div>
+        <div class="scenario-response">
+          <p><strong>Step 1 — Read</strong></p>
+          <div class="scenario-tool-call">glob("**/auth/**") → finds auth/login.ts, auth/login.test.ts</div>
+          <div class="scenario-tool-call">read_file("auth/login.ts") → reads the function signature and logic</div>
+          <p style="margin-top:10px"><strong>Step 2 — Read</strong></p>
+          <div class="scenario-tool-call">read_file("auth/login.test.ts") → reads existing test patterns to match style</div>
+          <p style="margin-top:10px"><strong>Step 3 — Write (requires your approval)</strong></p>
+          <div class="scenario-tool-call">apply_diff("auth/login.test.ts") → inserts new test case</div>
+          <p style="margin-top:10px"><strong>Step 4 — Execute (requires your approval)</strong></p>
+          <div class="scenario-tool-call">execute_command("npm test auth/login.test.ts") → verifies the test passes</div>
+        </div>
+      </div>
+    </div>
+
+    <p>Notice that Bob didn't just generate code — it explored the codebase first (read tools), matched existing patterns, made the change (write tool), and verified it worked (execute tool). That's the agentic loop in action.</p>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">Important</div>
+      <p>The mode you're in determines which tools Bob can use. In Ask mode, Bob can't call write or execute tools at all — it's read-only. In Agent mode, all tools are available. This is a fundamental safety constraint, not just a UX convention. Lesson 02 goes deep on this.</p>
+    </div>
+  </div>
+
+
+  
+  <div class="section">
+    <div class="section-label">Section 4 of 4</div>
+    <h2>Bobcoins: how usage translates to cost</h2>
+
+    <p>Bob doesn't bill you in raw tokens because different models have different token costs — using Claude costs differently than using GPT-4o. Bobcoins are a unified billing metric that normalizes across all underlying models so you get predictable cost accounting regardless of which model is active.</p>
+
+    <p>You don't set or track tokens. You set Bobcoin budgets. The conversion happens automatically.</p>
+
+    <p>Two key cost levers you control as a user:</p>
+
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin:16px 0">
+      <li style="display:flex;gap:10px">
+        <span style="color:#3b82d4;font-weight:700;flex-shrink:0">1.</span>
+        <span><strong>Conversation length.</strong> Every message re-sends the full context. Long conversations multiply cost quickly. Start new conversations for new tasks.</span>
+      </li>
+      <li style="display:flex;gap:10px">
+        <span style="color:#3b82d4;font-weight:700;flex-shrink:0">2.</span>
+        <span><strong>File reads.</strong> Asking Bob to read large files or whole directories loads them into context, which persists for the entire conversation. Be surgical about what you ask Bob to read.</span>
+      </li>
+    </ul>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Enterprise customers get a <strong>shared Bobcoin pool</strong> distributed from a centralized budget. This makes Bob spend a team-level management problem, not just an individual setting. The Bobalytics dashboard (Lesson 06) shows team-level usage but deliberately hides individual user data — a deliberate product privacy choice you should understand cold.</p>
+    </div>
+  </div>
+
+
+  
+  <div class="section">
+    <div class="section-label">Knowledge Check</div>
+
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-header">
+        <h2>Lesson 01 Quiz</h2>
+        <span class="quiz-score-badge" id="scoreDisplay">0 / 5</span>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+
+        
+        <div class="q-block" data-q="1" data-correct="b">
+          <div class="q-text"><span class="q-num">Q1.</span> Bob's context window is 270,000 tokens. Which of the following statements about this window is accurate?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>It only contains the messages you've typed — not tool results or file contents.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Every prompt re-sends the full active context, so a short follow-up in a long thread still costs nearly as much as the original request.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Rules files and skills are excluded from the context window to save cost.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>The 270,000-token window resets after every tool call, not after each conversation.</div>
+          </div>
+          <div class="q-feedback" id="fb-1"></div>
+        </div>
+
+        
+        <div class="q-block" data-q="2" data-correct="c">
+          <div class="q-text"><span class="q-num">Q2.</span> A developer is in Ask mode and asks Bob to "fix the bug in the authentication middleware." What will Bob do?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Execute the fix automatically since fixing bugs is Ask mode's primary purpose.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Ask for confirmation before writing the file, then proceed.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Explain the bug and suggest a fix, but not write to any files — Ask mode has no write tool access.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Automatically switch itself to Agent mode to complete the task.</div>
+          </div>
+          <div class="q-feedback" id="fb-2"></div>
+        </div>
+
+        
+        <div class="q-block" data-q="3" data-correct="d">
+          <div class="q-text"><span class="q-num">Q3.</span> What is "context poisoning" and what is the correct remedy?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>It's when a .bobignore file prevents Bob from accessing important files. Fix it by updating the ignore rules.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>It's a security attack where an MCP server injects malicious instructions. Fix it by vetting MCP servers.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>It's when too many rules files slow down Bob's response. Fix it by pruning your AGENTS.md.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>It's when earlier incorrect assumptions accumulate in the conversation and corrupt future responses. Fix it by starting a new conversation.</div>
+          </div>
+          <div class="q-feedback" id="fb-3"></div>
+        </div>
+
+        
+        <div class="q-block" data-q="4" data-correct="b">
+          <div class="q-text"><span class="q-num">Q4.</span> Why do Bobcoins exist rather than billing users directly in tokens?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Tokens are an IBM-proprietary concept that can't be shared with customers.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Different underlying models have different token costs; Bobcoins normalize billing across all of them into one predictable unit.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Bobcoins are more accurate than tokens because they account for output quality, not just volume.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Tokens are only tracked internally for compliance purposes and can't be surfaced to users.</div>
+          </div>
+          <div class="q-feedback" id="fb-4"></div>
+        </div>
+
+        
+        <div class="q-block" data-q="5" data-correct="a">
+          <div class="q-text"><span class="q-num">Q5.</span> When Bob executes the tool sequence glob → read_file → apply_diff → execute_command, what does this tell you about the mode it's operating in?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>It must be in Agent mode — only Agent mode has access to write tools (apply_diff) and execute tools (execute_command).</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>It must be in Plan mode — Plan mode is required before any code changes can be made.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>It could be any mode — all modes have full tool access by default.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Mode cannot be inferred from tool usage — modes only affect Bob's tone and suggestions.</div>
+          </div>
+          <div class="q-feedback" id="fb-5"></div>
+        </div>
+
+      </div>
+
+      <div class="quiz-submit-row">
+        <button class="btn-submit" id="submitBtn">Check Answers</button>
+        <span class="result-text" id="resultText"></span>
+      </div>
+    </div>
+
+  </div>
+
+
+  
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-plan-overview.html" class="btn-nav">↑ Overview</a>
+    <span class="lesson-nav-center">Lesson 1 of 6</span>
+    <a href="bob-mastery-lesson-02-modes-and-tools.html" class="btn-nav btn-nav-primary">Next: Modes &amp; Tools →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+
+
+
+<script>
+(function() {
+  var answers = {};
+  var submitted = false;
+
+  var feedbacks = {
+    1: { correct: "Correct. Every prompt re-sends the entire active context window. A short follow-up in a long thread carries the full accumulated history, tool results, and file contents — so it costs nearly as much as the original request.", incorrect: "Incorrect. The context window includes everything: your messages, tool results, file contents, rules files, and skills. It is re-sent in full with every prompt, not reset after tool calls." },
+    2: { correct: "Correct. Ask mode has no write or execute tool access. Bob can read files and explain the bug, but it cannot write the fix. It will not auto-switch modes either — that decision always belongs to the user.", incorrect: "Incorrect. Ask mode has no write tool access. Bob cannot write files, ask for confirmation and then write, or switch modes on its own. It will explain the issue and suggest a fix, but the actual file change requires Agent mode." },
+    3: { correct: "Correct. Context poisoning is when earlier incorrect assumptions or bad data accumulate in the conversation and corrupt subsequent responses. The remedy is to start a new conversation so the context window is clean.", incorrect: "Incorrect. Context poisoning refers to accumulated incorrect assumptions in the conversation corrupting later responses. It is not a .bobignore issue, not an MCP injection attack (that is prompt injection), and not a performance problem." },
+    4: { correct: "Correct. Different underlying models charge different rates per token. Bobcoins are an abstraction layer that normalizes billing across all models into one consistent, predictable unit regardless of which model processed the request.", incorrect: "Incorrect. Bobcoins exist because different underlying models have different token costs. They provide a unified billing unit that stays consistent across model changes, making consumption predictable for users." },
+    5: { correct: "Correct. apply_diff is a write (Edit) tool and execute_command is an Execute tool. Both are only available in Agent mode. Plan mode has Edit access but not Execute; Ask mode has neither.", incorrect: "Incorrect. apply_diff requires Edit tool access and execute_command requires Execute tool access. Only Agent mode has both. Plan mode lacks Execute access; Ask mode lacks both Edit and Execute access." }
+  };
+
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      if (submitted) return;
+      var block = this.closest('.q-block');
+      block.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      answers[block.dataset.q] = this.dataset.val;
+      updateProgress();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (submitted) return;
+    var total = 5, score = 0;
+    document.querySelectorAll('.q-block').forEach(function(block) {
+      var q = block.dataset.q;
+      var correct = block.dataset.correct;
+      var chosen = answers[q];
+      var fb = document.getElementById('fb-' + q);
+      block.querySelectorAll('.q-option').forEach(function(opt) {
+        if (opt.dataset.val === correct) opt.classList.add('revealed-correct');
+      });
+      if (chosen) {
+        var chosenEl = block.querySelector('[data-val="' + chosen + '"]');
+        if (chosen === correct) {
+          chosenEl.classList.add('correct');
+          chosenEl.classList.remove('selected');
+          score++;
+          fb.className = 'q-feedback correct-fb';
+          fb.textContent = feedbacks[q].correct;
+        } else {
+          chosenEl.classList.add('incorrect');
+          chosenEl.classList.remove('selected');
+          fb.className = 'q-feedback incorrect-fb';
+          fb.textContent = feedbacks[q].incorrect;
+        }
+      }
+    });
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    var rt = document.getElementById('resultText');
+    if (score === total) { rt.style.color = '#065f46'; rt.textContent = 'Perfect score!'; }
+    else if (score >= 3) { rt.style.color = '#1d4ed8'; rt.textContent = score + ' of ' + total + ' correct — solid.'; }
+    else { rt.style.color = '#b91c1c'; rt.textContent = score + ' of ' + total + ' — review the sections above.'; }
+    document.getElementById('submitBtn').disabled = true;
+    submitted = true;
+    document.getElementById('progressFill').style.width = '100%';
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    document.getElementById('progressFill').style.width = Math.round((answered / 5) * 80) + '%';
+  }
+})();
+</script>
+
+</body>
+</html>
