@@ -1,27 +1,27 @@
 [
   {
     "repo": "vercel/next.js",
-    "avgCycleTimeHours": 70.9,
-    "totalMergedPRs": 723
-  },
-  {
-    "repo": "facebook/react",
-    "avgCycleTimeHours": 150.1,
-    "totalMergedPRs": 415
+    "avgCycleTimeHours": 21.8,
+    "totalMergedPRs": 77
   },
   {
     "repo": "axios/axios",
-    "avgCycleTimeHours": 187.9,
-    "totalMergedPRs": 549
+    "avgCycleTimeHours": 78,
+    "totalMergedPRs": 64
+  },
+  {
+    "repo": "facebook/react",
+    "avgCycleTimeHours": 86.5,
+    "totalMergedPRs": 57
   },
   {
     "repo": "lodash/lodash",
-    "avgCycleTimeHours": 259.7,
-    "totalMergedPRs": 301
+    "avgCycleTimeHours": 175.4,
+    "totalMergedPRs": 41
   },
   {
-    "repo": "expressjs/express",
-    "avgCycleTimeHours": 573.6,
-    "totalMergedPRs": 205
+    "repo": "vuejs/vue",
+    "avgCycleTimeHours": null,
+    "totalMergedPRs": 0
   }
 ]

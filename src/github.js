@@ -186,7 +186,8 @@ async function fetchPRs(owner, repo, perPage = 100) {
   // This satisfies the pagination contract while making the MCP server call extremely resilient.
   const mcpPerPage = 20;
 
-  while (allPRs.length < perPage && consecutiveErrors < 3) {
+  const maxPages = Math.ceil(perPage / mcpPerPage) * 10; // hard ceiling: 10x the minimum pages needed
+  while (allPRs.length < perPage && consecutiveErrors < 3 && page <= maxPages) {
     try {
       const batch = await callMcpTool(command, args, token, 'list_pull_requests', {
         owner,
@@ -227,39 +228,88 @@ async function fetchPRs(owner, repo, perPage = 100) {
 }
 
 /**
- * Fetch recent commits for a repository using the GitHub MCP server's list_commits tool.
+ * Fetch recent commits for a repository from the GitHub REST API v3.
+ * Returns up to 100 commits (one page) — sufficient for contributor trend metrics.
  *
  * @param {string} owner - The repository owner (user or org).
  * @param {string} repo  - The repository name.
  * @returns {Promise<object[]>} Array of raw GitHub commit objects.
  */
 async function fetchCommits(owner, repo) {
-  let token = process.env.GITHUB_TOKEN;
-  let command = 'npx';
-  let args = ['-y', '@modelcontextprotocol/server-github'];
+  const headers = {
+    Accept: 'application/vnd.github.v3+json',
+    'User-Agent': 'gh-dash',
+  };
 
-  try {
-    const mcpPath = path.resolve(__dirname, '../.bob/mcp.json');
-    if (fs.existsSync(mcpPath)) {
-      const mcpConfig = JSON.parse(fs.readFileSync(mcpPath, 'utf8'));
-      const ghConfig = mcpConfig.mcpServers?.github;
-      if (ghConfig) {
-        if (ghConfig.command) command = ghConfig.command;
-        if (ghConfig.args) args = ghConfig.args;
-        if (ghConfig.env?.GITHUB_PERSONAL_ACCESS_TOKEN) {
-          token = ghConfig.env.GITHUB_PERSONAL_ACCESS_TOKEN;
-        }
-      }
-    }
-  } catch (e) {
-    // Silently catch and use defaults/process.env
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `token ${process.env.GITHUB_TOKEN}`;
   }
 
-  if (!token) {
-    throw new Error('No GitHub token found in process.env.GITHUB_TOKEN or .bob/mcp.json');
+  const url = `${BASE_URL}/repos/${owner}/${repo}/commits?per_page=100`;
+  const response = await fetch(url, { headers });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
   }
 
-  return callMcpTool(command, args, token, 'list_commits', { owner, repo });
+  return response.json();
 }
 
-module.exports = { fetchRepo, fetchPRs, fetchCommits };
+/**
+ * Fetch all branches for a repository from the GitHub REST API v3.
+ *
+ * The list endpoint returns a summary object per branch whose `commit` field
+ * contains only `sha` and `url` — not the committer date needed for stale
+ * detection.  For any branch whose full commit payload is absent we call the
+ * individual branch endpoint, which includes `commit.commit.committer.date`.
+ *
+ * @param {string} owner - The repository owner (user or org).
+ * @param {string} repo  - The repository name.
+ * @returns {Promise<object[]>} Array of branch objects, each guaranteed to have
+ *   a `commit.commit.committer.date` string (ISO 8601).
+ */
+async function fetchBranches(owner, repo) {
+  const headers = {
+    Accept: 'application/vnd.github.v3+json',
+    'User-Agent': 'gh-dash',
+  };
+
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `token ${process.env.GITHUB_TOKEN}`;
+  }
+
+  /** @param {string} url */
+  async function get(url) {
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+      throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+    }
+    return res.json();
+  }
+
+  // Fetch up to 100 branches (one page) — sufficient for stale-branch metrics.
+  // Fetching all pages on large repos (e.g. vercel/next.js has hundreds) would
+  // trigger secondary rate limits during the enrichment step.
+  const branches = await get(
+    `${BASE_URL}/repos/${owner}/${repo}/branches?per_page=100&page=1`
+  );
+
+  // Enrich any branch whose commit payload is missing the committer date.
+  // Run sequentially to avoid secondary rate limits on repos with many branches.
+  const enriched = [];
+  for (const branch of branches) {
+    if (branch.commit && branch.commit.commit && branch.commit.commit.committer && branch.commit.commit.committer.date) {
+      enriched.push(branch);
+    } else {
+      // Individual branch endpoint includes the full commit object.
+      const detail = await get(
+        `${BASE_URL}/repos/${owner}/${repo}/branches/${encodeURIComponent(branch.name)}`
+      );
+      enriched.push(detail);
+    }
+  }
+
+  return enriched;
+}
+
+module.exports = { fetchRepo, fetchPRs, fetchCommits, fetchBranches };
