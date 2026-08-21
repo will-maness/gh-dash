@@ -85,6 +85,108 @@
       color: #57606a;
     }
 
+    .data-context {
+      background: #f7f8fa;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 3rem;
+      font-size: 0.8rem;
+      color: #57606a;
+    }
+
+    .data-context-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #57606a;
+      margin-bottom: 1rem;
+    }
+
+    .data-context-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .data-context-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .data-context-item strong {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1f2328;
+    }
+
+    .data-context-item p {
+      font-size: 0.75rem;
+      color: #57606a;
+      line-height: 1.5;
+    }
+
+    .repo-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .repo-controls label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #57606a;
+      white-space: nowrap;
+    }
+
+    .repo-controls select {
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.6rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #1f2328;
+      cursor: pointer;
+    }
+
+    .repo-controls select:focus {
+      outline: 2px solid #3b82d4;
+      outline-offset: 1px;
+    }
+
+    #refresh-btn,
+    #refresh-all-btn {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #1f2328;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    #refresh-btn:hover:not(:disabled),
+    #refresh-all-btn:hover:not(:disabled) {
+      background: #f7f8fa;
+      border-color: #d0d7de;
+    }
+
+    #refresh-btn:disabled,
+    #refresh-all-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     footer {
       text-align: center;
       padding: 2rem 1rem;
@@ -185,6 +287,42 @@
       font-size: 0.85rem;
       padding: 1rem 0;
     }
+
+    /* ── Job progress bar ───────────────────────────────────── */
+    #job-progress {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.8rem;
+      color: #57606a;
+    }
+
+    #job-progress.visible { display: flex; }
+
+    #job-progress-label { white-space: nowrap; }
+
+    #job-progress-track {
+      flex: 1;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    #job-progress-fill {
+      height: 100%;
+      background: #3b82d4;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    #job-progress-pct {
+      white-space: nowrap;
+      min-width: 3rem;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
@@ -201,6 +339,27 @@
 
   <main>
 
+    <div id="job-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="CLI job progress">
+      <span id="job-progress-label">Fetching…</span>
+      <div id="job-progress-track">
+        <div id="job-progress-fill"></div>
+      </div>
+      <span id="job-progress-pct">0%</span>
+    </div>
+
+    <div class="repo-controls">
+      <label for="repo-select">Repository</label>
+      <select id="repo-select">
+        <option value="axios/axios">axios/axios</option>
+        <option value="vercel/next.js">vercel/next.js</option>
+        <option value="lodash/lodash">lodash/lodash</option>
+        <option value="facebook/react">facebook/react</option>
+        <option value="vuejs/vue">vuejs/vue</option>
+      </select>
+      <button id="refresh-btn">Refresh</button>
+      <button id="refresh-all-btn">Refresh All</button>
+    </div>
+
     <p class="repo-label" id="repo-label">No repository selected</p>
 
     <div class="grid">
@@ -212,21 +371,21 @@
       </div>
 
       <div class="card">
-        <p class="card-title">Commit Frequency</p>
+        <p class="card-title">PR Frequency</p>
         <p class="card-value placeholder" id="commit-frequency">—</p>
-        <p class="card-description">Commits per day (last 30 days)</p>
+        <p class="card-description">Merged PRs per day (100-PR window)</p>
       </div>
 
       <div class="card">
         <p class="card-title">Stale Branches</p>
         <p class="card-value placeholder" id="stale-branches">—</p>
-        <p class="card-description">Branches with no activity &gt; 30 days</p>
+        <p class="card-description">Branches with no activity &gt; 90 days</p>
       </div>
 
       <div class="card">
         <p class="card-title">Contributors</p>
         <p class="card-value placeholder" id="contributors">—</p>
-        <p class="card-description">Unique authors in last 90 days</p>
+        <p class="card-description">Unique authors in recent commits</p>
         <svg id="contributor-sparkline" width="200" height="40"></svg>
       </div>
 
@@ -247,6 +406,31 @@
         <tbody id="compare-tbody"></tbody>
       </table>
     </section>
+
+    <div class="data-context" aria-label="Data scope and methodology">
+      <div class="data-context-header">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a7.75 7.75 0 1 1 0 15.5A7.75 7.75 0 0 1 8 .25Zm0 1.5a6.25 6.25 0 1 0 0 12.5A6.25 6.25 0 0 0 8 1.75Zm0 3a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4.75Zm0 7.5a.875.875 0 1 1 0-1.75.875.875 0 0 1 0 1.75Z"/></svg>
+        Data scope &amp; methodology
+      </div>
+      <div class="data-context-grid">
+        <div class="data-context-item">
+          <strong>PR Cycle Time</strong>
+          <p>Average time in hours from a pull request's <code>created_at</code> to its <code>merged_at</code> timestamp. Only merged PRs are counted — closed-but-unmerged PRs are excluded. Sourced from up to 100 of the most-recent closed PRs via the GitHub REST API.</p>
+        </div>
+        <div class="data-context-item">
+          <strong>PR Frequency</strong>
+          <p>Merged pull requests per day, calculated from the 100-PR fetch window. The span is measured from the <code>merged_at</code> timestamp of the oldest to the newest merged PR in the set. The total merged PR count is divided by that span in days to produce a daily average.</p>
+        </div>
+        <div class="data-context-item">
+          <strong>Stale Branches</strong>
+          <p>Count of non-default branches whose most-recent commit's <code>committer.date</code> is older than 90 days. The default branch is always excluded. Branches with no resolvable commit date are skipped rather than counted as stale.</p>
+        </div>
+        <div class="data-context-item">
+          <strong>Contributors</strong>
+          <p>Unique commit authors identified across the fetched commit window. Each contributor is deduped by their GitHub <code>author.login</code> when available, falling back to the <code>committer.name</code> string. The sparkline shows weekly unique-contributor counts over the past 12 weeks.</p>
+        </div>
+      </div>
+    </div>
 
   </main>
 

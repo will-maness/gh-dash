@@ -25,13 +25,27 @@ function prCycleTime(prs) {
 }
 
 /**
- * Calculate commit frequency as commits per day over the observed period.
+ * Calculate PR frequency as merged pull requests per day over the observed window.
  *
- * @param {object[]} commits - Array of GitHub commit objects.
- * @returns {number|null} Commits per day, or null when not yet implemented.
+ * Uses the span between the oldest and newest merged PR in the provided array
+ * (typically the 100-PR fetch window) to derive a daily merge rate.
+ *
+ * @param {object[]} prs - Array of GitHub pull-request objects.
+ * @returns {number|null} Merged PRs per day (one decimal place),
+ *   or null when fewer than 2 merged PRs exist or the span is zero.
  */
-function commitFrequency(commits) {
-  return null;
+function prFrequency(prs) {
+  const merged = prs
+    .filter((pr) => pr.merged_at != null)
+    .map((pr) => new Date(pr.merged_at).getTime())
+    .sort((a, b) => a - b);
+
+  if (merged.length < 2) return null;
+
+  const spanDays = (merged[merged.length - 1] - merged[0]) / 86_400_000;
+  if (spanDays === 0) return null;
+
+  return Math.round((merged.length / spanDays) * 10) / 10;
 }
 
 /**
@@ -88,6 +102,24 @@ function contributorTrends(commits) {
 }
 
 /**
+ * Count the total unique contributors across an array of commit objects.
+ * Uses author.login when available, falling back to committer name.
+ *
+ * @param {object[]} commits - Array of GitHub commit objects.
+ * @returns {number} Count of unique contributors.
+ */
+function uniqueContributorCount(commits) {
+  if (!commits || commits.length === 0) return 0;
+
+  const contributors = new Set();
+  for (const commit of commits) {
+    const id = commit.author?.login || commit.commit?.committer?.name;
+    if (id) contributors.add(id);
+  }
+  return contributors.size;
+}
+
+/**
  * Convert an array of 12 weekly counts into an SVG polyline points string
  * scaled to fit a canvas of the given width × height.
  *
@@ -109,4 +141,37 @@ function sparklinePoints(counts, width, height) {
     .join(' ');
 }
 
-module.exports = { prCycleTime, commitFrequency, contributorTrends, sparklinePoints };
+/**
+ * Count branches whose most recent commit is older than 90 days.
+ * The default branch is never considered stale.
+ *
+ * Branches are expected to have been enriched by fetchBranches so that
+ * `branch.commit.commit.committer.date` is present.  A branch with no
+ * resolvable commit date is skipped rather than counted.
+ *
+ * @param {object[]} branches      - Array of GitHub branch objects.
+ * @param {string}   defaultBranch - The repository's default_branch name.
+ * @returns {number} Count of stale branches.
+ */
+function staleBranches(branches, defaultBranch) {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 90);
+
+  let count = 0;
+  for (const branch of branches) {
+    if (branch.name === defaultBranch) continue;
+
+    const date = branch.commit && branch.commit.commit && branch.commit.commit.committer
+      ? branch.commit.commit.committer.date
+      : null;
+
+    if (!date) continue;
+
+    if (new Date(date) < cutoff) {
+      count++;
+    }
+  }
+  return count;
+}
+
+module.exports = { prCycleTime, prFrequency, contributorTrends, sparklinePoints, staleBranches, uniqueContributorCount };

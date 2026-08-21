@@ -8,9 +8,14 @@ node_modules/
 # Logs
 *.log
 
+# Generated output artefacts
+public/data.json
+public/compare.json
+
 # macOS
 .DS_Store
 
 # Bob configuration
 .bob/
 .bobignore
+docs/LEARNING_LOG.md
