@@ -1,0 +1,434 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bob Mastery — Curriculum Overview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 40px 20px 60px;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .hero {
+    border-left: 4px solid #3b82d4;
+    padding: 20px 24px;
+    background: #f7f8fa;
+    margin-bottom: 36px;
+    border-radius: 0 6px 6px 0;
+  }
+  .hero h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .hero p { color: #57606a; font-size: 13.5px; }
+
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #57606a; font-weight: 600; }
+  .meta-value { font-size: 14px; font-weight: 600; color: #1f2328; }
+
+  h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; }
+  a { color: inherit; }
+  .lesson-card { text-decoration: none; display: block; color: inherit; transition: box-shadow .15s, border-color .15s; }
+  .lesson-card:hover { border-color: #93bbf5; box-shadow: 0 2px 8px rgba(59,130,212,.1); }
+
+  .lesson-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+
+  .lesson-card-wrapper {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .lesson-card-wrapper:hover { border-color: #93bbf5; box-shadow: 0 2px 8px rgba(59,130,212,.1); }
+  .lesson-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .lesson-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #3b82d4;
+    min-width: 64px;
+    padding-top: 2px;
+  }
+  .lesson-title-block { flex: 1; }
+  .lesson-title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .lesson-subtitle { font-size: 13px; color: #57606a; }
+  .lesson-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+  .badge-blue { background: #dbeafe; color: #1d4ed8; }
+  .badge-purple { background: #ede9fe; color: #6d28d9; }
+  .badge-green { background: #d1fae5; color: #065f46; }
+
+  .lesson-card-body { padding: 16px 20px; }
+
+  .objectives { margin-bottom: 14px; }
+  .objectives-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #57606a; margin-bottom: 8px; }
+  .objectives ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .objectives li { font-size: 13px; display: flex; gap: 8px; }
+  .objectives li::before { content: "→"; color: #3b82d4; font-weight: 700; flex-shrink: 0; }
+
+  .topics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .topic-tag {
+    font-size: 11.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 3px 9px;
+    border-radius: 12px;
+    border: 1px solid #dce4f5;
+  }
+
+  .footer-note {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #57606a;
+    margin-bottom: 40px;
+  }
+  .footer-note strong { color: #1f2328; }
+
+  .progression {
+    margin-bottom: 40px;
+  }
+  .prog-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .prog-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+  }
+  .prog-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #3b82d4;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  .prog-label { font-size: 11px; color: #57606a; line-height: 1.3; max-width: 72px; }
+  .prog-arrow {
+    font-size: 18px;
+    color: #c8d0dc;
+    padding: 0 4px;
+    padding-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #9ea8b3;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <h1>IBM Bob Mastery Curriculum</h1>
+    <p>Six lesson plans for a product manager who wants to understand Bob end-to-end — how it works, why it's built the way it is, and how to use it at a power-user level.</p>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Total Lessons</span>
+      <span class="meta-value">6</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Estimated Total Time</span>
+      <span class="meta-value">~2.5 hours</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Audience</span>
+      <span class="meta-value">Product Manager (Advanced)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Format</span>
+      <span class="meta-value">Narrative + Exercises + Quiz</span>
+    </div>
+  </div>
+
+  <div class="progression">
+    <h2>Learning Progression</h2>
+    <div class="prog-row">
+      <div class="prog-step">
+        <div class="prog-circle">1</div>
+        <div class="prog-label">Mental Model</div>
+      </div>
+      <div class="prog-arrow">›</div>
+      <div class="prog-step">
+        <div class="prog-circle">2</div>
+        <div class="prog-label">Modes &amp; Tools</div>
+      </div>
+      <div class="prog-arrow">›</div>
+      <div class="prog-step">
+        <div class="prog-circle">3</div>
+        <div class="prog-label">Skills &amp; Subagents</div>
+      </div>
+      <div class="prog-arrow">›</div>
+      <div class="prog-step">
+        <div class="prog-circle">4</div>
+        <div class="prog-label">Configuration</div>
+      </div>
+      <div class="prog-arrow">›</div>
+      <div class="prog-step">
+        <div class="prog-circle">5</div>
+        <div class="prog-label">Features</div>
+      </div>
+      <div class="prog-arrow">›</div>
+      <div class="prog-step">
+        <div class="prog-circle">6</div>
+        <div class="prog-label">Cost, Security &amp; Scale</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>The Six Lessons</h2>
+  <div class="lesson-grid">
+
+    
+    <a href="bob-mastery-lesson-01-how-bob-thinks.html" class="lesson-card-wrapper">
+      <div class="lesson-card-header">
+        <div class="lesson-num">Lesson 01</div>
+        <div class="lesson-title-block">
+          <div class="lesson-title">How Bob Thinks: The Core Mental Model</div>
+          <div class="lesson-subtitle">What Bob actually is, how it reasons, and why it works the way it does</div>
+        </div>
+        <div class="lesson-badge badge-blue">~20 min</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="objectives">
+          <div class="objectives-label">What you'll understand</div>
+          <ul>
+            <li>Why Bob is called an "SDLC partner" and what that actually means in practice</li>
+            <li>The context window: what's in it, how it fills up, and why it matters for cost and quality</li>
+            <li>The approval loop: how Bob proposes, you approve, and why this architecture exists</li>
+            <li>What "agentic AI" means vs. a simple chatbot — and how to explain it to stakeholders</li>
+          </ul>
+        </div>
+        <div class="topics-row">
+          <span class="topic-tag">SDLC partner</span>
+          <span class="topic-tag">Context window (270k tokens)</span>
+          <span class="topic-tag">Tool execution loop</span>
+          <span class="topic-tag">Approval model</span>
+          <span class="topic-tag">Bobcoins intro</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="bob-mastery-lesson-02-modes-and-tools.html" class="lesson-card-wrapper">
+      <div class="lesson-card-header">
+        <div class="lesson-num">Lesson 02</div>
+        <div class="lesson-title-block">
+          <div class="lesson-title">Modes &amp; Tools: Bob's Operating System</div>
+          <div class="lesson-subtitle">The three built-in modes, what each can and cannot do, and every tool category</div>
+        </div>
+        <div class="lesson-badge badge-blue">~25 min</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="objectives">
+          <div class="objectives-label">What you'll understand</div>
+          <ul>
+            <li>The exact tool permissions each mode grants — and why Agent can execute but Ask cannot</li>
+            <li>When to use Plan → Agent vs. going straight to Agent</li>
+            <li>All 8 tool categories: Read, Write, Execute, MCP, Skill, Subagent, Todo, Mode</li>
+            <li>How switching modes mid-task changes what Bob is allowed to do</li>
+          </ul>
+        </div>
+        <div class="topics-row">
+          <span class="topic-tag">Agent / Ask / Plan</span>
+          <span class="topic-tag">Tool permission matrix</span>
+          <span class="topic-tag">Read tools</span>
+          <span class="topic-tag">Write tools</span>
+          <span class="topic-tag">Execute tools</span>
+          <span class="topic-tag">Mode switching</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="bob-mastery-lesson-03-skills-and-subagents.html" class="lesson-card-wrapper">
+      <div class="lesson-card-header">
+        <div class="lesson-num">Lesson 03</div>
+        <div class="lesson-title-block">
+          <div class="lesson-title">Skills &amp; Subagents: Teaching Bob to Specialize</div>
+          <div class="lesson-subtitle">How to extend Bob's knowledge with skills and delegate parallel work with subagents</div>
+        </div>
+        <div class="lesson-badge badge-purple">~25 min</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="objectives">
+          <div class="objectives-label">What you'll understand</div>
+          <ul>
+            <li>What a skill is architecturally — SKILL.md format, frontmatter, file structure</li>
+            <li>Global vs. project-scoped skills and how priority resolution works</li>
+            <li>How subagents differ from subtasks (silent background vs. visible conversation)</li>
+            <li>The three conditions that must all be true before Bob spawns a subagent</li>
+            <li>fork_context: when conversation history gets passed and why it matters</li>
+          </ul>
+        </div>
+        <div class="topics-row">
+          <span class="topic-tag">SKILL.md format</span>
+          <span class="topic-tag">Skill scoping</span>
+          <span class="topic-tag">Subagent types (explore / general)</span>
+          <span class="topic-tag">Subtasks vs. subagents</span>
+          <span class="topic-tag">fork_context</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="bob-mastery-lesson-04-configuration.html" class="lesson-card-wrapper">
+      <div class="lesson-card-header">
+        <div class="lesson-num">Lesson 04</div>
+        <div class="lesson-title-block">
+          <div class="lesson-title">Configuring Bob: Modes, Rules &amp; MCP</div>
+          <div class="lesson-subtitle">Custom modes, the rules system (AGENTS.md, .bob/rules/), and MCP integrations</div>
+        </div>
+        <div class="lesson-badge badge-purple">~25 min</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="objectives">
+          <div class="objectives-label">What you'll understand</div>
+          <ul>
+            <li>Every field in a custom mode YAML — slug, roleDefinition, groups, fileRegex</li>
+            <li>The full rules hierarchy: global → workspace → mode-specific → AGENTS.md</li>
+            <li>What MCP is (the USB-C analogy), client-server architecture, and transport types</li>
+            <li>How to assess whether an MCP server is worth adding and what security questions to ask</li>
+          </ul>
+        </div>
+        <div class="topics-row">
+          <span class="topic-tag">custom_modes.yaml</span>
+          <span class="topic-tag">fileRegex permissions</span>
+          <span class="topic-tag">AGENTS.md</span>
+          <span class="topic-tag">Rules hierarchy</span>
+          <span class="topic-tag">MCP protocol</span>
+          <span class="topic-tag">.bobignore</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="bob-mastery-lesson-05-power-features.html" class="lesson-card-wrapper">
+      <div class="lesson-card-header">
+        <div class="lesson-num">Lesson 05</div>
+        <div class="lesson-title-block">
+          <div class="lesson-title">Power Features: The Developer Workflow Toolkit</div>
+          <div class="lesson-subtitle">Rollback, Bob tips, literate coding, context mentions, code reviews, and auto-approve</div>
+        </div>
+        <div class="lesson-badge badge-green">~25 min</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="objectives">
+          <div class="objectives-label">What you'll understand</div>
+          <ul>
+            <li>How rollback works under the hood (shadow git repos) and when to use it vs. undo</li>
+            <li>The Bob tips quality metrics — what thresholds trigger a suggestion and what they measure</li>
+            <li>What literate coding is and why it's a different interaction model than chat</li>
+            <li>All @mention types: files, folders, @problems, @terminal, @git-changes, @URL</li>
+            <li>The auto-approve settings matrix and the security tradeoffs of each toggle</li>
+          </ul>
+        </div>
+        <div class="topics-row">
+          <span class="topic-tag">Rollback</span>
+          <span class="topic-tag">Bob tips</span>
+          <span class="topic-tag">Literate coding</span>
+          <span class="topic-tag">Context mentions (@)</span>
+          <span class="topic-tag">Code reviews</span>
+          <span class="topic-tag">PR generation</span>
+          <span class="topic-tag">Commit messages</span>
+          <span class="topic-tag">Auto-approve</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="bob-mastery-lesson-06-cost-security-scale.html" class="lesson-card-wrapper">
+      <div class="lesson-card-header">
+        <div class="lesson-num">Lesson 06</div>
+        <div class="lesson-title-block">
+          <div class="lesson-title">Cost, Security &amp; Scale: The PM Lens</div>
+          <div class="lesson-subtitle">Bobcoins, Bobalytics, enterprise features, the full security threat model, and Bob Shell</div>
+        </div>
+        <div class="lesson-badge badge-green">~20 min</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="objectives">
+          <div class="objectives-label">What you'll understand</div>
+          <ul>
+            <li>How Bobcoins work as a unified billing metric across different underlying models</li>
+            <li>What Bobalytics tracks, what it deliberately hides (individual vs. team-level data)</li>
+            <li>Enterprise plan capabilities: shared Bobcoin pools, admin dashboards, team management</li>
+            <li>The full security threat model: prompt injection, context poisoning, MCP risks</li>
+            <li>What Bob Shell is and when it's more appropriate than the IDE extension</li>
+          </ul>
+        </div>
+        <div class="topics-row">
+          <span class="topic-tag">Bobcoins</span>
+          <span class="topic-tag">Bobalytics</span>
+          <span class="topic-tag">Enterprise plan</span>
+          <span class="topic-tag">Context poisoning</span>
+          <span class="topic-tag">Security guidance</span>
+          <span class="topic-tag">Bob Shell</span>
+          <span class="topic-tag">API keys</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="footer-note">
+    <strong>Start here:</strong> Each lesson card is clickable. Begin with Lesson 01 — it establishes the mental model everything else builds on. Each lesson takes 20–25 minutes and ends with a 5-question quiz to confirm mastery before moving on. When you're ready to apply the lessons, open the <a href="bob-mastery-project-gh-dash.html" style="color:#3b82d4;font-weight:600;">Project: gh-dash companion guide →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,753 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 04 — Configuring Bob | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar a { color: #57606a; text-decoration: none; }
+  .topbar a:hover { color: #3b82d4; text-decoration: underline; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .lesson-hero { margin-bottom: 40px; }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #7c5cd8;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 { font-size: 26px; font-weight: 800; line-height: 1.25; margin-bottom: 12px; }
+  .lesson-hero .tagline { font-size: 16px; color: #57606a; margin-bottom: 20px; }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid #e5e7eb; color: #57606a; }
+
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+  .progress-track { height: 4px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #7c5cd8; border-radius: 4px; transition: width .4s ease; }
+
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .callout .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .callout p { font-size: 14px; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .code-block {
+    background: #1f2328;
+    color: #e6edf3;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin: 16px 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .comment { color: #8b949e; }
+  .code-block .key { color: #79c0ff; }
+  .code-block .value { color: #a5d6ff; }
+  .code-block .string { color: #a5d6ff; }
+
+  /* ── Rules hierarchy diagram ── */
+  .hierarchy {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 20px 0;
+  }
+  .hier-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-bottom: none;
+    background: #fff;
+  }
+  .hier-item:first-child { border-radius: 8px 8px 0 0; }
+  .hier-item:last-child { border-bottom: 1px solid #e5e7eb; border-radius: 0 0 8px 8px; }
+  .hier-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #7c5cd8;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .hier-content { flex: 1; }
+  .hier-label { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+  .hier-detail { font-size: 12.5px; color: #57606a; }
+  .hier-priority {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+  .hier-p-high { background: #d1fae5; color: #065f46; }
+  .hier-p-low { background: #f3f4f6; color: #6b7280; }
+  .hier-arrow { text-align: center; color: #c8d0dc; font-size: 18px; margin: -1px 0; padding: 2px 0; }
+
+  /* ── MCP architecture diagram ── */
+  .mcp-diagram {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+    background: #f7f8fa;
+  }
+  .mcp-diagram-title {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #57606a;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .mcp-body {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .mcp-box {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    min-width: 100px;
+  }
+  .mcp-bob { background: #dbeafe; color: #1d4ed8; }
+  .mcp-protocol { background: #f5f3ff; color: #6d28d9; font-size: 11px; padding: 8px 14px; }
+  .mcp-server { background: #d1fae5; color: #065f46; }
+  .mcp-arrow { font-size: 20px; color: #c8d0dc; }
+  .mcp-note { font-size: 11px; color: #57606a; margin-top: 4px; font-weight: 400; }
+
+  /* ── Transport comparison table ── */
+  .compare-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .compare-table table { width: 100%; border-collapse: collapse; }
+  .compare-table th {
+    background: #f7f8fa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #57606a;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .compare-table td {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .row-label { font-weight: 700; color: #1f2328; white-space: nowrap; }
+
+  /* ── Scenario box ── */
+  .scenario { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin: 20px 0; }
+  .scenario-header {
+    background: #1f2328;
+    color: #fff;
+    padding: 12px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scenario-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-red { background: #f87171; }
+  .dot-yellow { background: #fbbf24; }
+  .dot-green { background: #34d399; }
+  .scenario-body { padding: 16px 18px; background: #fafafa; }
+  .scenario-prompt {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+  }
+  .scenario-prompt .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #57606a; margin-bottom: 4px; }
+  .scenario-response { font-size: 13px; color: #57606a; line-height: 1.6; }
+  .scenario-tool-call {
+    background: #f0f4ff;
+    border-left: 3px solid #3b82d4;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    color: #3b52a4;
+    margin: 8px 0;
+  }
+
+  /* ── Quiz ── */
+  .quiz-section { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+  .quiz-header {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .quiz-header h2 { border: none; padding: 0; margin: 0; font-size: 18px; }
+  .quiz-score-badge { font-size: 13px; font-weight: 700; color: #57606a; background: #e5e7eb; padding: 4px 12px; border-radius: 20px; }
+  .quiz-body { padding: 20px; display: flex; flex-direction: column; gap: 28px; }
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .q-num { color: #7c5cd8; margin-right: 6px; }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border: 1px solid #e5e7eb;
+    border-radius: 6px; cursor: pointer; font-size: 14px;
+    background: #fff; transition: border-color .15s, background .15s; user-select: none;
+  }
+  .q-option:hover { border-color: #c4b5fd; background: #faf5ff; }
+  .q-option.selected { border-color: #7c5cd8; background: #f5f3ff; }
+  .q-option.correct { border-color: #10b981; background: #d1fae5; }
+  .q-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+  .q-option.revealed-correct { border-color: #10b981; background: #d1fae5; }
+  .q-radio {
+    width: 16px; height: 16px; border: 2px solid #c8d0dc;
+    border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-radio-inner { width: 8px; height: 8px; border-radius: 50%; background: transparent; transition: background .1s; }
+  .q-option.selected .q-radio { border-color: #7c5cd8; }
+  .q-option.selected .q-radio-inner { background: #7c5cd8; }
+  .q-option.correct .q-radio { border-color: #10b981; }
+  .q-option.correct .q-radio-inner { background: #10b981; }
+  .q-option.incorrect .q-radio { border-color: #ef4444; }
+  .q-option.incorrect .q-radio-inner { background: #ef4444; }
+  .q-option.revealed-correct .q-radio { border-color: #10b981; }
+  .q-option.revealed-correct .q-radio-inner { background: #10b981; }
+  .q-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .q-feedback.correct-fb { background: #d1fae5; color: #065f46; display: block; }
+  .q-feedback.incorrect-fb { background: #fee2e2; color: #991b1b; display: block; }
+  .quiz-submit-row { padding: 0 20px 20px; display: flex; align-items: center; gap: 16px; }
+  .btn-submit {
+    background: #7c5cd8; color: #fff; border: none;
+    padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background .15s;
+  }
+  .btn-submit:hover { background: #6d28d9; }
+  .btn-submit:disabled { background: #c8d0dc; cursor: default; }
+  .result-text { font-size: 14px; font-weight: 600; }
+
+  .lesson-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 44px; padding-top: 20px; border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px; font-weight: 600; padding: 9px 20px;
+    border-radius: 6px; border: 1px solid #e5e7eb;
+    cursor: pointer; background: #fff; color: #1f2328;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-nav-primary { background: #1f2328; color: #fff; border-color: #1f2328; }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+  footer {
+    text-align: center; font-size: 11px; color: #9ea8b3;
+    padding-top: 20px; border-top: 1px solid #e5e7eb; margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Lesson 04 — Configuration</span>
+    <span class="pill">~25 min</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Lesson 04 of 06</div>
+    <h1>Configuring Bob: Modes, Rules &amp; MCP</h1>
+    <p class="tagline">Bob ships with sensible defaults, but the teams that get the most from it are those who invest in configuration. Custom modes, layered rules, and MCP integrations collectively define the difference between using Bob as a generic tool and deploying it as a team-specific AI platform.</p>
+    <div class="meta-chips">
+      <span class="chip">custom_modes.yaml</span>
+      <span class="chip">Rules hierarchy</span>
+      <span class="chip">AGENTS.md</span>
+      <span class="chip">MCP protocol</span>
+      <span class="chip">.bobignore</span>
+      <span class="chip">5-question quiz</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Lesson progress</div>
+    <div class="progress-track"><div class="progress-fill" style="width:0%" id="progressFill"></div></div>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">Section 1 of 4</div>
+    <h2>Custom modes: building specialized Bob personas</h2>
+
+    <p>Custom modes let you define purpose-specific Bob configurations with their own role, tool access, file permissions, and behavioral instructions. They're defined in YAML and can be committed to the repo (project-level) or stored globally for personal use.</p>
+
+    <p>There are two configuration locations: <strong>project-level</strong> at <code>.bob/custom_modes.yaml</code> (version-controlled with the repo, available to all team members) and <strong>global</strong> at <code>~/.bob/settings/custom_modes.yaml</code> (personal modes available across all projects). You can edit either via the settings menu: Settings → Modes → Edit Project Modes or Edit Global Modes.</p>
+
+    <p>Here's a real example — a documentation-writer mode that restricts Bob to only editing Markdown files:</p>
+
+    <div class="code-block"><span class="comment"># .bob/custom_modes.yaml  (or ~/.bob/settings/custom_modes.yaml for global)</span>
+<span class="key">customModes</span>:
+  - <span class="key">slug</span>: <span class="string">docs-writer</span>
+    <span class="key">name</span>: <span class="string">📝 Documentation Writer</span>
+    <span class="key">description</span>: <span class="string">Writes and revises Markdown documentation.</span>
+    <span class="key">roleDefinition</span>: <span class="string">You are a technical writer specializing in clear documentation.</span>
+    <span class="key">whenToUse</span>: <span class="string">Use this mode for writing and editing documentation.</span>
+    <span class="key">customInstructions</span>: <span class="string">Focus on clarity. Use sentence-case headings.</span>
+    <span class="key">groups</span>:
+      - <span class="value">read</span>
+      - - <span class="value">edit</span>
+        <span class="key">fileRegex</span>: <span class="string">"\\.(md|mdx)$"</span>           <span class="comment"># Edit Markdown ONLY</span>
+        <span class="key">description</span>: <span class="string">Markdown files only</span>
+      - <span class="value">skill</span></div>
+
+    <p>The most important fields to understand:</p>
+
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>What it controls</th><th>Key detail</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>slug</code></td>
+            <td>Unique identifier — also used for rule directory names (<code>rules-{slug}/</code>)</td>
+            <td>Letters, numbers, and hyphens only — no spaces. Must be unique. Matching an existing built-in slug overrides that default mode.</td>
+          </tr>
+          <tr>
+            <td><code>roleDefinition</code></td>
+            <td>Bob's identity and expertise in this mode — injected into the system prompt</td>
+            <td>Write it as "You are a [expert]…" — this shapes Bob's approach and vocabulary.</td>
+          </tr>
+          <tr>
+            <td><code>groups</code></td>
+            <td>Which tool categories are enabled</td>
+            <td>Available: <code>read</code>, <code>edit</code>, <code>execute</code>, <code>mcp</code>, <code>skill</code>, <code>subagent</code>, <code>subtask</code>, <code>todo</code>, <code>mode</code>. If you omit <code>groups</code>, the mode gets no grouped tools.</td>
+          </tr>
+          <tr>
+            <td><code>fileRegex</code></td>
+            <td>Restricts edit access to specific file patterns</td>
+            <td>A mode with <code>fileRegex: "\\.md$"</code> literally cannot write to <code>.ts</code> or <code>.py</code> files. Invalid regex prevents the file from loading.</td>
+          </tr>
+          <tr>
+            <td><code>customInstructions</code></td>
+            <td>Behavioral rules loaded with the mode</td>
+            <td>Combined with any <code>rules-{slug}/</code> files to form the full instruction set.</td>
+          </tr>
+          <tr>
+            <td><code>allowedSubagents</code></td>
+            <td>(Optional) Restricts which subagent types the mode can spawn</td>
+            <td>If set, only the listed presets are available. Omit to inherit the default restrictions for the tool groups you've granted.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Custom modes are how you productize Bob for a team. A product-manager mode with <code>fileRegex</code> restricted to <code>*.md</code> files and a <code>roleDefinition</code> focused on user research and requirement writing is genuinely different from what developers get out of the box. Teams that build well-crafted custom modes see measurably better output quality because the mode's role alignment eliminates ambiguity in every request.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label">Section 2 of 4</div>
+    <h2>The rules hierarchy: how Bob's instructions layer</h2>
+
+    <p>Bob accumulates behavioral rules from multiple sources, each with a defined precedence. Understanding this hierarchy is essential for debugging unexpected behavior and for building configurations that scale to teams.</p>
+
+    <div class="hierarchy">
+      <div class="hier-item">
+        <div class="hier-num">1</div>
+        <div class="hier-content">
+          <div class="hier-label">Mode-specific rules (<code>rules-{slug}/</code>)</div>
+          <div class="hier-detail">Files in <code>.bob/rules-agent/</code>, <code>.bob/rules-plan/</code>, or <code>.bob/rules-{custom}/</code> — loaded alphabetically, only for that mode</div>
+        </div>
+        <div class="hier-priority hier-p-high">Highest</div>
+      </div>
+      <div class="hier-item">
+        <div class="hier-num">2</div>
+        <div class="hier-content">
+          <div class="hier-label">AGENTS.md (workspace root)</div>
+          <div class="hier-detail">Team-standardization file, version-controlled with the project. Loaded after mode-specific rules. Ideal for repository-wide standards.</div>
+        </div>
+        <div class="hier-priority hier-p-high">High</div>
+      </div>
+      <div class="hier-item">
+        <div class="hier-num">3</div>
+        <div class="hier-content">
+          <div class="hier-label">General workspace rules (<code>rules/</code>)</div>
+          <div class="hier-detail">Files in <code>.bob/rules/</code> — apply to all modes in this workspace. Good for project-wide conventions.</div>
+        </div>
+        <div class="hier-priority hier-p-low">Medium</div>
+      </div>
+      <div class="hier-item">
+        <div class="hier-num">4</div>
+        <div class="hier-content">
+          <div class="hier-label">Global rules (<code>~/.bob/rules/</code>)</div>
+          <div class="hier-detail">Your personal rules that apply across all projects. Good for individual style preferences.</div>
+        </div>
+        <div class="hier-priority hier-p-low">Lowest</div>
+      </div>
+    </div>
+
+    <p>Rules are additive — they stack from lowest to highest, with higher-priority sources able to override lower ones. A project-committed <code>AGENTS.md</code> that says "always use TypeScript strict mode" will override a global rule that says "JavaScript is preferred."</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">AGENTS.md is the team contract</div>
+      <p>The <code>AGENTS.md</code> file is designed for team standardization. Commit it to the repo, include it in code review, and treat it as a living document. It's how you make Bob's behavior consistent across a team without each developer needing to configure their own settings. Common uses: coding style standards, documentation requirements, test methodology, architecture constraints.</p>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">Important: rules are context window cost</div>
+      <p>Every rules file loaded into Bob's context consumes tokens on every prompt. A verbose <code>AGENTS.md</code> with 2,000 lines of rules costs those tokens on every single message in every conversation in the project. Rules should be focused and non-redundant. If your team has a 500-line <code>AGENTS.md</code>, audit it — verbose rules are a hidden cost multiplier.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label">Section 3 of 4</div>
+    <h2>MCP: extending Bob with external tools</h2>
+
+    <p>The Model Context Protocol (MCP) is a standardized protocol that lets Bob connect to external tools and services. Think of it like USB-C: any MCP-compatible tool can plug into any MCP-compatible AI, without building custom integrations.</p>
+
+    <div class="mcp-diagram">
+      <div class="mcp-diagram-title">MCP client-server architecture</div>
+      <div class="mcp-body">
+        <div>
+          <div class="mcp-box mcp-bob">IBM Bob (MCP Client)</div>
+          <div class="mcp-note">Sends tool call requests</div>
+        </div>
+        <div class="mcp-arrow">⟺</div>
+        <div>
+          <div class="mcp-box mcp-protocol">MCP Protocol</div>
+          <div class="mcp-note">STDIO or HTTP/SSE transport</div>
+        </div>
+        <div class="mcp-arrow">⟺</div>
+        <div>
+          <div class="mcp-box mcp-server">MCP Server</div>
+          <div class="mcp-note">monday.com, Jira, databases, APIs…</div>
+        </div>
+      </div>
+    </div>
+
+    <p>MCP enables Bob to do things the built-in tools cannot — query your Jira backlog, search internal knowledge bases, pull data from product analytics, interact with monday.com boards, or call any custom internal API you've wrapped in an MCP server.</p>
+
+    <h3>STDIO vs. HTTP transport</h3>
+    <div class="compare-table">
+      <table>
+        <thead>
+          <tr><th>Consideration</th><th>STDIO (Local)</th><th>Streamable HTTP / SSE</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Location</td>
+            <td>Local machine only</td>
+            <td>Local or remote</td>
+          </tr>
+          <tr>
+            <td class="row-label">Security</td>
+            <td>Inherently secure (process isolation)</td>
+            <td>Requires explicit security measures (TLS, auth)</td>
+          </tr>
+          <tr>
+            <td class="row-label">Setup</td>
+            <td>Simpler — just a local process</td>
+            <td>More complex — requires HTTP server</td>
+          </tr>
+          <tr>
+            <td class="row-label">Multi-client</td>
+            <td>Single client only</td>
+            <td>Multiple clients can connect</td>
+          </tr>
+          <tr>
+            <td class="row-label">Best for</td>
+            <td>Individual dev tools, personal integrations</td>
+            <td>Team-shared servers, enterprise integrations</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">MCP Servers settings panel (no JSON required)</div>
+      <p>Since Bob 2.0, you can add, configure, and remove MCP servers directly from <strong>Settings → MCP Servers</strong> — a dedicated tab that gives you a central UI for all connected tools. You no longer need to hand-edit JSON configuration files to register a server. The underlying config format is unchanged if you prefer editing directly, but the settings panel is the canonical entry point for most users.</p>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">MCP security questions to ask before adding a server</div>
+      <p>Before adding any MCP server, especially in a corporate environment: Who built it and is it open-source auditable? What data does it access? Does it store or log prompts? Can it take irreversible actions (delete, send emails)? Is there a published security model? When in doubt, consult your security team — MCP servers extend Bob's security boundary into whatever the server can reach.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label">Section 4 of 4</div>
+    <h2>.bobignore: controlling what Bob can see</h2>
+
+    <p>The <code>.bobignore</code> file works like <code>.gitignore</code> — it's a list of patterns for files and directories that Bob's tools should not access. This is your primary mechanism for keeping sensitive files (credentials, secrets, generated outputs) out of Bob's reach.</p>
+
+    <div class="code-block"><span class="comment"># .bobignore — common patterns</span>
+<span class="value">.env</span>
+<span class="value">.env.*</span>
+<span class="value">secrets/</span>
+<span class="value">*.key</span>
+<span class="value">config/credentials.json</span>
+<span class="value">node_modules/</span>
+<span class="value">dist/</span>
+<span class="value">*.log</span></div>
+
+    <p>When Bob lists files with <code>list_files</code>, ignored files are omitted or marked with a 🔒 symbol. Strict enforcement applies to all read and most write operations — <code>read_file</code>, <code>glob</code>, <code>grep</code>, <code>apply_diff</code>, and <code>write_file</code> all respect <code>.bobignore</code> rules.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Known limitation</div>
+      <p><code>.bobignore</code> is not a full sandbox. The <code>insert_content</code> and <code>search_and_replace</code> tools have a known limitation where the final write operation may bypass <code>.bobignore</code> rules due to their internal save mechanism. Also, <code>execute_command</code> protection is limited to a predefined list of file-reading commands — custom scripts may not be blocked. Use <code>.bobignore</code> as defense-in-depth, not as your only access control.</p>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>The combination of custom modes + <code>AGENTS.md</code> + <code>.bobignore</code> is the full configuration surface of Bob. Think of it as a three-layer policy system: <strong>what Bob acts like</strong> (modes), <strong>how Bob should behave</strong> (rules), and <strong>what Bob can see</strong> (.bobignore). An enterprise deployment that doesn't configure all three layers is leaving significant governance capability unused.</p>
+    </div>
+  </div>
+
+
+  <!-- QUIZ -->
+  <div class="section">
+    <div class="section-label">Knowledge Check</div>
+
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-header">
+        <h2>Lesson 04 Quiz</h2>
+        <span class="quiz-score-badge" id="scoreDisplay">0 / 5</span>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+
+        <div class="q-block" data-q="1" data-correct="b">
+          <div class="q-text"><span class="q-num">Q1.</span> A custom mode has <code>fileRegex: "\\.(md|mdx)$"</code> in its edit group. A developer in this mode asks Bob to "refactor the authentication module." What happens?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob refactors the files and then asks if you want to update the documentation too.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob cannot edit the .ts or .js files — the fileRegex restriction prevents writing to anything that isn't Markdown.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob automatically switches to Agent mode to complete the refactoring, then returns.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>fileRegex only affects documentation files — code files are always editable regardless of the regex.</div>
+          </div>
+          <div class="q-feedback" id="fb-1"></div>
+        </div>
+
+        <div class="q-block" data-q="2" data-correct="d">
+          <div class="q-text"><span class="q-num">Q2.</span> In the rules hierarchy, which source has the highest precedence?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Global rules in <code>~/.bob/rules/</code> — user preferences always override project settings.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>AGENTS.md — it's the team contract and therefore highest priority.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>General workspace rules in <code>.bob/rules/</code> — workspace rules override global ones.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Mode-specific rules in <code>.bob/rules-{slug}/</code> — they are the most targeted and take precedence.</div>
+          </div>
+          <div class="q-feedback" id="fb-2"></div>
+        </div>
+
+        <div class="q-block" data-q="3" data-correct="a">
+          <div class="q-text"><span class="q-num">Q3.</span> What is the correct analogy for understanding what MCP does?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>USB-C: a standardized port where any compatible AI can connect to any MCP server without custom integration code.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>A plugin marketplace: MCP servers are downloaded and installed like browser extensions.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>A REST API layer: MCP is simply a standardized way to call HTTP endpoints from within prompts.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>An OAuth service: MCP handles authentication between Bob and external services automatically.</div>
+          </div>
+          <div class="q-feedback" id="fb-3"></div>
+        </div>
+
+        <div class="q-block" data-q="4" data-correct="c">
+          <div class="q-text"><span class="q-num">Q4.</span> Your team's <code>AGENTS.md</code> says "use 4-space indentation." Your global rules file says "use 2-space indentation." Which wins?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Global rules — personal preferences always take precedence over shared project rules.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Whichever file was modified most recently.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>AGENTS.md — higher in the hierarchy than global rules, so it wins.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Neither — Bob merges conflicting rules and applies both based on context.</div>
+          </div>
+          <div class="q-feedback" id="fb-4"></div>
+        </div>
+
+        <div class="q-block" data-q="5" data-correct="b">
+          <div class="q-text"><span class="q-num">Q5.</span> A <code>.bobignore</code> file includes <code>.env</code>. Which of the following is NOT guaranteed to be blocked?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div><code>read_file(".env")</code> — this is explicitly blocked by the .bobignore rule.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div><code>insert_content(".env", ...)</code> — this tool has a known bypass due to its internal save mechanism.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div><code>glob("**/.env")</code> — ignored files are omitted from glob results.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div><code>apply_diff(".env", ...)</code> — write tools respect .bobignore for most operations.</div>
+          </div>
+          <div class="q-feedback" id="fb-5"></div>
+        </div>
+
+      </div>
+
+      <div class="quiz-submit-row">
+        <button class="btn-submit" id="submitBtn">Check Answers</button>
+        <span class="result-text" id="resultText"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-03-skills-and-subagents.html" class="btn-nav">← Lesson 03</a>
+    <span class="lesson-nav-center">Lesson 4 of 6</span>
+    <a href="bob-mastery-lesson-05-power-features.html" class="btn-nav btn-nav-primary">Next: Power Features →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+
+<script>
+(function() {
+  var answers = {};
+  var submitted = false;
+
+  var feedbacks = {
+    1: { correct: "Correct. fileRegex is a hard file restriction, not a preference. If the edit group has fileRegex set to Markdown files, Bob physically cannot write to .ts, .js, or any other file type.", incorrect: "Incorrect. fileRegex is an enforced restriction at the tool level. The mode cannot edit files outside the regex pattern — Bob won't switch modes and won't attempt a write." },
+    2: { correct: "Correct. Mode-specific rules (rules-{slug}/ directories) have the highest precedence. They're the most targeted, so they win over AGENTS.md, workspace rules, and global rules.", incorrect: "Incorrect. Mode-specific rules in .bob/rules-{slug}/ have the highest precedence. AGENTS.md is high but is overridden by mode-specific rules." },
+    3: { correct: "Correct. The official MCP analogy in the Bob docs is USB-C: any compatible AI can connect to any MCP server using the standardized protocol, eliminating the need for custom integrations.", incorrect: "Incorrect. The MCP analogy from the docs is USB-C: a standardized connection that any compatible client and server can use without custom integration code." },
+    4: { correct: "Correct. AGENTS.md is higher in the rules hierarchy than global rules. Project-level configurations override personal global settings.", incorrect: "Incorrect. AGENTS.md wins. It is higher in the hierarchy than global rules. The hierarchy goes: mode-specific > AGENTS.md > workspace rules > global rules." },
+    5: { correct: "Correct. The insert_content and search_and_replace tools have a documented known limitation where their final write operation may bypass .bobignore rules due to their internal save mechanism.", incorrect: "Incorrect. The known bypass is specifically for insert_content (and search_and_replace). The docs explicitly note that these tools' final write may not check .bobignore." }
+  };
+
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      if (submitted) return;
+      var block = this.closest('.q-block');
+      block.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      answers[block.dataset.q] = this.dataset.val;
+      updateProgress();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (submitted) return;
+    var total = 5, score = 0;
+    document.querySelectorAll('.q-block').forEach(function(block) {
+      var q = block.dataset.q;
+      var correct = block.dataset.correct;
+      var chosen = answers[q];
+      var fb = document.getElementById('fb-' + q);
+      block.querySelectorAll('.q-option').forEach(function(opt) {
+        if (opt.dataset.val === correct) opt.classList.add('revealed-correct');
+      });
+      if (chosen) {
+        var chosenEl = block.querySelector('[data-val="' + chosen + '"]');
+        if (chosen === correct) {
+          chosenEl.classList.add('correct'); chosenEl.classList.remove('selected'); score++;
+          fb.className = 'q-feedback correct-fb'; fb.textContent = feedbacks[q].correct;
+        } else {
+          chosenEl.classList.add('incorrect'); chosenEl.classList.remove('selected');
+          fb.className = 'q-feedback incorrect-fb'; fb.textContent = feedbacks[q].incorrect;
+        }
+      }
+    });
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    var rt = document.getElementById('resultText');
+    if (score === total) { rt.style.color = '#065f46'; rt.textContent = 'Perfect score!'; }
+    else if (score >= 3) { rt.style.color = '#6d28d9'; rt.textContent = score + ' of ' + total + ' correct — solid.'; }
+    else { rt.style.color = '#b91c1c'; rt.textContent = score + ' of ' + total + ' — review the sections above.'; }
+    document.getElementById('submitBtn').disabled = true;
+    submitted = true;
+    document.getElementById('progressFill').style.width = '100%';
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    document.getElementById('progressFill').style.width = Math.round((answered / 5) * 80) + '%';
+  }
+})();
+</script>
+</body>
+</html>

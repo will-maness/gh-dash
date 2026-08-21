@@ -1,0 +1,751 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 06 — Cost, Security &amp; Scale | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar a { color: #57606a; text-decoration: none; }
+  .topbar a:hover { color: #3b82d4; text-decoration: underline; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .lesson-hero { margin-bottom: 40px; }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #10b981;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 { font-size: 26px; font-weight: 800; line-height: 1.25; margin-bottom: 12px; }
+  .lesson-hero .tagline { font-size: 16px; color: #57606a; margin-bottom: 20px; }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid #e5e7eb; color: #57606a; }
+
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+  .progress-track { height: 4px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #10b981; border-radius: 4px; transition: width .4s ease; }
+
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .callout .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .callout p { font-size: 14px; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+  .callout-green { background: #f0fdf4; border-left: 4px solid #10b981; }
+  .callout-green .callout-label { color: #065f46; }
+  .callout-red { background: #fff1f2; border-left: 4px solid #ef4444; }
+  .callout-red .callout-label { color: #991b1b; }
+
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── Pricing table ── */
+  .pricing-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .pricing-table table { width: 100%; border-collapse: collapse; }
+  .pricing-table th {
+    background: #f7f8fa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #57606a;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .pricing-table td {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: top;
+  }
+  .pricing-table tr:last-child td { border-bottom: none; }
+  .plan-name { font-weight: 700; }
+  .plan-enterprise { color: #7c5cd8; font-weight: 700; }
+
+  /* ── KPI cards (Bobalytics) ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  @media (max-width: 520px) { .kpi-grid { grid-template-columns: 1fr; } }
+  .kpi-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .kpi-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #57606a; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 800; color: #1f2328; margin-bottom: 4px; }
+  .kpi-desc { font-size: 11.5px; color: #57606a; line-height: 1.4; }
+
+  /* ── Threat model table ── */
+  .threat-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .threat-table table { width: 100%; border-collapse: collapse; }
+  .threat-table th {
+    background: #f7f8fa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #57606a;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .threat-table td {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f2f5;
+    vertical-align: top;
+  }
+  .threat-table tr:last-child td { border-bottom: none; }
+  .threat-name { font-weight: 700; color: #1f2328; }
+  .sev-critical { color: #991b1b; font-weight: 700; }
+  .sev-high { color: #92400e; font-weight: 700; }
+  .sev-medium { color: #1d4ed8; font-weight: 700; }
+
+  /* ── Enterprise feature list ── */
+  .ent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  @media (max-width: 520px) { .ent-grid { grid-template-columns: 1fr; } }
+  .ent-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .ent-card-icon { font-size: 20px; margin-bottom: 8px; }
+  .ent-card-title { font-size: 13.5px; font-weight: 700; margin-bottom: 4px; }
+  .ent-card-desc { font-size: 12.5px; color: #57606a; line-height: 1.5; }
+
+  /* ── Quiz ── */
+  .quiz-section { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+  .quiz-header {
+    background: #f7f8fa; border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .quiz-header h2 { border: none; padding: 0; margin: 0; font-size: 18px; }
+  .quiz-score-badge { font-size: 13px; font-weight: 700; color: #57606a; background: #e5e7eb; padding: 4px 12px; border-radius: 20px; }
+  .quiz-body { padding: 20px; display: flex; flex-direction: column; gap: 28px; }
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .q-num { color: #10b981; margin-right: 6px; }
+  .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .q-option {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border: 1px solid #e5e7eb;
+    border-radius: 6px; cursor: pointer; font-size: 14px;
+    background: #fff; transition: border-color .15s, background .15s; user-select: none;
+  }
+  .q-option:hover { border-color: #6ee7b7; background: #f0fdf4; }
+  .q-option.selected { border-color: #10b981; background: #ecfdf5; }
+  .q-option.correct { border-color: #10b981; background: #d1fae5; }
+  .q-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+  .q-option.revealed-correct { border-color: #10b981; background: #d1fae5; }
+  .q-radio {
+    width: 16px; height: 16px; border: 2px solid #c8d0dc;
+    border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-radio-inner { width: 8px; height: 8px; border-radius: 50%; background: transparent; transition: background .1s; }
+  .q-option.selected .q-radio { border-color: #10b981; }
+  .q-option.selected .q-radio-inner { background: #10b981; }
+  .q-option.correct .q-radio { border-color: #10b981; }
+  .q-option.correct .q-radio-inner { background: #10b981; }
+  .q-option.incorrect .q-radio { border-color: #ef4444; }
+  .q-option.incorrect .q-radio-inner { background: #ef4444; }
+  .q-option.revealed-correct .q-radio { border-color: #10b981; }
+  .q-option.revealed-correct .q-radio-inner { background: #10b981; }
+  .q-feedback { font-size: 13px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .q-feedback.correct-fb { background: #d1fae5; color: #065f46; display: block; }
+  .q-feedback.incorrect-fb { background: #fee2e2; color: #991b1b; display: block; }
+  .quiz-submit-row { padding: 0 20px 20px; display: flex; align-items: center; gap: 16px; }
+  .btn-submit {
+    background: #10b981; color: #fff; border: none;
+    padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background .15s;
+  }
+  .btn-submit:hover { background: #059669; }
+  .btn-submit:disabled { background: #c8d0dc; cursor: default; }
+  .result-text { font-size: 14px; font-weight: 600; }
+
+  /* ── Completion banner ── */
+  .completion-banner {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 28px 28px;
+    text-align: center;
+    margin-top: 40px;
+  }
+  .completion-badge {
+    width: 52px;
+    height: 52px;
+    background: #3b82d4;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+  .completion-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+  .completion-sub { font-size: 14px; color: #57606a; margin-bottom: 16px; }
+  .completion-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+    max-width: 480px;
+    margin: 0 auto 16px;
+  }
+  .completion-item {
+    display: flex;
+    gap: 10px;
+    font-size: 13.5px;
+  }
+  .completion-check { color: #10b981; font-weight: 700; flex-shrink: 0; }
+  .back-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b82d4;
+    text-decoration: none;
+    padding: 8px 20px;
+    border: 1px solid #3b82d4;
+    border-radius: 6px;
+  }
+  .back-link:hover { background: #3b82d4; color: #fff; }
+
+  .lesson-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 44px; padding-top: 20px; border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px; font-weight: 600; padding: 9px 20px;
+    border-radius: 6px; border: 1px solid #e5e7eb;
+    cursor: pointer; background: #fff; color: #1f2328;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-nav-primary { background: #1f2328; color: #fff; border-color: #1f2328; }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+  footer {
+    text-align: center; font-size: 11px; color: #9ea8b3;
+    padding-top: 20px; border-top: 1px solid #e5e7eb; margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Lesson 06 — Cost, Security &amp; Scale</span>
+    <span class="pill">~20 min</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Lesson 06 of 06</div>
+    <h1>Cost, Security &amp; Scale: The PM Lens</h1>
+    <p class="tagline">This is the lesson where the product manager's perspective matters most. Bobcoins, Bobalytics, the enterprise security model, and context poisoning are not just technical details — they're the substrate of every business conversation about Bob: ROI, risk, governance, and scale.</p>
+    <div class="meta-chips">
+      <span class="chip">Bobcoins &amp; billing</span>
+      <span class="chip">Bobalytics</span>
+      <span class="chip">Enterprise plan</span>
+      <span class="chip">Security model</span>
+      <span class="chip">Context poisoning</span>
+      <span class="chip">5-question quiz</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Lesson progress</div>
+    <div class="progress-track"><div class="progress-fill" style="width:0%" id="progressFill"></div></div>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-label">Section 1 of 4</div>
+    <h2>Bobcoins: the billing model you need to understand cold</h2>
+
+    <p>Bobcoins are the unified billing metric Bob uses instead of raw tokens. The reason: different underlying AI models consume tokens at vastly different rates and costs. If IBM billed in tokens, switching from one model to another would make cost unpredictable from the user's perspective. Bobcoins abstract over that complexity — you set a Bobcoin budget, and the conversion to tokens happens automatically, invisibly.</p>
+
+    <p><strong>Think of it this way:</strong> tokens are to Bobcoins what kWh are to dollars on your electricity bill. The underlying unit exists; you just don't manage it directly.</p>
+
+    <div class="pricing-table">
+      <table>
+        <thead>
+          <tr><th>Plan</th><th>Monthly Bobcoins included</th><th>Key characteristic</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="plan-name">Free Trial</span></td>
+            <td>40 Bobcoins</td>
+            <td>Fixed allocation, no overage</td>
+          </tr>
+          <tr>
+            <td><span class="plan-name">Pro</span></td>
+            <td>40 Bobcoins</td>
+            <td>Overage available (optional)</td>
+          </tr>
+          <tr>
+            <td><span class="plan-name">Pro+</span></td>
+            <td>160 Bobcoins</td>
+            <td>Overage available (optional)</td>
+          </tr>
+          <tr>
+            <td><span class="plan-name">Ultra</span></td>
+            <td>500 Bobcoins</td>
+            <td>Overage available (optional)</td>
+          </tr>
+          <tr>
+            <td><span class="plan-enterprise">Enterprise</span></td>
+            <td>Purchased in packs, centrally pooled</td>
+            <td>Packs expire 1 year from purchase; distributed by admin</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Verify current pricing</div>
+      <p>The Bobcoin allocations above reflect plan tiers at time of writing. IBM may update these at any time. Always verify current allocations at <a href="https://bob.ibm.com/pricing" target="_blank" style="color:#92400e">bob.ibm.com/pricing</a> before quoting them in customer conversations or procurement planning.</p>
+    </div>
+
+    <p>The two biggest Bobcoin levers users control are: <strong>conversation length</strong> (every prompt re-sends the entire context — long threads are expensive) and <strong>file reads</strong> (every file Bob loads persists in context for the conversation's duration). These are structural cost drivers, not usage bugs — they're a consequence of how LLMs work.</p>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Overage nuance</div>
+      <p>Overage allows you to pay for Bobcoins beyond your monthly allocation at a per-unit rate. It applies to Pro, Pro+, and Ultra plans — but specifically <em>not</em> to Free Trial or Enterprise plans. For Enterprise, you buy additional packs in bulk from IBM Sales rather than using a metered overage system. Know which regime applies to your team when capacity planning.</p>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>Bobcoins are a product pricing design decision worth understanding deeply. By abstracting over model tokens, IBM retains the ability to swap underlying models (for performance, cost, or capability reasons) without re-pricing from the customer's perspective. This is the same logic behind "compute units" in cloud services — model abstraction creates commercial flexibility. It also means customers can't easily comparison-shop on token economics alone.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-label">Section 2 of 4</div>
+    <h2>Bobalytics &amp; Enterprise features</h2>
+
+    <p>Bobalytics is the analytics dashboard for Enterprise plan users — only admins with Enterprise plans can access it, via the Admin section on bob.ibm.com. It provides insight into how Bob is contributing to the software development lifecycle at the team and workspace level.</p>
+
+    <h3>The three Bobalytics KPIs</h3>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-name">Adoption Rate</div>
+        <div class="kpi-value">%</div>
+        <div class="kpi-desc">How many people on the team are actively using Bob. The primary "is anyone actually using this?" metric.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Bob Factor</div>
+        <div class="kpi-value">×</div>
+        <div class="kpi-desc">Bob's tangible contribution to shipped code — the proportion of committed code that originated from or was significantly modified by Bob.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Bobcoin Spend</div>
+        <div class="kpi-value">🪙</div>
+        <div class="kpi-desc">Team-level AI tooling cost. Used with Bob Factor to assess efficiency: value generated per Bobcoin spent.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">The privacy design choice you must know</div>
+      <p>Bobalytics is <strong>deliberately designed to show team-level data, not individual user data</strong>. Admins cannot see which specific developer is spending how many Bobcoins or how often. This is a product privacy decision — IBM chose team aggregation over individual tracking. You will be asked about this in enterprise evaluations. The correct answer: "you can see team performance, not individual surveillance data." This is a feature, not a limitation.</p>
+    </div>
+
+    <h3>Enterprise plan capabilities</h3>
+    <div class="ent-grid">
+      <div class="ent-card">
+        <div class="ent-card-icon">🏦</div>
+        <div class="ent-card-title">Shared Bobcoin Pool</div>
+        <div class="ent-card-desc">A centralized budget that admins distribute across teams. Prevents individual runaway spending. Enables capacity planning at the team level.</div>
+      </div>
+      <div class="ent-card">
+        <div class="ent-card-icon">📊</div>
+        <div class="ent-card-title">Admin Dashboard</div>
+        <div class="ent-card-desc">Control spending, manage users, track usage, and view Bobalytics. The org-level control plane for Bob governance.</div>
+      </div>
+      <div class="ent-card">
+        <div class="ent-card-icon">📦</div>
+        <div class="ent-card-title">Bobcoin Packs</div>
+        <div class="ent-card-desc">Additional capacity purchased in bulk from IBM Sales. Pack Bobcoins expire 1 year from purchase — include this in procurement conversations.</div>
+      </div>
+      <div class="ent-card">
+        <div class="ent-card-icon">🛟</div>
+        <div class="ent-card-title">Dedicated Support</div>
+        <div class="ent-card-desc">Enterprise customers get access to IBM Bob specialists and can open cases via IBM Support. Not available on individual plans.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">Telemetry note for Enterprise</div>
+      <p>Enterprise plan users <em>must</em> keep telemetry enabled to view data in Bobalytics. Disabling telemetry disables Bobalytics analytics for that user. This is a known tradeoff — individual users who opt out of telemetry disappear from the team's Bobalytics view. Mention this when configuring org-wide telemetry policies.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-label">Section 3 of 4</div>
+    <h2>The full security threat model</h2>
+
+    <p>Understanding Bob's security model isn't optional for a PM working with enterprise customers. The threat surface is real and the mitigations are specific. Here's the complete picture.</p>
+
+    <div class="threat-table">
+      <table>
+        <thead>
+          <tr><th>Threat</th><th>Severity</th><th>How it happens</th><th>Mitigation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="threat-name">Context poisoning</span></td>
+            <td><span class="sev-high">High</span></td>
+            <td>Bad facts accumulate in conversation history. Bob treats them as ground truth on every subsequent prompt. Replies drift toward the false assumption.</td>
+            <td>Start a new task (new context window). Don't try to correct context poisoning by arguing within the same conversation.</td>
+          </tr>
+          <tr>
+            <td><span class="threat-name">Prompt injection</span></td>
+            <td><span class="sev-critical">Critical</span></td>
+            <td>Malicious content in files, URLs, or tool output contains hidden instructions that Bob reads and executes. An attacker-controlled file tells Bob to exfiltrate code.</td>
+            <td>Use .bobignore for sensitive areas. Vet MCP servers. Avoid reading untrusted files in the same context as privileged operations.</td>
+          </tr>
+          <tr>
+            <td><span class="threat-name">MCP server risks</span></td>
+            <td><span class="sev-high">High</span></td>
+            <td>An untrusted MCP server can be a vector for prompt injection, data exfiltration, or executing unauthorized actions on connected systems.</td>
+            <td>Vet all MCP servers before installation. Check open-source code. Understand what data the server can access. Apply principle of least privilege.</td>
+          </tr>
+          <tr>
+            <td><span class="threat-name">Secret exposure</span></td>
+            <td><span class="sev-critical">Critical</span></td>
+            <td>API keys, tokens, or credentials in code or config files get loaded into Bob's context and potentially sent to underlying model providers.</td>
+            <td>Use .bobignore for .env and secrets/ directories. Never paste credentials into the chat. Use delegated access (short-lived tokens, narrow scopes).</td>
+          </tr>
+          <tr>
+            <td><span class="threat-name">Auto-approve escalation</span></td>
+            <td><span class="sev-medium">Medium</span></td>
+            <td>Overly permissive auto-approve settings allow Bob to execute destructive commands or write to sensitive files without human review.</td>
+            <td>Default to manual approval for write and execute. Auto-approve only read operations by default. Re-evaluate after each new MCP server addition.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-red">
+      <div class="callout-label">Context poisoning: the mechanics in depth</div>
+      <p>Context poisoning is subtler than a simple error. The wrong fact doesn't just affect one response — it gets re-sent with every subsequent prompt for the rest of the conversation. Corrective prompts within the same conversation don't reliably fix it: the poisoned history is still there, and any future off-topic question can re-activate the bad assumption. The only reliable fix is a new task (<code>+</code> button in the chat panel). Not "sorry, you were wrong about X." Not a correction prompt. A new context window.</p>
+    </div>
+
+    <div class="callout callout-purple">
+      <div class="callout-label">PM Insight</div>
+      <p>The security story for Bob enterprise evaluations has three layers: <strong>data privacy</strong> (IBM states it does not use prompts for training data), <strong>access control</strong> (.bobignore, mode permissions, auto-approve settings), and <strong>threat mitigations</strong> (context poisoning recovery, MCP vetting, secrets hygiene). Enterprise buyers will ask about all three. Know the specific product mechanisms — not just "Bob is secure" — because that's what security review panels actually probe.</p>
+    </div>
+  </div>
+
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-label">Section 4 of 4</div>
+    <h2>Scaling Bob: Shell, API keys &amp; team deployment patterns</h2>
+
+    <h3>Bob Shell</h3>
+    <p>Bob Shell is the command-line interface for Bob — it runs in a terminal instead of the IDE extension. It has all the same capabilities as the IDE version but is more appropriate for: CI/CD pipelines, server environments without a GUI, automation scripts, developers who prefer terminal-first workflows, and remote SSH sessions.</p>
+
+    <p>Authentication in Bob Shell uses API keys rather than the interactive IBMid login flow. Two types are available:</p>
+
+    <div class="threat-table">
+      <table>
+        <thead>
+          <tr><th>API Key Type</th><th>Scope</th><th>When to use</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>General</strong></td>
+            <td>Scoped to a subscription instance; usable across multiple services. Requires Team ID header for inference requests.</td>
+            <td>Shared team automation, CI/CD pipelines where multiple services need access</td>
+          </tr>
+          <tr>
+            <td><strong>Inference</strong></td>
+            <td>Scoped to a specific subscription instance and team; limited to inference requests only. No additional headers required.</td>
+            <td>Simpler automation setups, single-team pipelines, lower-privilege scenarios</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="callout-label">API key security</div>
+      <p>Never hardcode API keys in configuration files or scripts. Store them as environment variables or in a secrets manager. Add any file containing API keys to <code>.gitignore</code> and <code>.bobignore</code>. Exposed API keys in a repository are a real incident, not just a policy violation — they can be used to consume your Bobcoin budget or access your Bob instance.</p>
+    </div>
+
+    <h3>Team deployment patterns</h3>
+    <p>There are three common patterns for rolling out Bob across an engineering organization, each with different tradeoff profiles:</p>
+
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;margin:16px 0">
+      <li style="display:flex;gap:10px">
+        <span style="color:#3b82d4;font-weight:700;flex-shrink:0;min-width:28px">1.</span>
+        <span><strong>Bottom-up adoption:</strong> Individual developers install and use Bob at their discretion. Low friction, fast time-to-value, but inconsistent practices and no team-level Bobalytics visibility.</span>
+      </li>
+      <li style="display:flex;gap:10px">
+        <span style="color:#3b82d4;font-weight:700;flex-shrink:0;min-width:28px">2.</span>
+        <span><strong>Repository-first standardization:</strong> Teams commit <code>AGENTS.md</code>, <code>.bob/skills/</code>, <code>.bobignore</code>, and <code>custom_modes.yaml</code> to the repo. Any developer who clones the repo gets the team's Bob configuration automatically. High consistency, lower friction than policy mandates.</span>
+      </li>
+      <li style="display:flex;gap:10px">
+        <span style="color:#3b82d4;font-weight:700;flex-shrink:0;min-width:28px">3.</span>
+        <span><strong>Enterprise governance:</strong> Central IT deploys Bob with org-level telemetry policies, Enterprise plan Bobcoin pools managed by team leads, Bobalytics for leadership reporting, and vetted MCP servers pre-approved for org use. Highest control, most governance overhead.</span>
+      </li>
+    </ul>
+
+    <div class="callout callout-green">
+      <div class="callout-label">Recommended starting point</div>
+      <p>Pattern 2 (repository-first standardization) gives the best ROI for most teams starting out. It's lightweight (just files in the repo), immediately benefits all team members who clone the project, and creates the foundation for Pattern 3 enterprise governance later. Start by committing a focused <code>AGENTS.md</code> with your team's core coding conventions, then add skills as the team identifies repeating workflows.</p>
+    </div>
+  </div>
+
+
+  <!-- QUIZ -->
+  <div class="section">
+    <div class="section-label">Knowledge Check</div>
+
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-header">
+        <h2>Lesson 06 Quiz</h2>
+        <span class="quiz-score-badge" id="scoreDisplay">0 / 5</span>
+      </div>
+
+      <div class="quiz-body" id="quizBody">
+
+        <div class="q-block" data-q="1" data-correct="b">
+          <div class="q-text"><span class="q-num">Q1.</span> Why does Bob use Bobcoins instead of billing directly in tokens?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Tokens are a proprietary metric that IBM cannot expose to external customers for legal reasons.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Different underlying AI models have different token costs; Bobcoins normalize billing across all models into one predictable unit.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Bobcoins automatically adjust for output quality, giving customers a fairer measure of value than raw token counts.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>The token count is too large a number for typical enterprise billing systems — Bobcoins are a smaller, more manageable unit.</div>
+          </div>
+          <div class="q-feedback" id="fb-1"></div>
+        </div>
+
+        <div class="q-block" data-q="2" data-correct="d">
+          <div class="q-text"><span class="q-num">Q2.</span> An admin wants to see how much each individual developer is spending on Bobcoins to identify who is using Bob most. Can they get this data from Bobalytics?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Yes — Bobalytics shows individual user spending by default in the detailed view.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Yes — individual data is available for admins with Super Admin privileges.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>No — individual data is available, but must be specifically requested via IBM Support for compliance reasons.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>No — Bobalytics is deliberately designed to show only team-level aggregates, not individual user data.</div>
+          </div>
+          <div class="q-feedback" id="fb-2"></div>
+        </div>
+
+        <div class="q-block" data-q="3" data-correct="a">
+          <div class="q-text"><span class="q-num">Q3.</span> A developer notices Bob is giving incorrect answers about the codebase architecture. They've tried sending a correction prompt, but Bob keeps reverting to the wrong assumption. What is the correct fix?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Start a new task — only a new context window reliably clears context poisoning.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Use rollback to restore to the last known-good snapshot, which also resets the context.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Add a correction to AGENTS.md so it permanently overrides the incorrect assumption.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Switch to Ask mode, which uses a lighter-weight context that doesn't preserve poisoned history.</div>
+          </div>
+          <div class="q-feedback" id="fb-3"></div>
+        </div>
+
+        <div class="q-block" data-q="4" data-correct="c">
+          <div class="q-text"><span class="q-num">Q4.</span> An Enterprise admin disables telemetry for all users in their organization to comply with a data privacy policy. What is the consequence?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Bob stops functioning — telemetry is required for the inference pipeline to work.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>Only new conversations are affected — historical Bobalytics data is preserved.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>Bobalytics analytics are disabled for users with telemetry off — they disappear from team reporting.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>There is no consequence — Bobalytics pulls from billing data, not telemetry.</div>
+          </div>
+          <div class="q-feedback" id="fb-4"></div>
+        </div>
+
+        <div class="q-block" data-q="5" data-correct="b">
+          <div class="q-text"><span class="q-num">Q5.</span> A developer stores their Bob API key in a <code>.env</code> file that is in <code>.bobignore</code> and <code>.gitignore</code>. Is this sufficient security for the API key?</div>
+          <div class="q-options">
+            <div class="q-option" data-val="a"><div class="q-radio"><div class="q-radio-inner"></div></div>Yes — .bobignore prevents Bob from reading the file, and .gitignore prevents it from being committed to version control. Both protection layers are in place.</div>
+            <div class="q-option" data-val="b"><div class="q-radio"><div class="q-radio-inner"></div></div>It's better than nothing, but .bobignore has known bypass limitations (insert_content/search_and_replace) and .bobignore is not a system-level sandbox. Use a secrets manager for production keys.</div>
+            <div class="q-option" data-val="c"><div class="q-radio"><div class="q-radio-inner"></div></div>No — .env files should always be stored in a remote secrets vault, never on the local filesystem.</div>
+            <div class="q-option" data-val="d"><div class="q-radio"><div class="q-radio-inner"></div></div>Insufficient — Bob automatically scans .env files to detect exposed credentials and will warn the developer regardless of ignore rules.</div>
+          </div>
+          <div class="q-feedback" id="fb-5"></div>
+        </div>
+
+      </div>
+
+      <div class="quiz-submit-row">
+        <button class="btn-submit" id="submitBtn">Check Answers</button>
+        <span class="result-text" id="resultText"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- COMPLETION BANNER -->
+  <div class="completion-banner">
+    <div class="completion-badge">🎓</div>
+    <div class="completion-title">Curriculum Complete</div>
+    <div class="completion-sub">You've worked through all six lessons. Here's what you now understand that most Bob users don't:</div>
+    <div class="completion-checklist">
+      <div class="completion-item"><span class="completion-check">✓</span><span>The architectural difference between agentic AI and a chatbot — and how to explain it</span></div>
+      <div class="completion-item"><span class="completion-check">✓</span><span>Every tool category, which modes they're available in, and why that permission model exists</span></div>
+      <div class="completion-item"><span class="completion-check">✓</span><span>How skills and subagents extend Bob from a tool to a team-wide knowledge platform</span></div>
+      <div class="completion-item"><span class="completion-check">✓</span><span>The full configuration surface: modes, rules hierarchy, MCP, and .bobignore</span></div>
+      <div class="completion-item"><span class="completion-check">✓</span><span>The workflow features that compound over time: rollback, code review, literate coding, context mentions</span></div>
+      <div class="completion-item"><span class="completion-check">✓</span><span>The cost, security, and governance model for enterprise deployment</span></div>
+    </div>
+    <a href="bob-mastery-lesson-plan-overview.html" class="back-link">← Back to Curriculum Overview</a>
+  </div>
+
+
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-05-power-features.html" class="btn-nav">← Lesson 05</a>
+    <span class="lesson-nav-center">Lesson 6 of 6</span>
+    <a href="bob-mastery-lesson-plan-overview.html" class="btn-nav btn-nav-primary">↑ Overview</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+
+<script>
+(function() {
+  var answers = {};
+  var submitted = false;
+
+  var feedbacks = {
+    1: { correct: "Correct. Different AI models have different token costs and consumption rates. Bobcoins normalize this into a single predictable billing unit regardless of which underlying model is used.", incorrect: "Incorrect. The documented reason is that different underlying models have different token costs. Bobcoins provide a unified billing metric so customers get predictable costs regardless of model changes." },
+    2: { correct: "Correct. Bobalytics is deliberately designed to show team-level aggregates only. Individual user data is intentionally hidden from admins — this is a product privacy design decision, not a limitation.", incorrect: "Incorrect. Bobalytics is specifically designed to show only team-level data. Individual user spending is intentionally not available to admins. This is a documented product privacy choice." },
+    3: { correct: "Correct. Context poisoning can only be reliably fixed by starting a new task (new context window). Correction prompts within the same conversation don't work because the poisoned history is still re-sent with every prompt.", incorrect: "Incorrect. The only reliable fix for context poisoning is starting a new task to get a fresh context window. Correction prompts don't work — the bad history is still present and will re-surface. Rollback restores files but not context." },
+    4: { correct: "Correct. Enterprise plan users must keep telemetry enabled to appear in Bobalytics. If telemetry is disabled for users, those users disappear from team-level reporting. This is the documented tradeoff between privacy and analytics visibility.", incorrect: "Incorrect. Disabling telemetry specifically disables Bobalytics visibility for those users. Bob continues to function, but those users' activity won't appear in team analytics." },
+    5: { correct: "Correct. Both protections are valuable, but .bobignore has known bypass limitations (insert_content and search_and_replace can bypass it), and .bobignore is not a system-level sandbox. For production credentials, a dedicated secrets manager (like Vault or AWS Secrets Manager) provides stronger guarantees.", incorrect: "Incorrect. The .bobignore + .gitignore combination is better than nothing, but the docs explicitly note that insert_content and search_and_replace tools may bypass .bobignore. The strongest protection for API keys is a secrets manager, not file-level ignore rules." }
+  };
+
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      if (submitted) return;
+      var block = this.closest('.q-block');
+      block.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      answers[block.dataset.q] = this.dataset.val;
+      updateProgress();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (submitted) return;
+    var total = 5, score = 0;
+    document.querySelectorAll('.q-block').forEach(function(block) {
+      var q = block.dataset.q;
+      var correct = block.dataset.correct;
+      var chosen = answers[q];
+      var fb = document.getElementById('fb-' + q);
+      block.querySelectorAll('.q-option').forEach(function(opt) {
+        if (opt.dataset.val === correct) opt.classList.add('revealed-correct');
+      });
+      if (chosen) {
+        var chosenEl = block.querySelector('[data-val="' + chosen + '"]');
+        if (chosen === correct) {
+          chosenEl.classList.add('correct'); chosenEl.classList.remove('selected'); score++;
+          fb.className = 'q-feedback correct-fb'; fb.textContent = feedbacks[q].correct;
+        } else {
+          chosenEl.classList.add('incorrect'); chosenEl.classList.remove('selected');
+          fb.className = 'q-feedback incorrect-fb'; fb.textContent = feedbacks[q].incorrect;
+        }
+      }
+    });
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    var rt = document.getElementById('resultText');
+    if (score === total) { rt.style.color = '#065f46'; rt.textContent = 'Perfect score! Curriculum complete.'; }
+    else if (score >= 3) { rt.style.color = '#059669'; rt.textContent = score + ' of ' + total + ' correct — strong finish.'; }
+    else { rt.style.color = '#b91c1c'; rt.textContent = score + ' of ' + total + ' — review the sections above.'; }
+    document.getElementById('submitBtn').disabled = true;
+    submitted = true;
+    document.getElementById('progressFill').style.width = '100%';
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    document.getElementById('progressFill').style.width = Math.round((answered / 5) * 80) + '%';
+  }
+})();
+</script>
+</body>
+</html>

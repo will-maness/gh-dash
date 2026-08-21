@@ -1,0 +1,1293 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project: gh-dash | IBM Bob Mastery</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 0 20px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .topbar {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 0;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .topbar .crumb-sep { color: #c8d0dc; }
+  .topbar .current { color: #1f2328; font-weight: 600; }
+  .topbar a { color: #57606a; text-decoration: none; }
+  .topbar a:hover { color: #3b82d4; text-decoration: underline; }
+  .topbar .pill {
+    margin-left: auto;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .lesson-hero { margin-bottom: 40px; }
+  .lesson-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 8px;
+  }
+  .lesson-hero h1 { font-size: 26px; font-weight: 800; line-height: 1.25; margin-bottom: 12px; }
+  .lesson-hero .tagline { font-size: 16px; color: #57606a; margin-bottom: 20px; }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid #e5e7eb; color: #57606a; }
+
+  .section { margin-bottom: 44px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #57606a;
+    margin-bottom: 6px;
+  }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+  h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; margin-top: 22px; }
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  .callout .callout-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .callout p { font-size: 14px; margin-bottom: 8px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-blue { background: #eff6ff; border-left: 4px solid #3b82d4; }
+  .callout-blue .callout-label { color: #1d4ed8; }
+  .callout-purple { background: #f5f3ff; border-left: 4px solid #7c5cd8; }
+  .callout-purple .callout-label { color: #6d28d9; }
+  .callout-amber { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout-amber .callout-label { color: #92400e; }
+  .callout-green { background: #f0fdf4; border-left: 4px solid #10b981; }
+  .callout-green .callout-label { color: #065f46; }
+  .callout-slate { background: #f8fafc; border-left: 4px solid #94a3b8; }
+  .callout-slate .callout-label { color: #475569; }
+
+  code {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    background: #f0f4ff;
+    color: #3b52a4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .code-block {
+    background: #1f2328;
+    color: #e6edf3;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    margin: 14px 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .c { color: #8b949e; }
+  .code-block .k { color: #ff7b72; }
+  .code-block .s { color: #a5d6ff; }
+  .code-block .v { color: #79c0ff; }
+  .code-block .p { color: #e6edf3; }
+
+  /* ── Session header ── */
+  .session-header {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .session-header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .session-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #57606a;
+    min-width: 72px;
+    padding-top: 3px;
+    flex-shrink: 0;
+  }
+  .session-title-block { flex: 1; }
+  .session-title { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+  .session-subtitle { font-size: 13px; color: #57606a; }
+  .session-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+  .badge-slate { background: #f1f5f9; color: #475569; }
+  .badge-blue { background: #dbeafe; color: #1d4ed8; }
+  .badge-purple { background: #ede9fe; color: #6d28d9; }
+  .badge-green { background: #d1fae5; color: #065f46; }
+  .session-meta-row {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .session-meta-item {
+    flex: 1;
+    padding: 10px 16px;
+    border-right: 1px solid #e5e7eb;
+    font-size: 12px;
+  }
+  .session-meta-item:last-child { border-right: none; }
+  .session-meta-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #57606a; margin-bottom: 3px; }
+  .session-meta-value { font-weight: 600; color: #1f2328; }
+  .session-body { padding: 18px 20px; }
+
+  /* ── Step lists ── */
+  .step-list { display: flex; flex-direction: column; gap: 16px; margin: 16px 0; }
+  .step-item { display: flex; gap: 14px; align-items: flex-start; }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #1f2328; color: #fff;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-num-blue { background: #3b82d4; }
+  .step-num-purple { background: #7c5cd8; }
+  .step-num-green { background: #10b981; }
+  .step-num-amber { background: #d97706; }
+  .step-body { flex: 1; font-size: 13.5px; line-height: 1.6; }
+  .step-body strong { display: block; margin-bottom: 3px; font-size: 14px; }
+  .step-body p { margin-bottom: 6px; font-size: 13.5px; }
+  .step-body p:last-child { margin-bottom: 0; }
+
+  /* ── Prompt blocks ── */
+  .prompt-block {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  .prompt-header {
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 7px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #57606a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mode-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+  }
+  .mode-agent { background: #dbeafe; color: #1d4ed8; }
+  .mode-ask { background: #d1fae5; color: #065f46; }
+  .mode-plan { background: #ede9fe; color: #6d28d9; }
+  .prompt-text {
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: #1f2328;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ── Box variants ── */
+  .constraint-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .constraint-box .box-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #92400e; margin-bottom: 8px; }
+  .constraint-box ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .constraint-box li { display: flex; gap: 8px; font-size: 13px; color: #78350f; }
+  .constraint-box li::before { content: "✗"; color: #dc2626; font-weight: 700; flex-shrink: 0; }
+
+  .observe-box {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .observe-box .box-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #0369a1; margin-bottom: 8px; }
+  .observe-box ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .observe-box li { display: flex; gap: 8px; font-size: 13px; color: #0c4a6e; }
+  .observe-box li::before { content: "→"; color: #0284c7; font-weight: 700; flex-shrink: 0; }
+
+  .deliverable-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .deliverable-box .box-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #065f46; margin-bottom: 8px; }
+  .deliverable-box ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .deliverable-box li { display: flex; gap: 8px; font-size: 13px; color: #14532d; }
+  .deliverable-box li::before { content: "✓"; color: #16a34a; font-weight: 700; flex-shrink: 0; }
+
+  .file-tree {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    margin: 14px 0;
+    color: #374151;
+  }
+  .file-tree .dir { color: #3b82d4; font-weight: 700; }
+  .file-tree .new { color: #16a34a; font-weight: 700; }
+  .file-tree .cmt { color: #9ca3af; font-size: 11.5px; }
+
+  /* ── Progression timeline ── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 20px 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 26px;
+    bottom: 26px;
+    width: 2px;
+    background: #e5e7eb;
+  }
+  .tl-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 10px 0;
+    position: relative;
+  }
+  .tl-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-body { flex: 1; padding-top: 5px; }
+  .tl-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .tl-desc { font-size: 12.5px; color: #57606a; }
+  .tl-feature {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 4px;
+  }
+
+  .lesson-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 44px; padding-top: 20px; border-top: 1px solid #e5e7eb;
+  }
+  .btn-nav {
+    font-size: 13px; font-weight: 600; padding: 9px 20px;
+    border-radius: 6px; border: 1px solid #e5e7eb;
+    background: #fff; color: #1f2328;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-nav-primary { background: #1f2328; color: #fff; border-color: #1f2328; }
+  .lesson-nav-center { font-size: 12px; color: #57606a; }
+
+  footer {
+    text-align: center; font-size: 11px; color: #9ea8b3;
+    padding-top: 20px; border-top: 1px solid #e5e7eb; margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a href="bob-mastery-lesson-plan-overview.html">Bob Mastery</a>
+    <span class="crumb-sep">›</span>
+    <span class="current">Project: gh-dash</span>
+    <span class="pill">Companion Guide</span>
+  </div>
+
+  <div class="lesson-hero">
+    <div class="lesson-eyebrow">Applied Learning — All 6 Lessons</div>
+    <h1>Project: gh-dash</h1>
+    <p class="tagline">A developer productivity dashboard that analyzes GitHub repositories and surfaces health metrics: PR cycle time, commit frequency, stale branches, contributor trends. You build it across six Bob sessions — one per lesson — unlocking one new Bob mechanic each time. The repo grows. The workflow matures.</p>
+    <div class="meta-chips">
+      <span class="chip">6 Bob sessions</span>
+      <span class="chip">Single continuous repo</span>
+      <span class="chip">GitHub REST API</span>
+      <span class="chip">Node.js + HTML dashboard</span>
+      <span class="chip">New mechanic per session</span>
+    </div>
+  </div>
+
+
+  <!-- HOW TO USE THIS GUIDE -->
+  <div class="section">
+    <div class="section-label">Before you begin</div>
+    <h2>How this guide works</h2>
+
+    <p>Each session maps to one lesson. <strong>Read the lesson first, pass the quiz, then open this guide for that session.</strong> The exercise only makes sense after you understand the concept — if you try to follow the steps without the lesson context, you'll be going through motions instead of building intuition.</p>
+
+    <p>Three rules that hold for every session:</p>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>One Bob conversation per session.</strong>
+          Start a new conversation at the beginning of each session. Don't carry a conversation over from the previous one. The codebase persists; the context does not. This is intentional — it exercises context discipline from Lesson 1.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Honor the constraint for each session.</strong>
+          Each session has a red "constraint" box listing things you cannot do yet. The constraint is what makes it an exercise. Skipping it means you're not practicing the lesson's mechanic.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>The prompts are starting points, not scripts.</strong>
+          The prompts shown are what to send Bob to initiate each step. Bob's response will vary. You'll need to approve tool calls, iterate, and make judgment calls. That's the point.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="callout-label">Prerequisites</div>
+      <p>You need: Node.js 18+ installed, a GitHub account, and a GitHub Personal Access Token (classic, <code>repo</code> scope) stored as an environment variable. You do not need to set up the token before Session 1 — that happens in Session 4. Sessions 1–3 use Bob's own GitHub MCP connection or public API endpoints that don't require auth.</p>
+    </div>
+  </div>
+
+
+  <!-- PROGRESSION MAP -->
+  <div class="section">
+    <div class="section-label">Project arc</div>
+    <h2>What you're building, session by session</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#6b7280;">1</div>
+        <div class="tl-body">
+          <div class="tl-title">Session 1 — Scaffold &amp; Observe</div>
+          <div class="tl-desc">A bare Node.js project with a GitHub API client stub, a simple CLI entry point, and a static HTML shell. Nothing works yet — you're watching how Bob builds, not what it builds.</div>
+          <div class="tl-feature" style="background:#f1f5f9;color:#475569;">Lesson 1: observation mode</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#3b82d4;">2</div>
+        <div class="tl-body">
+          <div class="tl-title">Session 2 — PR Metrics</div>
+          <div class="tl-desc">The first real feature: fetch all PRs for a repo, compute average cycle time (open → merge), and render the number in the dashboard HTML. Built Plan-first, then implemented in Agent mode.</div>
+          <div class="tl-feature" style="background:#dbeafe;color:#1d4ed8;">Lesson 2: mode discipline</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#7c5cd8;">3</div>
+        <div class="tl-body">
+          <div class="tl-title">Session 3 — Multi-Repo Comparison</div>
+          <div class="tl-desc">Extend to analyze 5 repos in parallel. A <code>gh-analysis</code> skill encodes your GitHub domain vocabulary so Bob generates consistent analysis code every session from here on.</div>
+          <div class="tl-feature" style="background:#ede9fe;color:#6d28d9;">Lesson 3: skills + subagents</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#7c5cd8;">4</div>
+        <div class="tl-body">
+          <div class="tl-title">Session 4 — Configuration &amp; MCP</div>
+          <div class="tl-desc">Wire up the GitHub MCP server for real API access. Commit <code>AGENTS.md</code>, <code>.bobignore</code>, and a custom <code>repo-analyst</code> mode. The project becomes self-configuring for Bob.</div>
+          <div class="tl-feature" style="background:#ede9fe;color:#6d28d9;">Lesson 4: configuration</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#10b981;">5</div>
+        <div class="tl-body">
+          <div class="tl-title">Session 5 — Contributor Trends</div>
+          <div class="tl-desc">Add the most complex feature: contributor activity over time, rendered as an SVG sparkline in the dashboard. Built using literate coding for the algorithm, <code>/review</code> before commit, and <code>@git-changes</code> for the PR description.</div>
+          <div class="tl-feature" style="background:#d1fae5;color:#065f46;">Lesson 5: power features</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#10b981;">6</div>
+        <div class="tl-body">
+          <div class="tl-title">Session 6 — Hardening &amp; Reflection</div>
+          <div class="tl-desc">Add a stale-branch detector, harden the project's security posture, and conduct a deliberate cost + context hygiene audit across all 6 sessions.</div>
+          <div class="tl-feature" style="background:#d1fae5;color:#065f46;">Lesson 6: cost, security &amp; scale</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SESSION 1 -->
+  <div class="section">
+    <div class="section-label">Session 1 of 6 — Lesson 01</div>
+    <h2>Scaffold &amp; Observe</h2>
+
+    <div class="session-header">
+      <div class="session-header-top">
+        <div class="session-num">Session 01</div>
+        <div class="session-title-block">
+          <div class="session-title">Project scaffold — watch Bob work</div>
+          <div class="session-subtitle">Your job is observation, not judgment. Let Bob make every decision.</div>
+        </div>
+        <div class="session-badge badge-slate">~30 min</div>
+      </div>
+      <div class="session-meta-row">
+        <div class="session-meta-item">
+          <div class="session-meta-label">Bob mode</div>
+          <div class="session-meta-value">Agent</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">Auto-approve</div>
+          <div class="session-meta-value">All OFF</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">New Bob mechanic</div>
+          <div class="session-meta-value">Tool execution loop</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">What you build</div>
+          <div class="session-meta-value">Project scaffold</div>
+        </div>
+      </div>
+      <div class="session-body">
+
+        <div class="constraint-box">
+          <div class="box-label">Constraints for this session</div>
+          <ul>
+            <li>Do not type ahead or send a second prompt while Bob is working — one prompt at a time</li>
+            <li>Do not reject any tool call approval unless Bob is about to write outside the project folder</li>
+            <li>Do not ask Bob to explain its decisions — just observe them</li>
+            <li>Do not start a second conversation — even if you want to fix something Bob did</li>
+          </ul>
+        </div>
+
+        <h3>Setup: create the repo</h3>
+        <p>Before opening Bob, do this manually in your terminal:</p>
+        <div class="code-block"><span class="p">mkdir gh-dash && cd gh-dash
+git init
+npm init -y</span></div>
+        <p>Open the <code>gh-dash</code> folder in Bob IDE. You are now ready to start your first session.</p>
+
+        <h3>Step 1 — Send the scaffold prompt</h3>
+        <p>Open a new Agent mode conversation and send this single prompt. Then stop. Read every tool call approval before clicking approve.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Send this prompt
+            <span class="mode-tag mode-agent">Agent mode</span>
+          </div>
+          <div class="prompt-text">
+            "Scaffold a Node.js project called gh-dash. It will eventually analyze GitHub repositories and produce health metrics. For now, create: a src/ directory with a github.js module that exports a stub fetchRepo(owner, repo) function using the GitHub REST API v3; a src/metrics.js module with stub functions prCycleTime(prs) and commitFrequency(commits) that return null; a cli.js entry point that accepts --owner and --repo flags and logs 'Fetching {owner}/{repo}...'; and a public/index.html dashboard shell with placeholder cards for PR Cycle Time, Commit Frequency, Stale Branches, and Contributors. Add a .gitignore for node_modules and .env. Do not install any npm packages yet."
+          </div>
+        </div>
+
+        <div class="observe-box">
+          <div class="box-label">While Bob works — observe these things</div>
+          <ul>
+            <li>How many tool calls does Bob make before writing a single file?</li>
+            <li>Does Bob read anything before it writes? What does it read and why?</li>
+            <li>How many separate write operations does it use — one big write or surgical per-file operations?</li>
+            <li>Does it verify anything after writing?</li>
+            <li>After 3–4 tool calls, notice the approval prompt getting longer. That's context accumulating.</li>
+          </ul>
+        </div>
+
+        <h3>Step 2 — Verify the structure</h3>
+        <p>After Bob finishes, send one verification prompt:</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Verification prompt
+            <span class="mode-tag mode-agent">Agent mode</span>
+          </div>
+          <div class="prompt-text">
+            "List the files you created and confirm each one has the correct exports or structure."
+          </div>
+        </div>
+
+        <p>Watch what tools Bob uses to answer this. Does it re-read the files it just wrote, or does it answer from memory? Notice whether re-reading files generates more tool calls — and understand that each of those reads is now in your context window for the rest of the conversation.</p>
+
+        <h3>Step 3 — Make one observation note</h3>
+        <p>Before closing this session, open a new file in the project manually (not via Bob) and write a short note. This becomes your learning log for the project.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">Create this file yourself — not via Bob</div>
+          <div class="prompt-text">LEARNING_LOG.md — write: "Session 1: I observed N tool calls. Bob read [X] before writing. The context window had [describe what you noticed]. One thing that surprised me: [your observation]."</div>
+        </div>
+
+        <div class="deliverable-box">
+          <div class="box-label">Session 1 deliverables</div>
+          <ul>
+            <li><code>src/github.js</code> — stub fetchRepo function</li>
+            <li><code>src/metrics.js</code> — stub prCycleTime and commitFrequency</li>
+            <li><code>cli.js</code> — entry point with --owner and --repo flags</li>
+            <li><code>public/index.html</code> — dashboard shell with 4 placeholder cards</li>
+            <li><code>.gitignore</code> — node_modules and .env ignored</li>
+            <li><code>LEARNING_LOG.md</code> — your first observation note (written by hand)</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-slate">
+          <div class="callout-label">What you just experienced</div>
+          <p>Bob made multiple decisions you didn't specify: file structure, naming conventions, how to parse CLI flags, how to structure the HTML. Each of those decisions became a fact in the context window. If any of them were wrong, arguing about them in this conversation would compound the error — context poisoning in miniature. The right response would have been to start a new conversation with a more precise prompt. Keep that in mind for Session 2.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SESSION 2 -->
+  <div class="section">
+    <div class="section-label">Session 2 of 6 — Lesson 02</div>
+    <h2>PR Metrics — Mode Discipline</h2>
+
+    <div class="session-header">
+      <div class="session-header-top">
+        <div class="session-num">Session 02</div>
+        <div class="session-title-block">
+          <div class="session-title">Build the PR cycle time feature — Plan first, then Agent</div>
+          <div class="session-subtitle">Three distinct mode phases. No skipping ahead to Agent.</div>
+        </div>
+        <div class="session-badge badge-blue">~35 min</div>
+      </div>
+      <div class="session-meta-row">
+        <div class="session-meta-item">
+          <div class="session-meta-label">Modes used</div>
+          <div class="session-meta-value">Plan → Agent → Ask</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">Auto-approve</div>
+          <div class="session-meta-value">Read only</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">New Bob mechanic</div>
+          <div class="session-meta-value">Mode selection</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">What you build</div>
+          <div class="session-meta-value">PR cycle time metric</div>
+        </div>
+      </div>
+      <div class="session-body">
+
+        <div class="constraint-box">
+          <div class="box-label">Constraints for this session</div>
+          <ul>
+            <li>Do not switch to Agent mode until you have reviewed and approved the written plan</li>
+            <li>Do not ask Bob to implement anything while in Plan mode</li>
+            <li>Do not skip the Ask mode audit at the end — it is the verification step</li>
+            <li>Enable auto-approve for Read operations only — all writes and executes still require manual approval</li>
+          </ul>
+        </div>
+
+        <h3>Phase 1 — Plan mode: design before building</h3>
+        <p>Start a new conversation in <strong>Plan mode</strong>. Do not open Agent mode yet.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Plan prompt — send this first
+            <span class="mode-tag mode-plan">Plan mode</span>
+          </div>
+          <div class="prompt-text">
+            "I need to implement PR cycle time analysis in gh-dash. Cycle time = the average duration in hours from a PR's created_at to its merged_at, across all merged PRs in a repo. Using the GitHub REST API v3 (GET /repos/{owner}/{repo}/pulls?state=closed), design the implementation plan. Show me: which files need to change, what the fetchPRs function signature should look like, the algorithm for the prCycleTime calculation, how the result gets written to the dashboard HTML, and any edge cases I should handle. Do not write any code yet."
+          </div>
+        </div>
+
+        <p>Read Bob's plan carefully. Look for anything that conflicts with the structure from Session 1 — wrong file names, different function signatures than what exists, assumptions about how the HTML is structured. <strong>Correct any mistakes now, before a single line of code is written.</strong> This is the entire point of Plan mode.</p>
+
+        <div class="observe-box">
+          <div class="box-label">What to look for in the plan</div>
+          <ul>
+            <li>Does the plan reference the actual filenames from Session 1, or does it invent new ones?</li>
+            <li>Does it account for the edge case where merged_at is null (PR was closed but not merged)?</li>
+            <li>Does it specify how the result flows from metrics.js to the HTML — or leave that vague?</li>
+            <li>Does Plan mode try to write any files? (It should not — that would be a mode violation.)</li>
+          </ul>
+        </div>
+
+        <h3>Phase 2 — Agent mode: implement the plan</h3>
+        <p>Switch to <strong>Agent mode</strong>. Start a new conversation — do not continue the Plan conversation.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Implementation prompt
+            <span class="mode-tag mode-agent">Agent mode</span>
+          </div>
+          <div class="prompt-text">
+            "Implement PR cycle time analysis in gh-dash based on this plan: [paste the key points from the plan Bob just produced]. Specifically: update src/github.js to add a fetchPRs(owner, repo) function that calls GET /repos/{owner}/{repo}/pulls?state=closed&per_page=100; update the prCycleTime(prs) function in src/metrics.js to compute average hours from created_at to merged_at, skipping PRs where merged_at is null; update cli.js to fetch PRs and log the cycle time result; update the PR Cycle Time card in public/index.html to display the computed value. Run node cli.js --owner facebook --repo react to verify it executes without errors."
+          </div>
+        </div>
+
+        <p>Watch each write approval carefully. Verify that Bob is editing the files from Session 1, not creating new ones. If it tries to restructure the project, decline the tool call and correct the prompt.</p>
+
+        <h3>Phase 3 — Ask mode: audit the implementation</h3>
+        <p>Switch to <strong>Ask mode</strong>. Start a new conversation.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Audit prompt
+            <span class="mode-tag mode-ask">Ask mode</span>
+          </div>
+          <div class="prompt-text">
+            "Review src/metrics.js and src/github.js. Does prCycleTime correctly handle the case where a PR has no merged_at? Is there a risk of dividing by zero if all PRs are unmerged? Does fetchPRs handle GitHub API pagination — what happens with repos that have more than 100 PRs?"
+          </div>
+        </div>
+
+        <p>Bob will identify any gaps. Note them in <code>LEARNING_LOG.md</code>. You are not fixing them now — just recording. The deliberate use of Ask mode after Agent mode is the practice: build, then audit without side effects.</p>
+
+        <div class="deliverable-box">
+          <div class="box-label">Session 2 deliverables</div>
+          <ul>
+            <li><code>src/github.js</code> — fetchPRs function added</li>
+            <li><code>src/metrics.js</code> — prCycleTime implemented with null guard</li>
+            <li><code>cli.js</code> — logs PR cycle time for a given repo</li>
+            <li><code>public/index.html</code> — PR Cycle Time card populated</li>
+            <li><code>LEARNING_LOG.md</code> — note on what the Ask audit found</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-purple">
+          <div class="callout-label">What you just practiced</div>
+          <p>You used three modes for three distinct mental postures in a single feature. Plan mode forced you to catch design errors before they became code errors. Agent mode executed without needing to re-explain the design. Ask mode audited without risk of accidentally changing something. This three-phase pattern — Plan → Agent → Ask — is the highest-leverage workflow for complex features. You'll use it instinctively by Session 5.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SESSION 3 -->
+  <div class="section">
+    <div class="section-label">Session 3 of 6 — Lesson 03</div>
+    <h2>Multi-Repo Comparison — Skills &amp; Subagents</h2>
+
+    <div class="session-header">
+      <div class="session-header-top">
+        <div class="session-num">Session 03</div>
+        <div class="session-title-block">
+          <div class="session-title">Analyze 5 repos in parallel — write and use your first skill</div>
+          <div class="session-subtitle">The subagent task must be naturally parallel. It is here.</div>
+        </div>
+        <div class="session-badge badge-purple">~40 min</div>
+      </div>
+      <div class="session-meta-row">
+        <div class="session-meta-item">
+          <div class="session-meta-label">Mode</div>
+          <div class="session-meta-value">Agent</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">Auto-approve</div>
+          <div class="session-meta-value">Read + Skill</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">New mechanic</div>
+          <div class="session-meta-value">Skills + Subagents</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">What you build</div>
+          <div class="session-meta-value">Multi-repo analysis</div>
+        </div>
+      </div>
+      <div class="session-body">
+
+        <div class="constraint-box">
+          <div class="box-label">Constraints for this session</div>
+          <ul>
+            <li>You must write the SKILL.md file yourself before asking Bob to use it</li>
+            <li>The multi-repo fetch must use parallel subagents — do not write a sequential loop</li>
+            <li>The skill must be in .bob/skills/ (project-scoped), not your global skills directory</li>
+          </ul>
+        </div>
+
+        <h3>Part A — Write your gh-analysis skill</h3>
+        <p>Create the skill file <strong>manually</strong> before this session's Bob conversation. This is deliberate — writing the skill yourself forces you to think about what domain knowledge is actually worth encoding.</p>
+
+        <p>Create the directory and file: <code>.bob/skills/gh-analysis/SKILL.md</code></p>
+        <p>Write the following content:</p>
+
+        <div class="code-block"><span class="c">---</span>
+<span class="v">name</span>: <span class="s">gh-analysis</span>
+<span class="v">description</span>: <span class="s">Analyze GitHub repositories for health metrics including</span>
+<span class="s">             PR cycle time, commit frequency, stale branches, and contributor</span>
+<span class="s">             activity. Use when writing or extending analysis functions in</span>
+<span class="s">             gh-dash that call the GitHub REST API v3.</span>
+<span class="c">---</span>
+
+<span class="c"># gh-analysis Skill</span>
+
+<span class="c">## Domain conventions in this project</span>
+
+All GitHub API calls go through `src/github.js`. Never call the API
+directly from metrics.js or cli.js.
+
+Metric functions live in `src/metrics.js` and accept raw API response
+arrays as their only argument. They return a single number or null.
+
+The dashboard renders metric values by ID: `#pr-cycle-time`,
+`#commit-freq`, `#stale-branches`, `#contributors`.
+
+<span class="c">## GitHub API patterns</span>
+
+PRs: GET /repos/{owner}/{repo}/pulls?state=closed&per_page=100
+Commits: GET /repos/{owner}/{repo}/commits?per_page=100
+Branches: GET /repos/{owner}/{repo}/branches?per_page=100
+Contributors: GET /repos/{owner}/{repo}/contributors?per_page=100
+
+All endpoints paginate. Check the Link header for rel="next".
+
+<span class="c">## Key edge cases to always handle</span>
+
+- merged_at is null for closed-but-unmerged PRs — skip these for cycle time
+- Branches with no commits in 90+ days are stale
+- The default branch is never stale regardless of commit date
+- contributor.login may be null for deleted GitHub accounts</div>
+
+        <h3>Part B — Build the multi-repo comparison feature</h3>
+        <p>Now open a new Agent mode conversation. Bob should detect and activate the skill automatically when your request is relevant to GitHub analysis.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Send this prompt
+            <span class="mode-tag mode-agent">Agent mode</span>
+          </div>
+          <div class="prompt-text">
+            "I need to extend gh-dash to analyze multiple repos simultaneously and compare their PR cycle times side by side. The repos to compare are: facebook/react, vercel/next.js, expressjs/express, axios/axios, and lodash/lodash. The analysis for each repo should be run in parallel — use subagents so the main conversation context doesn't get polluted with five separate sets of API calls. Each subagent should fetch that repo's closed PRs and return a summary object: { repo, avgCycleTimeHours, totalMergedPRs }. After all five complete, render a comparison table in public/index.html showing all five repos ranked by cycle time."
+          </div>
+        </div>
+
+        <div class="observe-box">
+          <div class="box-label">Watch for these specific mechanics</div>
+          <ul>
+            <li>Does Bob activate the gh-analysis skill? It should — the request matches the description.</li>
+            <li>How many subagents does Bob spawn? It should be 5 (one per repo), running in parallel.</li>
+            <li>What comes back to the main conversation from each subagent — the full tool trace or just a summary?</li>
+            <li>Does Bob set fork_context: true on the subagents? Would it need to here? (Think about what each subagent needs to know.)</li>
+          </ul>
+        </div>
+
+        <p>After this completes, do a quick sanity check — the comparison table should show real cycle time data for at least 3 of the 5 repos (some may return errors if their APIs behave differently at query time).</p>
+
+        <div class="deliverable-box">
+          <div class="box-label">Session 3 deliverables</div>
+          <ul>
+            <li><code>.bob/skills/gh-analysis/SKILL.md</code> — hand-written skill file committed to the repo</li>
+            <li><code>src/github.js</code> — updated with multi-repo fetch capability</li>
+            <li><code>src/metrics.js</code> — consistent with skill conventions</li>
+            <li><code>public/index.html</code> — comparison table with 5-repo results</li>
+            <li><code>LEARNING_LOG.md</code> — note on whether Bob activated the skill automatically, and what the subagent summaries looked like vs. what a sequential approach would have produced</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-purple">
+          <div class="callout-label">What you just practiced</div>
+          <p>The skill did two things simultaneously: it gave Bob domain vocabulary (the ID conventions, the file architecture, the edge cases) and it constrained Bob's behavior (always route API calls through github.js). Without the skill, Bob would have had to infer these from reading your code — at token cost, with risk of getting them wrong. With the skill, the knowledge was already in context before Bob looked at a single file. That's the compounding value of a well-written skill: every future session in this project benefits from it automatically.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SESSION 4 -->
+  <div class="section">
+    <div class="section-label">Session 4 of 6 — Lesson 04</div>
+    <h2>Configuration — Modes, Rules &amp; MCP</h2>
+
+    <div class="session-header">
+      <div class="session-header-top">
+        <div class="session-num">Session 04</div>
+        <div class="session-title-block">
+          <div class="session-title">Make the project self-configuring for Bob</div>
+          <div class="session-subtitle">AGENTS.md, .bobignore, a custom mode, and live GitHub API access via MCP.</div>
+        </div>
+        <div class="session-badge badge-purple">~45 min</div>
+      </div>
+      <div class="session-meta-row">
+        <div class="session-meta-item">
+          <div class="session-meta-label">Mode</div>
+          <div class="session-meta-value">Agent + custom</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">Auto-approve</div>
+          <div class="session-meta-value">Read + Skill</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">New mechanic</div>
+          <div class="session-meta-value">Config files + MCP</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">What you build</div>
+          <div class="session-meta-value">Project config layer</div>
+        </div>
+      </div>
+      <div class="session-body">
+
+        <div class="constraint-box">
+          <div class="box-label">Constraints for this session</div>
+          <ul>
+            <li>Write AGENTS.md yourself — do not ask Bob to write it for you</li>
+            <li>The custom mode must have a fileRegex that restricts edits to src/ and public/ only</li>
+            <li>Your GitHub token must never appear in any file Bob can read — enforce this with .bobignore</li>
+          </ul>
+        </div>
+
+        <h3>Part A — Write AGENTS.md by hand</h3>
+        <p>Create <code>AGENTS.md</code> in the project root manually. This is your team contract — writing it yourself is more valuable than having Bob generate it, because you have to consciously decide what matters.</p>
+
+        <p>Minimum contents to include:</p>
+        <div class="code-block"><span class="c"># gh-dash — Bob Configuration</span>
+
+<span class="c">## Architecture rules</span>
+All GitHub API calls must go through src/github.js.
+Metric calculation functions live in src/metrics.js only.
+The dashboard is a single HTML file at public/index.html.
+Do not create additional HTML files or a build step.
+
+<span class="c">## Code style</span>
+Use CommonJS (require/module.exports), not ES modules.
+Function names use camelCase. Files use kebab-case.
+No external dependencies beyond node-fetch.
+
+<span class="c">## Error handling</span>
+All GitHub API calls must handle 404 (repo not found) and
+403 (rate limited) responses explicitly. Never throw uncaught errors.</div>
+
+        <h3>Part B — Create .bobignore</h3>
+        <p>Create <code>.bobignore</code> in the project root:</p>
+        <div class="code-block"><span class="c"># Credentials — never read these</span>
+<span class="s">.env</span>
+<span class="s">.env.*</span>
+
+<span class="c"># Generated output</span>
+<span class="s">node_modules/</span>
+<span class="s">*.log</span></div>
+
+        <h3>Part C — Create the custom repo-analyst mode</h3>
+        <p>Create <code>.bob/custom_modes.yaml</code>:</p>
+        <div class="code-block"><span class="v">customModes</span>:
+  - <span class="v">slug</span>: <span class="s">repo-analyst</span>
+    <span class="v">name</span>: <span class="s">📊 Repo Analyst</span>
+    <span class="v">description</span>: <span class="s">Extends gh-dash with new metrics and analysis features.</span>
+    <span class="v">roleDefinition</span>: <span class="s">You are a developer extending a GitHub repository</span>
+<span class="s">      analytics tool. You understand the GitHub REST API v3, JavaScript</span>
+<span class="s">      metrics computation, and HTML dashboard rendering.</span>
+    <span class="v">whenToUse</span>: <span class="s">Use for any task that adds or modifies analysis features in gh-dash.</span>
+    <span class="v">customInstructions</span>: <span class="s">Always check AGENTS.md before making architectural decisions.</span>
+<span class="s">      All API calls through src/github.js. No new dependencies.</span>
+    <span class="v">groups</span>:
+      - <span class="s">read</span>
+      - - <span class="s">edit</span>
+        <span class="v">fileRegex</span>: <span class="s">"^(src/|public/|cli\\.js|AGENTS\\.md)"</span>
+        <span class="v">description</span>: <span class="s">Source and dashboard files only</span>
+      - <span class="s">execute</span>
+      - <span class="s">skill</span>
+      - <span class="s">mcp</span></div>
+
+        <h3>Part D — Wire up the GitHub MCP server</h3>
+        <p>Open Bob Settings and add the GitHub MCP server. This gives Bob real GitHub API access using your personal token — no more stub functions needed.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            In Bob Settings → MCP Servers, add this configuration
+          </div>
+          <div class="prompt-text">
+            Server name: github<br/>
+            Transport: STDIO<br/>
+            Command: npx -y @modelcontextprotocol/server-github<br/>
+            Environment: GITHUB_PERSONAL_ACCESS_TOKEN = [your token from .env]
+          </div>
+        </div>
+
+        <h3>Part E — Verify the configuration with a live fetch</h3>
+        <p>Switch to the custom <strong>repo-analyst</strong> mode and start a new conversation:</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Verification prompt
+            <span class="mode-tag mode-agent">repo-analyst mode</span>
+          </div>
+          <div class="prompt-text">
+            "Using the GitHub MCP server, fetch the 10 most recent merged PRs for vercel/next.js and compute the average cycle time in hours. Then update src/github.js to replace the stub fetchPRs function with a real implementation that uses the MCP server's list_pull_requests tool instead of a raw HTTP call."
+          </div>
+        </div>
+
+        <div class="observe-box">
+          <div class="box-label">Watch for these specific mechanics</div>
+          <ul>
+            <li>Does the repo-analyst mode prevent Bob from editing any file outside src/ or public/? Try asking it to edit package.json — it should decline.</li>
+            <li>Does Bob reference AGENTS.md when making architectural decisions?</li>
+            <li>Does the MCP server provide richer data than the raw HTTP stub? Compare the response structure.</li>
+            <li>Is your .env file visible to Bob? Run a glob for .env — it should return nothing.</li>
+          </ul>
+        </div>
+
+        <div class="deliverable-box">
+          <div class="box-label">Session 4 deliverables</div>
+          <ul>
+            <li><code>AGENTS.md</code> — project rules committed to the repo</li>
+            <li><code>.bobignore</code> — credentials and generated files excluded</li>
+            <li><code>.bob/custom_modes.yaml</code> — repo-analyst mode with fileRegex</li>
+            <li><code>src/github.js</code> — fetchPRs updated to use GitHub MCP</li>
+            <li><code>LEARNING_LOG.md</code> — note on what the custom mode prevented Bob from doing, and whether AGENTS.md was referenced</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-purple">
+          <div class="callout-label">What you just built</div>
+          <p>Any developer who clones this repo and opens it in Bob gets the same configuration automatically: the skill activates, AGENTS.md loads, the mode is available, and .bobignore is in effect. You've made the project's Bob behavior reproducible across team members without any manual setup. This is the repository-first standardization pattern from Lesson 6's deployment section — and you built it in Lesson 4.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SESSION 5 -->
+  <div class="section">
+    <div class="section-label">Session 5 of 6 — Lesson 05</div>
+    <h2>Contributor Trends — Power Features Workflow</h2>
+
+    <div class="session-header">
+      <div class="session-header-top">
+        <div class="session-num">Session 05</div>
+        <div class="session-title-block">
+          <div class="session-title">Build the most complex feature using every power tool</div>
+          <div class="session-subtitle">Literate coding for the algorithm. /review before commit. @git-changes for the PR.</div>
+        </div>
+        <div class="session-badge badge-green">~45 min</div>
+      </div>
+      <div class="session-meta-row">
+        <div class="session-meta-item">
+          <div class="session-meta-label">Mode</div>
+          <div class="session-meta-value">repo-analyst</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">Auto-approve</div>
+          <div class="session-meta-value">Read + Skill</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">New mechanic</div>
+          <div class="session-meta-value">Literate + /review + @mentions</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">What you build</div>
+          <div class="session-meta-value">Contributor trends + SVG sparkline</div>
+        </div>
+      </div>
+      <div class="session-body">
+
+        <div class="constraint-box">
+          <div class="box-label">Constraints for this session</div>
+          <ul>
+            <li>The binContribsByWeek algorithm must be written using literate coding — not a chat prompt</li>
+            <li>You must run /review before committing — do not skip this step</li>
+            <li>The PR description must be generated using @git-changes, not typed manually</li>
+          </ul>
+        </div>
+
+        <h3>Part A — Add the metrics stub via chat</h3>
+        <p>Start a new conversation in <strong>repo-analyst mode</strong>.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Setup prompt
+            <span class="mode-tag mode-agent">repo-analyst mode</span>
+          </div>
+          <div class="prompt-text">
+            "Add a contributorTrends(commits) function stub to src/metrics.js. It should accept an array of commit objects from the GitHub API and return null for now. Also add a fetchCommits(owner, repo) function to src/github.js that uses the MCP server's list_commits tool. Add a Contributors card to public/index.html with an empty SVG element (id='contributor-sparkline', width='200', height='40')."
+          </div>
+        </div>
+
+        <h3>Part B — Write the algorithm using literate coding</h3>
+        <p>This is the key step. Do not use the chat panel for this part. Instead, open <code>src/metrics.js</code> directly in the editor.</p>
+
+        <p>Find the <code>contributorTrends(commits)</code> stub. On the line after the opening brace, activate literate coding mode and type this instruction directly in the file:</p>
+
+        <div class="code-block"><span class="c">// Group commits by week for the last 12 weeks. For each week, count unique
+// contributor logins. Return an array of 12 integers in chronological order.
+// A commit's week is determined by its committer.date field (ISO 8601).
+// Weeks with no commits should return 0, not be omitted from the array.</span></div>
+
+        <p>Hit Generate. Bob reads the surrounding function signature and your instruction, then produces the implementation as an inline diff. Review the diff before applying — check that it handles the "no commits" weeks correctly.</p>
+
+        <div class="observe-box">
+          <div class="box-label">Compare literate coding to chat</div>
+          <ul>
+            <li>Bob knew exactly which function to implement — you didn't need to describe file or function name</li>
+            <li>The generated code is already in the right place — no copy-paste, no "insert after line X"</li>
+            <li>The surrounding context (the function signature, other functions in the file) shaped the output style automatically</li>
+          </ul>
+        </div>
+
+        <h3>Part C — Render the SVG sparkline via chat</h3>
+        <p>Back in the chat panel:</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Sparkline prompt
+            <span class="mode-tag mode-agent">repo-analyst mode</span>
+          </div>
+          <div class="prompt-text">
+            "Using the contributorTrends result (an array of 12 weekly commit counts), generate an SVG polyline that scales to fit the contributor-sparkline element (200×40). Update cli.js to fetch commits for the target repo, call contributorTrends, and inject the polyline path into the SVG element in index.html. The line should be blue (#3b82d4), stroke-width 1.5, no fill."
+          </div>
+        </div>
+
+        <h3>Part D — Run /review before committing</h3>
+        <p>Before staging anything, run the code review workflow:</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">In the chat panel, type</div>
+          <div class="prompt-text">/review</div>
+        </div>
+
+        <p>Configure the review panel to compare against your main branch. Include uncommitted changes. Start the review. Wait for Bob Findings to populate. Address any Critical or High findings before proceeding. Note Medium findings in <code>LEARNING_LOG.md</code> for later.</p>
+
+        <h3>Part E — Generate the commit message and PR description</h3>
+        <p>Stage your changes with <code>git add -A</code>. Then:</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Commit + PR prompt
+            <span class="mode-tag mode-agent">repo-analyst mode</span>
+          </div>
+          <div class="prompt-text">
+            "Generate a conventional commit message for the staged changes. Then generate a PR description for @git-changes. The PR is merging into main. Use ## Summary and ## Changes sections."
+          </div>
+        </div>
+
+        <p>Review both before using them. Edit if needed, then commit and push.</p>
+
+        <div class="deliverable-box">
+          <div class="box-label">Session 5 deliverables</div>
+          <ul>
+            <li><code>src/metrics.js</code> — contributorTrends implemented via literate coding</li>
+            <li><code>src/github.js</code> — fetchCommits added</li>
+            <li><code>public/index.html</code> — SVG sparkline card rendering live data</li>
+            <li>A commit with a Bob-generated conventional commit message</li>
+            <li><code>LEARNING_LOG.md</code> — note on what /review found, and how the literate coding experience compared to sending a chat prompt</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-green">
+          <div class="callout-label">What you just practiced</div>
+          <p>You used four distinct power features in one feature build: literate coding for precise in-situ code generation, /review as a quality gate before commit, @git-changes to ground the PR description in the actual diff, and conventional commit generation from staged changes. Any one of these would save time in isolation. Together, they form a complete quality-controlled workflow — design, implement, review, document, ship — without leaving Bob.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SESSION 6 -->
+  <div class="section">
+    <div class="section-label">Session 6 of 6 — Lesson 06</div>
+    <h2>Hardening &amp; Reflection — Cost, Security &amp; Scale</h2>
+
+    <div class="session-header">
+      <div class="session-header-top">
+        <div class="session-num">Session 06</div>
+        <div class="session-title-block">
+          <div class="session-title">Add stale branch detection, audit security, reflect on cost</div>
+          <div class="session-subtitle">The PM lens: what did this project actually cost to build with Bob?</div>
+        </div>
+        <div class="session-badge badge-green">~35 min</div>
+      </div>
+      <div class="session-meta-row">
+        <div class="session-meta-item">
+          <div class="session-meta-label">Mode</div>
+          <div class="session-meta-value">repo-analyst + Ask</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">Auto-approve</div>
+          <div class="session-meta-value">Read + Skill</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">New mechanic</div>
+          <div class="session-meta-value">Security + cost hygiene</div>
+        </div>
+        <div class="session-meta-item">
+          <div class="session-meta-label">What you build</div>
+          <div class="session-meta-value">Stale branch detector + audit</div>
+        </div>
+      </div>
+      <div class="session-body">
+
+        <div class="constraint-box">
+          <div class="box-label">Constraints for this session</div>
+          <ul>
+            <li>Start a fresh context at the beginning — do not continue any prior conversation</li>
+            <li>If you detect context drift mid-session, start a new conversation immediately rather than correcting in-thread</li>
+            <li>The security audit must be done in Ask mode — no writes during audit</li>
+          </ul>
+        </div>
+
+        <h3>Part A — Add stale branch detection</h3>
+        <p>New conversation, <strong>repo-analyst mode</strong>.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Feature prompt
+            <span class="mode-tag mode-agent">repo-analyst mode</span>
+          </div>
+          <div class="prompt-text">
+            "Implement stale branch detection in gh-dash. A branch is stale if its most recent commit is more than 90 days old and it is not the default branch. Add a staleBranches(branches, defaultBranch) function to src/metrics.js that accepts the branches array from GET /repos/{owner}/{repo}/branches and the repo's default_branch name, and returns the count of stale branches. Add fetchBranches(owner, repo) to src/github.js. Update the Stale Branches card in public/index.html to show the count. Handle the edge case where a branch has no commits array — use the GitHub API's GET /repos/{owner}/{repo}/branches/{branch} endpoint to fetch individual branch details if needed."
+          </div>
+        </div>
+
+        <h3>Part B — Security audit in Ask mode</h3>
+        <p>New conversation, <strong>Ask mode</strong>.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Security audit prompt
+            <span class="mode-tag mode-ask">Ask mode</span>
+          </div>
+          <div class="prompt-text">
+            "Audit gh-dash for security issues. Specifically: does any file outside of .env reference a GitHub token or API key as a hardcoded string? Are there any files that should be in .bobignore but aren't? Does the error handling in src/github.js correctly prevent 403 rate-limit responses from causing uncaught exceptions? Does cli.js sanitize the --owner and --repo CLI arguments to prevent path traversal or injection risks?"
+          </div>
+        </div>
+
+        <p>Bob will audit in read-only mode. It cannot write anything — you're in Ask mode. Note every finding. Then switch back to repo-analyst mode to fix them in a separate conversation.</p>
+
+        <h3>Part C — Cost and context hygiene reflection</h3>
+        <p>This is a thinking exercise, not a Bob session. Open <code>LEARNING_LOG.md</code> and answer these questions honestly:</p>
+
+        <div class="observe-box">
+          <div class="box-label">Reflection questions for LEARNING_LOG.md</div>
+          <ul>
+            <li>Across all 6 sessions, which session consumed the most Bobcoins and why?</li>
+            <li>Did you ever detect context poisoning — a moment where Bob was acting on a false assumption from earlier in the conversation? How did you handle it?</li>
+            <li>Which session would have benefited most from starting a new conversation earlier than you did?</li>
+            <li>The gh-analysis skill was written in Session 3 and never updated. Did it cause Bob to make any incorrect assumptions in Sessions 4–6? Should anything be added to it?</li>
+            <li>If you were deploying gh-dash on a team of 5 engineers, what would you add to AGENTS.md that isn't there now?</li>
+          </ul>
+        </div>
+
+        <h3>Part D — Final commit</h3>
+
+        <div class="prompt-block">
+          <div class="prompt-header">
+            Final commit prompt
+            <span class="mode-tag mode-agent">repo-analyst mode</span>
+          </div>
+          <div class="prompt-text">
+            "Generate a conventional commit message for the stale branch feature and security fixes. Then generate a brief CHANGELOG.md that summarizes what was built across all 6 sessions — one line per feature, in order: project scaffold, PR cycle time, multi-repo comparison, GitHub MCP integration, contributor trends, stale branch detection."
+          </div>
+        </div>
+
+        <div class="deliverable-box">
+          <div class="box-label">Session 6 deliverables</div>
+          <ul>
+            <li><code>src/metrics.js</code> — staleBranches implemented</li>
+            <li><code>src/github.js</code> — fetchBranches added</li>
+            <li><code>public/index.html</code> — all 4 metric cards populated with live data</li>
+            <li><code>CHANGELOG.md</code> — full project history in one file</li>
+            <li><code>LEARNING_LOG.md</code> — completed reflection with all 5 questions answered</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-green">
+          <div class="callout-label">What you just completed</div>
+          <p>You built a working developer productivity tool across 6 sessions, with each session introducing one new Bob capability. More importantly, you now have a working intuition for when to switch modes, when to start fresh, when to write a skill versus send a prompt, and how configuration choices compound across a project's lifetime. The LEARNING_LOG is the artifact that matters most — it's your personal record of where the theory from the lessons showed up as a real decision in a real project.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FINAL STATE -->
+  <div class="section">
+    <div class="section-label">Completed project</div>
+    <h2>Final project structure</h2>
+
+    <p>After all six sessions, your repo should look like this:</p>
+
+    <div class="file-tree">
+<span class="dir">gh-dash/</span>
+├── <span class="new">AGENTS.md</span>                    <span class="cmt"># Bob project rules — session 4</span>
+├── <span class="new">CHANGELOG.md</span>                 <span class="cmt"># Generated in session 6</span>
+├── LEARNING_LOG.md              <span class="cmt"># Your observations across all sessions</span>
+├── cli.js                       <span class="cmt"># Entry point — session 1, extended 2–6</span>
+├── package.json
+├── .gitignore
+├── <span class="new">.bobignore</span>                   <span class="cmt"># Credentials excluded — session 4</span>
+├── <span class="dir">.bob/</span>
+│   ├── <span class="new">custom_modes.yaml</span>        <span class="cmt"># repo-analyst mode — session 4</span>
+│   └── <span class="dir">skills/</span>
+│       └── <span class="new">gh-analysis/</span>
+│           └── <span class="new">SKILL.md</span>         <span class="cmt"># Domain skill — session 3</span>
+├── <span class="dir">src/</span>
+│   ├── github.js                <span class="cmt"># API client — sessions 1, 2, 3, 4, 5, 6</span>
+│   └── metrics.js               <span class="cmt"># Analysis functions — sessions 1, 2, 3, 5, 6</span>
+└── <span class="dir">public/</span>
+    └── index.html               <span class="cmt"># Dashboard — sessions 1, 2, 3, 5, 6</span>
+    </div>
+
+    <div class="callout callout-slate">
+      <div class="callout-label">A note on what "done" means here</div>
+      <p>gh-dash is a complete, working tool — but it's not production-ready. Pagination is only partially handled. The dashboard doesn't auto-refresh. Error states aren't styled. The SVG scaling is basic. That's intentional. This is a learning vehicle, not a product. If you want to take it further, you now have the Bob skills to do it properly: write a spec in Plan mode, implement in repo-analyst mode, review before committing. You know the workflow.</p>
+    </div>
+  </div>
+
+
+  <div class="lesson-nav">
+    <a href="bob-mastery-lesson-plan-overview.html" class="btn-nav">↑ Curriculum Overview</a>
+    <span class="lesson-nav-center">Applied Project Guide</span>
+    <a href="bob-mastery-lesson-01-how-bob-thinks.html" class="btn-nav btn-nav-primary">Start: Lesson 01 →</a>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
