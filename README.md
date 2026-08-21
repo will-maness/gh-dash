@@ -1,6 +1,6 @@
 # gh-dash
 
-An IBM Bob Tutorial project. Please see docs/lessons for a six lesson hands on program that coaches you through key points of IBM Bob and builds toward a GitHub repository health dashboard that you will build using IBM Bob. This program builds real software with [IBM Bob](https://bob.ibm.com/), IBM's AI coding assistant, including the enterprise SDLC activities along the way.
+An IBM Bob Tutorial project. Please see docs/lessons for a six lesson hands on program that coaches you through key points of IBM Bob and builds toward a functional GitHub repository health dashboard that you build from scratch. This program progressive addresses what it takes to build real software with [IBM Bob](https://bob.ibm.com/), IBM's AI coding assistant, including the enterprise SDLC activities along the way.
 
 ---
 
