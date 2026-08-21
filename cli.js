@@ -33,6 +33,7 @@ function parseArgs(argv) {
   }
   return args;
 }
+module.exports = { parseArgs };
 
 /**
  * Fetch all data and compute every metric for a single repo slug.
@@ -41,6 +42,9 @@ function parseArgs(argv) {
  * @returns {Promise<object>} Result object keyed by slug for data.json.
  */
 async function analyzeRepo(slug) {
+  if (!slug.includes('/') || slug.split('/').length !== 2) {
+    throw new Error(`Invalid repo slug "${slug}". Expected format: owner/repo`);
+  }
   const [owner, repo] = slug.split('/');
 
   console.log(`[${slug}] Fetching repo metadata…`);
@@ -145,10 +149,19 @@ async function main() {
     process.exit(1);
   }
 
+  for (const slug of args.repos) {
+    if (!/^[^/]+\/[^/]+$/.test(slug)) {
+      console.error(`Invalid repo slug "${slug}". Expected format: owner/repo`);
+      process.exit(1);
+    }
+  }
+
   await runRepos(args.repos);
 }
 
-main().catch((err) => {
-  console.error(err.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err.message);
+    process.exit(1);
+  });
+}

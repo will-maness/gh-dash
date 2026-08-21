@@ -8,6 +8,10 @@ node_modules/
 # Logs
 *.log
 
+# Generated output artefacts
+public/data.json
+public/compare.json
+
 # macOS
 .DS_Store
 

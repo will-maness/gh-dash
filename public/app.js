@@ -31,7 +31,16 @@ function pollProgress() {
 
   return new Promise((resolve) => {
     let started = false;
+    let ticks = 0;
+    const MAX_TICKS = 300; // 5 minutes at 1-second intervals
     const id = setInterval(async () => {
+      ticks++;
+      if (!started && ticks >= MAX_TICKS) {
+        clearInterval(id);
+        if (bar) bar.classList.remove('visible');
+        resolve();
+        return;
+      }
       try {
         const res = await fetch('/progress');
         if (!res.ok) return;
@@ -104,7 +113,7 @@ function renderRepo(repoKey) {
 
   const contributorsEl = document.getElementById('contributors');
   if (contributorsEl) {
-    if (data && data.contributorCount !== undefined && data.contributorCount !== null) {
+    if (data && data.contributorCount !== undefined) {
       contributorsEl.textContent = data.contributorCount;
       contributorsEl.classList.remove('placeholder');
     } else {
